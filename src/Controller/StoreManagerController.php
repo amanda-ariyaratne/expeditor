@@ -24,8 +24,11 @@ class StoreManagerController extends AbstractController
      */
     public function index(StoreManagerRepository $storeManagerRepository): Response
     {
+        $managers = $this->getDoctrine()
+                        ->getRepository(StoreManager::class)
+                        ->findAll();
         return $this->render('store_manager/index.html.twig', [
-            'store_managers' => $storeManagerRepository->findAll(),
+            'managers' => $managers
         ]);
     }
 
