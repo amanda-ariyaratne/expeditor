@@ -1,0 +1,81 @@
+{% extends 'back/base.html.twig' %}
+
+{% block title %}Store Manager{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
+    <style type="text/css">
+        td {
+            text-align:center
+        }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
+    <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.flash.min.js') }}"></script> 
+    <script src="{{ asset('back/js/jszip.min.js') }}"></script> 
+    <script src="{{ asset('back/js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('back/js/vfs_fonts.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.html5.min.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('back/js/data-table.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+        <div class="card ">
+            <div class="card-body">
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Store Managers</h4>
+                <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
+                <div class="table-responsive mt-40">
+                    <table id="myTable" class="display nowrap table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>NIC</th>
+                                <th>Service ID</th>
+                                <th>Store</th>
+                                <th>Joined Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for manager in managers %}
+                                <tr>
+                                    <td>{{ manager.user.id }}</td>
+                                    <td class="text-dark font-semibold">{{ manager.user.firstName }} {{ manager.user.lastName }}</td>
+                                    <td>{{ manager.user.email }}</td>
+                                    <td>{{ manager.NIC }}</td>
+                                    <td>{{ manager.serviceNo }}</td>
+                                    <td>{{ manager.store.name }}</td>
+                                    <td>{{ manager.createdAt }}</td>
+                                    <td>
+                                        <a href="" class="pencil-icon">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </a>
+                                        <a href="" class="delete-icon">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}
+
+
+        
