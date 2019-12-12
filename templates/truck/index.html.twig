@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Truck index{% endblock %}
+
+{% block body %}
+    <h1>Truck index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Insurance_no</th>
+                <th>Registration_no</th>
+                <th>Created_at</th>
+                <th>Updated_at</th>
+                <th>Deleted_at</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for truck in trucks %}
+            <tr>
+                <td>{{ truck.id }}</td>
+                <td>{{ truck.insuranceNo }}</td>
+                <td>{{ truck.registrationNo }}</td>
+                <td>{{ truck.createdAt ? truck.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ truck.updatedAt ? truck.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ truck.deletedAt ? truck.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('truck_show', {'id': truck.id}) }}">show</a>
+                    <a href="{{ path('truck_edit', {'id': truck.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('truck_new') }}">Create new</a>
+{% endblock %}
