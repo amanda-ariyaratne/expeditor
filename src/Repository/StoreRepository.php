@@ -19,6 +19,32 @@ class StoreRepository extends ServiceEntityRepository
         parent::__construct($registry, Store::class);
     }
 
+    public function getById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id) {
+            $sql = "SELECT * FROM store WHERE id = :id AND deleted_at IS NULL LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntity($result);
+    }
+
+    private function getEntity($array)
+    {
+        $store = new Store();
+        $store->setId($array['id']);
+        $store->setName($array['name']);
+        $store->setStreet($array['street']);
+        $store->setCity($array['city']);
+        $store->setCreatedAt(new \DateTime($array['created_at']));
+        $store->setUpdatedAt(new \DateTime($array['updated_at']));
+        $store->setUpdatedAt(new \DateTime($array['deleted_at']));
+        return $store;
+    }
+
     // /**
     //  * @return Store[] Returns an array of Store objects
     //  */
