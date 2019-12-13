@@ -36,12 +36,12 @@ class StoreManagerRepository extends ServiceEntityRepository
 
     public function insert(StoreManager $sm)
     {
-        $user = $sm->getUser();
-        $user_id = $this->getEntityManager()
-                        ->getRepository(User::class)
-                        ->insert($user);
         $conn = $this->getEntityManager()->getConnection();
-        $lastInsertId = $conn->transactional(function($conn) use(&$sm, &$user_id) {
+        $lastInsertId = $conn->transactional(function($conn) use(&$sm) {
+            $user = $sm->getUser();
+            $user_id = $this->getEntityManager()
+                            ->getRepository(User::class)
+                            ->insert($user);
             $sql = "INSERT INTO store_manager (`user_id`, NIC, service_no, store_id) VALUES (:user, :nic, :service_no, :store);";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('user', $user_id);
