@@ -41,17 +41,21 @@ class StoreManagerType extends AbstractType
             $storeArray[$store['name']] = $store['id'];
         }
         $builder
-            ->add('user', UserType::class)
+            ->add('user', UserType::class, [
+                'validation_groups' => ['edit']
+            ])
             ->add('nic', TextType::class, [
                 'constraints' => [
                     new NotNull([
-                        'message' => 'NIC number is required'
+                        'message' => 'NIC number is required',
+                        'groups' => ['new', 'edit']
                     ]),
                     new Length([
                         'min' => 10,
                         'max' => 12,
                         'minMessage' => 'NIC number must be at least {{ limit }} characters long',
                         'maxMessage' => 'NIC number must be at least {{ limit }} characters long',
+                        'groups' => ['new', 'edit']
                     ])
                 ]
             ])
@@ -59,15 +63,19 @@ class StoreManagerType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new NotNull([
-                        'message' => 'Service ID is required'
+                        'message' => 'Service ID is required',
+                        'groups' => ['new', 'edit']
                     ]),
                     new Length([
                         'min' => 5,
                         'max' => 5,
                         'minMessage' => 'Invalid service ID. Length must be 5 and should start with "SM"',
                         'maxMessage' => 'Invalid service ID. Length must be 5 and should start with "SM"',
+                        'groups' => ['new', 'edit']
                     ]),
-                    new UniqueServiceId()
+                    new UniqueServiceId([
+                        'groups' => ['new']
+                    ])
                 ]
             ])
             ->add('store_id', ChoiceType::class, [
@@ -89,7 +97,7 @@ class StoreManagerType extends AbstractType
             'csrf_field_name' => '_token',
             // an arbitrary string used to generate the value of the token
             // using a different string for each form improves its security
-            'csrf_token_id'   => 'delete_store_manager',
+            'validation_groups' => ['new', 'edit'],
         ]);
     }
 }
