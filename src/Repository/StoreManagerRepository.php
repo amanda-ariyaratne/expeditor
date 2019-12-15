@@ -54,6 +54,22 @@ class StoreManagerRepository extends ServiceEntityRepository
         return $lastInsertId;
     }
 
+    public function deleteById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $status = $conn->transactional(function($conn) use(&$id) {
+            $this->getEntityManager()
+                 ->getRepository(User::class)
+                 ->deleteById($id);
+            $sql = "UPDATE store_manager SET deleted_at = now(), updated_at = now() WHERE user_id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return true;
+        });
+        return $status;
+    }
+
     private function getEntity($array)
     {
         $sm = new StoreManager();

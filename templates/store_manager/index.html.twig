@@ -104,7 +104,6 @@
             $(".delete-icon").on("click", function (e) {
 
                 e.preventDefault();
-                alert("gvhbjnk");
                 var id = $(this).data("id");
 
                 $.confirm({
@@ -127,7 +126,17 @@
                                         _token: token
                                     },
                                     success: function(result) {
-                                        alert("yay");
+                                        $.confirm({
+                                            title: 'Deleted',
+                                            content: 'The record was successfully deleted',
+                                            type: 'green',
+                                            typeAnimated: true,
+                                            buttons: {
+                                                close: function () {
+                                                    location.reload();
+                                                }
+                                            }
+                                        });
                                     }
                                 });
                             }

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\Entity\User;
 use App\Entity\Store;
@@ -103,23 +104,16 @@ class StoreManagerController extends AbstractController
      */
     public function delete(Request $request, $id): Response
     {
-        // if ($this->isCsrfTokenValid('delete'.$storeManager->getUser()->getId(), $request->request->get('_token'))) {
-        //     $entityManager = $this->getDoctrine()->getManager();
-        //     $entityManager->remove($storeManager);
-        //     $entityManager->flush();
-        // }
         if ($this->isCsrfTokenValid('delete-store-manager', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $storeManager = $entityManager->getRepository(StoreManager::class)->findById($id);
-            //$user = $storeManager->getUser();
-            dd($storeManager);
-            $entityManager->remove($storeManager);
-            $entityManager->remove($user);
-            $entityManager->flush();
+            $storeManager = $entityManager->getRepository(StoreManager::class)->deleteById($id);
+            return new JsonResponse([
+                'status' => 'true'
+            ]);
         }
         
-        dd("Deleted");
-        
-        return $this->redirectToRoute('store_manager_index');
+        return new JsonResponse([
+            'status' => 'false'
+        ]);
     }
 }
