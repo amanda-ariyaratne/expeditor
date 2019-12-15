@@ -330,6 +330,9 @@
     "symfony/property-access": {
         "version": "v4.4.1"
     },
+    "symfony/property-info": {
+        "version": "v4.4.1"
+    },
     "symfony/routing": {
         "version": "4.2",
         "recipe": {
