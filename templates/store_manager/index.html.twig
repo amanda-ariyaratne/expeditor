@@ -118,7 +118,7 @@
                             action: function(){
                                 url = "{{path('store_manager_delete', { 'id': 0}) }}";
                                 url = url.replace("0",id);
-                                token = "{{ csrf_token('delete-store-manager') }}"
+                                token = "{{ csrf_token('store_manager') }}"
                                 $.ajax({
                                     url: url,
                                     type: 'DELETE',

@@ -50,7 +50,7 @@ class StoreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="store_show")
+     * @Route("/{id}", name="store_show", requirements={"id"="\d+"})
      */
     public function show(Store $store): Response
     {           
