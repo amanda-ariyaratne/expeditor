@@ -10,14 +10,15 @@
             text-align:center
         }
             .plus-icon {
-                background: #db3838;
-                width: 28px;
-                height: 28px;
-                line-height: 28px;
+                background: #025a83;
+                width: 22px;
+                height: 22px;
+                line-height: 22px;
                 text-align: center;
                 display: inline-block;
                 color: #fff!important;
                 border-radius: 100px;
+                margin-right: 35px;
             }
             .plus-icon:hover {
                 background: #002661;
@@ -34,7 +35,7 @@
             <div class="card-body">
                 <h4 class="card-title text-uppercase mb-20 pull-left"> Store Managers</h4>
                 <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
-                <a href="{{ path('store_manager_new') }}" class="plus-icon pull-right">
+                <a href="{{ path('store_manager_new') }}" class="plus-icon pull-left">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
                 <div class="table-responsive mt-40">
@@ -52,17 +53,19 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {%set i = 1 %}
                             {% for manager in managers %}
                                 <tr>
-                                    <td>{{ manager.user.id }}</td>
+                                    <td>{{~i~}}</td>
+                                    {% set i = i + 1 %}
                                     <td class="text-dark font-semibold">{{ manager.user.firstName }} {{ manager.user.lastName }}</td>
                                     <td>{{ manager.user.email }}</td>
                                     <td>{{ manager.NIC }}</td>
                                     <td>{{ manager.serviceNo }}</td>
                                     <td>{{ manager.store.name }}</td>
-                                    <td>{{ manager.createdAt|date("m/d/Y") }}</td>
+                                    <td>{{ manager.createdAt|date("d/m/Y") }}</td>
                                     <td>
-                                        <a href="" class="pencil-icon">
+                                        <a href="{{path('store_manager_edit', { 'id': manager.user.id}) }}" class="pencil-icon">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
                                         <a href="#" class="delete-icon" data-id="{{ manager.user.id }}" >
@@ -118,7 +121,7 @@
                             action: function(){
                                 url = "{{path('store_manager_delete', { 'id': 0}) }}";
                                 url = url.replace("0",id);
-                                token = "{{ csrf_token('delete-store-manager') }}"
+                                token = "{{ csrf_token('store_manager') }}"
                                 $.ajax({
                                     url: url,
                                     type: 'DELETE',

@@ -25,13 +25,15 @@ class UserType extends AbstractType
             ->add('first_name', TextType::class, [
                 'constraints' => [
                     new NotNull([
-                        'message' => 'First Name is required'
+                        'message' => 'First Name is required',
+                        'groups' => ['new', 'edit']
                     ]),
                     new Length([
                         'min' => 2,
                         'max' => 50,
                         'minMessage' => 'First Name must be at least {{ limit }} characters long',
                         'maxMessage' => 'First Name must be at most {{ limit }} characters long',
+                        'groups' => ['new', 'edit']
                     ])
                 ]
             ])
@@ -39,13 +41,15 @@ class UserType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new NotNull([
-                        'message' => 'Last Name is required'
+                        'message' => 'Last Name is required',
+                        'groups' => ['new', 'edit']
                     ]),
                     new Length([
                         'min' => 2,
                         'max' => 50,
                         'minMessage' => 'Last Name Name must be at least {{ limit }} characters long',
                         'maxMessage' => 'Last Name Name must be at most {{ limit }} characters long',
+                        'groups' => ['new', 'edit']
                     ])
                 ]
             ])
@@ -53,16 +57,21 @@ class UserType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new NotNull([
-                        'message' => 'Email is required'
+                        'message' => 'Email is required',
+                        'groups' => ['new', 'edit']
                     ]),
                     new Email([
                         'message' => 'Invalid Email Address',
+                        'groups' => ['new', 'edit']
                     ]),
                     new Length([
                         'max' => 180,
                         'maxMessage' => 'Email must be at most {{ limit }} characters long',
+                        'groups' => ['new', 'edit']
                     ]),
-                    new UniqueUserEmail()
+                    new UniqueUserEmail([
+                        'groups' => ['new']
+                    ])
                 ]
             ])
             ->add('password', RepeatedType::class, [
@@ -72,7 +81,8 @@ class UserType extends AbstractType
                 'second_options' => ['label' => 'Confirm Password'],
                 'constraints' => [
                     new NotNull([
-                        'message' => 'Password is required'
+                        'message' => 'Password is required',
+                        'groups' => ['new']
                     ]),
                 ]
             ])
@@ -83,7 +93,8 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'allow_extra_fields' => true
+            'allow_extra_fields' => true,
+            'validation_groups' => ['new', 'edit'],
         ]);
     }
 }

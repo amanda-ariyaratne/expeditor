@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Expeditor - Store List{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
+
+    <style type="text/css">
+        td {
+            text-align:center
+        }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
+    <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.flash.min.js') }}"></script> 
+    <script src="{{ asset('back/js/jszip.min.js') }}"></script> 
+    <script src="{{ asset('back/js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('back/js/vfs_fonts.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.html5.min.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('back/js/data-table.js') }}"></script>
+
+    
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+<!-- ============================================================== --> 
+<!-- Start Page Content --> 
+<!-- ============================================================== -->
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+        <div class="card ">
+            <div class="card-body">
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Stores </h4>
+                <a href="{{ path('store_new') }}">add new</a>
+                <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
+                <div class="table-responsive mt-40">
+                    <table id="myTable" class="display nowrap table table-hover table-bordered" >
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Store</th>
+                                <th>Street</th>
+                                <th>City</th>
+                                <th>Created at</th>
+                                <th>Updated at</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for store in stores %}
+                                <tr>
+                                    <td>{{ store.id }}</td>
+                                    <td class="text-dark font-semibold">{{ store.getName() }}</td>
+                                    <td>{{ store.getStreet()}}</td>
+                                    <td>{{ store.getCity() }}</td>
+                                    <td>{{ store.getCreatedAt()|date('Y-m-d H:i:s') }}</td>
+                                    <td>{{ store.getUpdatedAt()|date('Y-m-d H:i:s') }}</td>
+                                    <td>
+                                        <a href="{{ path('store_edit', {id: store.id} )}}" class="pencil-icon">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </a>
+                                        <a href="{{ path('store_delete', {id: store.id} )}}" class="delete-icon">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============================================================== --> 
+<!-- End PAge Content --> 
+<!-- ============================================================== --> 
+<!-- ============================================================== --> 
+</div>
+{% endblock content %}
+
+

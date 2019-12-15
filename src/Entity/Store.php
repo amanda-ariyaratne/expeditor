@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StoreRepository")
@@ -35,11 +36,13 @@ class Store
 
     /**
      * @ORM\Column(type="datetime")
+     * 
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
+     * 
      */
     private $updated_at;
 
@@ -55,7 +58,6 @@ class Store
 
     public function __construct()
     {
-        $this->chainManagers = new ArrayCollection();
         $this->train_trip = new ArrayCollection();
     }
 

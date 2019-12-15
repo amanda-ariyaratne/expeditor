@@ -44,7 +44,7 @@ class StoreManagerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
+            
             $storeManager = $form->getData();
 
             /* process password */
@@ -82,19 +82,32 @@ class StoreManagerController extends AbstractController
     /**
      * @Route("/{id}/edit", name="store_manager_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, StoreManager $storeManager): Response
+    public function edit(Request $request, $id): Response
     {
-        $form = $this->createForm(StoreManagerType::class, $storeManager);
+        $storeManager = $this->getDoctrine() 
+                             ->getRepository(StoreManager::class)
+                             ->getById($id);
+        
+        $form = $this->createForm(StoreManagerType::class, $storeManager, array('validation_groups'=>'edit'));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+
+            $storeManager = $form->getData();
+
+            $storeManager->getUser()->setRoles(['ROLE_STORE_MANAGER']);
+
+            /* set store */
+            $storeId = $form->get('store_id')->getData();
+            $store = $this->getDoctrine()->getRepository(Store::class)->getById($storeId);
+            $storeManager->setStore($store);
+
+            $entityManager = $this->getDoctrine()->getRepository(StoreManager::class)->update($storeManager);
 
             return $this->redirectToRoute('store_manager_index');
-        }
 
+        }
         return $this->render('store_manager/edit.html.twig', [
-            'store_manager' => $storeManager,
             'form' => $form->createView(),
         ]);
     }
