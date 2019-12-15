@@ -1,0 +1,149 @@
+.require {
+    size: 40px;
+    color: #FF0000 !important;
+
+}
+
+.box{
+	width: 300px;
+}
+
+
+/*.wrap{*/
+    /*padding:10px;*/
+    /*position: relative;*/
+    /*display:inline-block;*/
+/*}*/
+/*.popup{*/
+    /*position: absolute;*/
+    /*bottom: 60px;*/
+    /*left: 90px;*/
+    /*width: 190px;*/
+    /*height: 70px;*/
+    /*z-index: 2;*/
+    /*display: none;*/
+/*}*/
+/*.popup-inner{*/
+    /*background: #FFAF44;*/
+    /*border-radius: 4px;*/
+    /*padding: 10px;*/
+    /*box-shadow: 2px 2px 20px rgba(0,0,0,.3);*/
+/*}*/
+/*.popup-tip{*/
+    /*font-size: 35px;*/
+    /*position: absolute;*/
+    /*color: #FFAF44;*/
+    /*top: 60px;*/
+    /*left: 20px;*/
+/*}*/
+/*.steps {*/
+    /*float: left;*/
+    /*font-size: 11px;*/
+    /*text-transform: uppercase;*/
+    /*width: 100px;*/
+    /*padding-top: 10px;*/
+    /*line-height: 11px;*/
+    /*margin-top: 8px;*/
+/*}*/
+/*.number-a{*/
+    /*float: left;*/
+    /*font-family: Arial, Helvetica, sans-serif;*/
+    /*font-size: 28px;*/
+    /*font-weight: bold;*/
+    /*color: #999;*/
+    /*display:block;*/
+    /*width:20px;*/
+/*}*/
+/*.number-b{ float:left; width:65px; display:block; margin:-5px 0px 0px 8px;*/
+/*}*/
+/*.wrap .sm{*/
+    /*float:left;*/
+/*}*/
+/*.minicolors {*/
+    /*position: relative;*/
+    /*display: inline-block;*/
+    /*z-index: 1;*/
+    /*margin:10px;*/
+/*}*/
+/*.minicolors .minicolors-input {*/
+    /*margin: 0px;*/
+    /*margin-right: 3px;*/
+    /*border: solid 1px #CCC;*/
+    /*font: 18px sans-serif;*/
+    /*width: 100px;*/
+    /*height: 22px;*/
+    /*border-radius: 0;*/
+    /*box-shadow: inset 0px 1px 10px rgba(0, 0, 0, 0.07);*/
+    /*-moz-box-shadow: inset 0px 1px 10px rgba(0, 0, 0, 0.07);*/
+    /*-o-box-shadow: inset 0px 1px 10px rgba(0, 0, 0, 0.07);*/
+    /*-webkit-box-shadow: inset 0px 1px 10px rgba(0, 0, 0, 0.07);*/
+    /*padding: 2px;*/
+    /*margin-right: -1px;*/
+    /*vertical-align: middle;*/
+    /*outline: none;*/
+    /*color:#555;*/
+/*}*/
+/*.minicolors-swatch {*/
+    /*position: relative;*/
+    /*width: 26px;*/
+    /*height: 26px;*/
+    /*text-align: left;*/
+    /*!*background: url('/images/color-calculator/jquery.minicolors.png') -80px 0;*!*/
+    /*border: solid 1px #CCC;*/
+    /*vertical-align: middle;*/
+    /*display: inline-block;*/
+/*}*/
+/*.minicolors-panel {*/
+    /*position: absolute;*/
+    /*top: 28px;*/
+    /*left: 0;*/
+    /*width: 182px;*/
+    /*height: 210px;*/
+    /*background: white;*/
+    /*border: solid 1px #CCC;*/
+    /*box-shadow: 0 0 20px rgba(0, 0, 0, .2);*/
+    /*display: none;*/
+/*}*/
+/*.ui-helper-hidden {*/
+    /*display: none;*/
+/*}*/
+/*.ui-helper-hidden-accessible {*/
+    /*border: 0;*/
+    /*clip: rect(0 0 0 0);*/
+    /*height: 1px;*/
+    /*margin: -1px;*/
+    /*overflow: hidden;*/
+    /*padding: 0;*/
+    /*position: absolute;*/
+    /*width: 1px;*/
+/*}*/
+/*.inputs .minicolors.off{*/
+    /*!*opacity: .5;*!*/
+    /*display:none;*/
+/*}*/
+/*.ui-helper-hidden-accessible {*/
+    /*border: 0;*/
+    /*clip: rect(0 0 0 0);*/
+    /*height: 1px;*/
+    /*margin: -1px;*/
+    /*overflow: hidden;*/
+    /*padding: 0;*/
+    /*position: absolute;*/
+    /*width: 1px;*/
+/*}*/
+/*.inputs .minicolors.off{*/
+    /*!*opacity: .5;*!*/
+    /*display:none;*/
+/*}*/
+/*a.addmore{*/
+    /*float:left;*/
+    /*position:absolute;*/
+    /*top:25px;*/
+    /*right:-60px;*/
+/*}*/
+/*a.addmore, a.remove { font-size:10px; }*/
+
+/*a {*/
+    /*cursor: pointer !important;*/
+/*}*/
+

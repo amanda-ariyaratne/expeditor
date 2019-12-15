@@ -1,0 +1,103 @@
+{% extends 'frontbase.html.twig'%}
+
+{% block title%}Register{% endblock %}
+
+{% block body %}
+
+	<div id="main-content">
+	    <div class="main-content">
+	        <div class="container">
+	          	<div id="col-main" class="page-login">
+	            	<div class="row">
+	              		<div class="col-sm-6 col-xs-12">
+	                		<div class="form-wrapper">
+	                  			<div id="customer-login" class="content">
+	                    			<h2 class="heading">Register</h2>
+
+									{{ form_start(form) }}
+
+										<div id="register-form">
+											<div class="my-custom-class-for-errors">
+							                    {{ form_errors(form) }}
+							                </div>
+
+											<div class="form-group has-success m-t-15 m-b-10 row">
+							                    {{ form_label(form.user.first_name, 'First Name', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+							                  <div class="col-8">
+							                    {{ form_widget(form.user.first_name, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+							                  </div>
+							                </div>
+
+									    	<div class="form-group has-success m-t-15 m-b-10 row">
+							                    {{ form_label(form.user.last_name, 'Last Name', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+							                  <div class="col-8">
+							                    {{ form_widget(form.user.last_name, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+							                  </div>
+							                </div>
+
+							                <div class="form-group has-success m-t-15 m-b-10 row">
+							                    {{ form_label(form.user.email, 'Email', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+							                  <div class="col-8">
+							                    {{ form_widget(form.user.email, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+							                  </div>
+							                </div>
+
+							                <div class="form-group has-success m-t-15 m-b-10 row">
+							                    {{ form_label(form.address.house_no, 'House number', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+							                  <div class="col-8">
+							                    {{ form_widget(form.address.house_no, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+							                  </div>
+							                </div>
+							                <div class="form-group has-success m-t-15 m-b-10 row">
+							                    {{ form_label(form.address.street, 'Street', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+							                  <div class="col-8">
+							                    {{ form_widget(form.address.street, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+							                  </div>
+							                </div>
+							                <div class="form-group has-success m-t-15 m-b-10 row">
+							                    {{ form_label(form.address.city, 'City', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+							                  <div class="col-8">
+							                    {{ form_widget(form.address.city, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+							                  </div>
+							                </div>
+									    	
+									    	<div class="form-group has-success m-t-15 m-b-10 row">
+							                    {{ form_label(form.user.password.first, 'Password', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+							                  <div class="col-8">
+							                    {{ form_widget(form.user.password.first, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+							                  </div>
+							                </div>
+
+							                <div class="form-group has-success m-t-15 m-b-10 row">
+							                    {{ form_label(form.user.password.second, 'Confirm Password', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+							                  <div class="col-8">
+							                    {{ form_widget(form.user.password.second, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+							                  </div>
+							                </div>
+
+							                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+									    	<div class="form-group has-success m-t-15 m-b-10 row">
+							                  <div class="col-10"></div>
+							                  <div class="col-2">
+							                    {{ form_widget(form.register) }}
+							                  </div>
+							                </div>
+
+									    	
+										</div>
+
+
+									{{ form_end(form) }}
+
+								</div>
+							</div>
+              			</div>
+            		</div>
+          		</div>
+        	</div>
+    	</div>
+  	</div>
+
+
+{% endblock %}

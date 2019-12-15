@@ -1,0 +1,125 @@
+{% extends 'frontbase.html.twig'%}
+
+{% block title%}All products{% endblock %}
+
+{% block body%}
+
+    <div id="body-content" class="layout-boxed" style="background: #fff !important;">
+        <div id="main-content"> 
+            <div class="main-content">
+                <div id="shopify-section-collection-template" class="shopify-section">
+                    <div class="wrap-breadcrumb bw-color">
+                        <div id="breadcrumb" class="breadcrumb-holder container">
+                            <div class="row">
+                                <div class="col-lg-8 d-none d-lg-block">
+                                  <div class="page-title">All products
+                                  </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                                  <ul class="breadcrumb">
+                                    <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                                      <a itemprop="url" href="">
+                                        Home
+                                      </a>
+                                    </li>
+                                    <li class="active">
+                                      All products 
+                                    </li>
+                                  </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+<div class="page-cata" data-logic="true">
+  <div class="container">
+    <div class="row">
+        <div class="col-lg-9 col-md-12">
+        
+            <div class="wrap-cata-title">
+              <h2>Products</h2>
+            </div>
+
+            <div class="cata-toolbar">
+              <div class="group-toolbar">
+                
+                <div class="pagination-showing">
+                  <div class="showing">
+                             
+                  </div>
+                </div>
+                
+                      
+                  <!-- <div class="filter-icon dropdown"><i class="demo-icon icon-sliders"></i>Filter</div> -->
+                      
+                  <div class="grid-list">
+                    <span class="text">View</span>
+                    <span class="grid grid-4" title="Small"><i class="demo-icon icon-icon-grid-04"></i></span>
+                    <span class="grid grid-3 active" title="Medium"><i class="demo-icon icon-electro-grid-view"></i></span>
+                    <span class="grid grid-2" title="Large"><i class="demo-icon icon-grid-circle"></i></span>
+                    <span class="grid grid-1" title="Huge"><i class="demo-icon icon-th-list-1"></i></span>
+                  </div>
+
+
+              </div>
+            </div>
+
+
+        <div id="col-main">
+            <div class="cata-product cp-grid">
+
+                      {% for product in products %}
+                        <div class="product-grid-item mode-view-item">                 
+                          <div class="product-wrapper effect-overlay ">
+                            <div class="product-head">
+                              <div class="product-image">
+                                  <a href="/product/{{product.id}}"> 
+                                    <img class="featured-image front lazyload" src="/front/images/products/{{ product.image }}"/>
+                                  </a>
+                              </div>
+                            </div>
+
+                            <div class="product-content">
+                              <div class="pc-inner">          
+                                <div class="product-group-vendor-name"> 
+                                  <h5 class="product-name"><a href="/product/{{product.id}}">{{product.name}}</a></h5>
+                                  <div class="product-review">
+                                    <span class="shopify-product-reviews-badge" data-id="1588807794747"></span>
+                                  </div>
+                                  
+                                </div>          
+                                <div class="price-cart-wrapper">    
+
+                                  <div class="product-price">                          
+                                    <span class="sold-out">$ {{product.wholesalePrice}} - $ {{product.retailPrice}}</span>                          
+                                  </div>
+
+                                  <div class="product-add-cart"></div>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>  
+
+                      {% endfor %}
+  
+
+               
+
+              
+                  </div>
+                 </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
