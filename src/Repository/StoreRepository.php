@@ -36,15 +36,23 @@ class StoreRepository extends ServiceEntityRepository
     }
     */
 
-    /*
+    
     public function findOneBySomeField($value): ?Store
     {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->createQuery()
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
+    
+    public function findById($id): ?socket_read
+    {
+        
+        
+        $store = $this->getEntityManager()
+            ->createQuery('SELECT id FROM Store WHERE id = ?', $id)
+            ->getResult();
+
+        return $store;
+    }
 }
