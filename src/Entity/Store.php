@@ -36,13 +36,13 @@ class Store
 
     /**
      * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="create")
+     * 
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Gedmo\Timestampable(on="update")
+     * 
      */
     private $updated_at;
 
@@ -65,6 +65,13 @@ class Store
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId($id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string

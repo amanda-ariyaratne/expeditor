@@ -21,7 +21,6 @@ class StoreController extends AbstractController
     public function index(StoreRepository $storeRepository): Response
     {
         $stores = $storeRepository->findAll();
-        // dd($stores);
         return $this->render('store/index.html.twig', [
             'stores' => $stores,
         ]);
@@ -61,16 +60,16 @@ class StoreController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="store_edit", methods={"GET","POST"})
+     * @Route("/edit/{id}", name="store_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Store $store): Response
+    public function edit(Request $request, Store $store, StoreRepository $storeRepository): Response
     {
         $form = $this->createForm(StoreType::class, $store);
         $form->handleRequest($request);
+        // dd($store);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
+            $storeRepository->update($store);
             return $this->redirectToRoute('store_index');
         }
 
@@ -85,13 +84,10 @@ class StoreController extends AbstractController
      */
     public function delete(Request $request, $id, StoreRepository $storeRepository): Response
     {   
-        $store = $storeRepository->findById($id);
-
-        if ($this->isCsrfTokenValid('delete'.$store->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($store);
-            $entityManager->flush();
-        }
+        $storeRepository->delete($id);
+        // if ($this->isCsrfTokenValid('delete'.$store->getId(), $request->request->get('_token'))) {
+        //     $storeRepository->delete($id);
+        // }
 
         return $this->redirectToRoute('store_index');
     }
