@@ -51,7 +51,6 @@ class Store
      */
     private $deleted_at;
 
-    
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\TrainTrip", mappedBy="store")
      */
@@ -67,7 +66,7 @@ class Store
         return $this->id;
     }
 
-    public function setId($id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
@@ -144,7 +143,8 @@ class Store
         $this->deleted_at = $deleted_at;
 
         return $this;
-    }    
+    }
+
     /**
      * @return Collection|TrainTrip[]
      */

@@ -18,41 +18,21 @@ class StoreRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Store::class);
     }
-
-    public function getEntity($params){
-        $store = new Store();
-        $store->setId($params['id']);
-        $store->setName($params['name']);
-        $store->setStreet($params['street']);
-        $store->setCity($params['city']);
-        $store->setCreatedAt(new \DateTime($params['created_at']));
-        $store->setUpdatedAt(new \DateTime($params['updated_at']));
-        return $store;
-    }
-
-    private function getEntityArray($array)
-    {   
-        $entityArray = [];
-        foreach ($array as $element) {
-            array_push($entityArray, $this->getEntity($element));
-        }
-        return $entityArray;    
-    }
-    
-    public function findById($id)
+  
+    public function getById($id)
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM store WHERE id = :id AND deleted_at IS NULL";
+            $sql = "SELECT * FROM store WHERE id = :id AND deleted_at IS NULL LIMIT 1";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
             return $stmt->fetch();
-        });        
+        });
         return $this->getEntity($result);
-    }
-
-    public function findAll(){
+    }  
+  
+    public function getAll(){
         $conn = $this->getEntityManager()->getConnection();
         $results = $conn->transactional(function($conn){
             $sql = "SELECT * FROM store";
@@ -106,6 +86,26 @@ class StoreRepository extends ServiceEntityRepository
             $stmt->bindValue('present', $date);
             $stmt->execute();
         });        
+    }
+  
+    private function getEntity($params){
+        $store = new Store();
+        $store->setId($params['id']);
+        $store->setName($params['name']);
+        $store->setStreet($params['street']);
+        $store->setCity($params['city']);
+        $store->setCreatedAt(new \DateTime($params['created_at']));
+        $store->setUpdatedAt(new \DateTime($params['updated_at']));
+        return $store;
+    }
+
+    private function getEntityArray($array)
+    {   
+        $entityArray = [];
+        foreach ($array as $element) {
+            array_push($entityArray, $this->getEntity($element));
+        }
+        return $entityArray;    
     }
 
 }
