@@ -31,11 +31,7 @@ class StoreManagerType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $stores = $this->entityManager->createQueryBuilder()
-                                    ->select('s')
-                                    ->from(Store::class, 's')
-                                    ->getQuery()
-                                    ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $stores = $this->entityManager->getRepository(Store::class)->getAllAsArray();
         $storeArray = [];
         foreach ($stores as $store) {
             $storeArray[$store['name']] = $store['id'];

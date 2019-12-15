@@ -1,0 +1,9 @@
+# config/validator/validation.yaml
+App\Entity\Store:
+    properties:
+        name:
+            - NotNull: ~         
+        street:
+            - NotNull: ~
+        city:
+            - NotNull: ~
