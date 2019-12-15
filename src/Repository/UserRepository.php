@@ -36,6 +36,65 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
+    public function getById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id) {
+            $sql = "SELECT * FROM user WHERE id = :id AND deleted_at IS NULL LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntity($result);
+    }
+
+    public function insert(User $user)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $lastInsertId = $conn->transactional(function($conn) use(&$user) {
+            $sql = "INSERT INTO user (email, roles, `password`, first_name, last_name) VALUES (:email, :roles, :pass, :fname, :lname);";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('email', $user->getEmail());
+            $stmt->bindValue('roles', json_encode($user->getRoles()));
+            $stmt->bindValue('pass', $user->getPassword());
+            $stmt->bindValue('fname', $user->getFirstName());
+            $stmt->bindValue('lname', $user->getLastName());
+            $stmt->execute();
+            return $conn->lastInsertId();
+        });
+        return $lastInsertId;
+    }
+
+    public function deleteById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $status = $conn->transactional(function($conn) use(&$id) {
+            $sql = "UPDATE user SET deleted_at = now(), updated_at = now() WHERE id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return true;
+        });
+        return $status;
+    }
+
+    private function getEntity($array)
+    {
+        $user = new User();
+        $user->setId($array['id']);
+        $user->setEmail($array['email']);
+        $user->setRoles(json_decode($array['roles']));
+        $user->setPassword($array['password']);
+        $user->setFirstName($array['first_name']);
+        $user->setLastName($array['last_name']);
+        $date = new \DateTime($array['created_at']);
+        $user->setCreatedAt(new \DateTime($array['created_at']));
+        $user->setUpdatedAt(new \DateTime($array['updated_at']));
+        $user->setUpdatedAt(new \DateTime($array['deleted_at']));
+        return $user;
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

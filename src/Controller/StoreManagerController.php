@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\Entity\User;
 use App\Entity\Store;
@@ -24,8 +25,11 @@ class StoreManagerController extends AbstractController
      */
     public function index(StoreManagerRepository $storeManagerRepository): Response
     {
+        $managers = $this->getDoctrine() 
+                        ->getRepository(StoreManager::class)
+                        ->getAll();
         return $this->render('store_manager/index.html.twig', [
-            'store_managers' => $storeManagerRepository->findAll(),
+            'managers' => $managers
         ]);
     }
 
@@ -35,12 +39,10 @@ class StoreManagerController extends AbstractController
     public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $storeManager = new StoreManager();
-
+        
         $form = $this->createForm(StoreManagerType::class, $storeManager);
         $form->handleRequest($request);
 
-        //dd($form->get('store_id')->getData());
-        
         if ($form->isSubmitted() && $form->isValid()) {
 
             $storeManager = $form->getData();
@@ -54,15 +56,12 @@ class StoreManagerController extends AbstractController
 
             /* set store */
             $storeId = $form->get('store_id')->getData();
-            $store = $this->getDoctrine()->getRepository(Store::class)->find($storeId);
+            $store = $this->getDoctrine()->getRepository(Store::class)->getById($storeId);
             $storeManager->setStore($store);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($storeManager->getUser());
-            $entityManager->persist($storeManager);
-            $entityManager->flush();
+            $entityManager = $this->getDoctrine()->getRepository(StoreManager::class)->insert($storeManager);
 
-            return $this->redirectToRoute('app_dashboard');
+            return $this->redirectToRoute('store_manager_index');
 
         }
         return $this->render('store_manager/new.html.twig', [
@@ -103,14 +102,18 @@ class StoreManagerController extends AbstractController
     /**
      * @Route("/{id}", name="store_manager_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, StoreManager $storeManager): Response
+    public function delete(Request $request, $id): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$storeManager->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete-store-manager', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($storeManager);
-            $entityManager->flush();
+            $storeManager = $entityManager->getRepository(StoreManager::class)->deleteById($id);
+            return new JsonResponse([
+                'status' => 'true'
+            ]);
         }
-
-        return $this->redirectToRoute('store_manager_index');
+        
+        return new JsonResponse([
+            'status' => 'false'
+        ]);
     }
 }

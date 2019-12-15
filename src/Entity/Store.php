@@ -49,11 +49,6 @@ class Store
     private $deleted_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ChainManager", mappedBy="store")
-     */
-    private $chainManagers;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\TrainTrip", mappedBy="store")
      */
     private $train_trip;
@@ -67,6 +62,13 @@ class Store
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -137,37 +139,6 @@ class Store
     public function setDeletedAt(?\DateTimeInterface $deleted_at): self
     {
         $this->deleted_at = $deleted_at;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|ChainManager[]
-     */
-    public function getChainManagers(): Collection
-    {
-        return $this->chainManagers;
-    }
-
-    public function addChainManager(ChainManager $chainManager): self
-    {
-        if (!$this->chainManagers->contains($chainManager)) {
-            $this->chainManagers[] = $chainManager;
-            $chainManager->setStore($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChainManager(ChainManager $chainManager): self
-    {
-        if ($this->chainManagers->contains($chainManager)) {
-            $this->chainManagers->removeElement($chainManager);
-            // set the owning side to null (unless already changed)
-            if ($chainManager->getStore() === $this) {
-                $chainManager->setStore(null);
-            }
-        }
 
         return $this;
     }
