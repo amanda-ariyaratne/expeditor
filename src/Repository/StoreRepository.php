@@ -18,7 +18,7 @@ class StoreRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Store::class);
     }
-
+  
     public function getById($id)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -30,47 +30,82 @@ class StoreRepository extends ServiceEntityRepository
             return $stmt->fetch();
         });
         return $this->getEntity($result);
+    }  
+  
+    public function getAll(){
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn){
+            $sql = "SELECT * FROM store";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });         
+        return $this->getEntityArray($results);
     }
 
-    private function getEntity($array)
+    public function update($store)
+    {   
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$store ) {
+            $sql = "UPDATE store SET name=:sname, street=:street, city=:city WHERE id = :id AND deleted_at IS NULL";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $store->getId());
+            $stmt->bindValue('sname', $store->getName());
+            $stmt->bindValue('street', $store->getStreet());
+            $stmt->bindValue('city', $store->getCity());
+            $stmt->execute();
+        });        
+    }
+
+    public function insert(User $user)
     {
+        $conn = $this->getEntityManager()->getConnection();
+        $lastInsertId = $conn->transactional(function($conn) use(&$user) {
+            $sql = "INSERT INTO user (email, roles, `password`, first_name, last_name) VALUES (:email, :roles, :pass, :fname, :lname);";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('email', $user->getEmail());
+            $stmt->bindValue('roles', json_encode($user->getRoles()));
+            $stmt->bindValue('pass', $user->getPassword());
+            $stmt->bindValue('fname', $user->getFirstName());
+            $stmt->bindValue('lname', $user->getLastName());
+            $stmt->execute();
+            return $conn->lastInsertId();
+        });
+        return $lastInsertId;
+    }
+
+    public function delete($id)
+    {   
+        $date = new \DateTime();
+        $date = $date->format('Y-m-d H:i:s');
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id, $date) {
+            $sql = "UPDATE store SET deleted_at=:present WHERE id = :id AND deleted_at IS NULL";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->bindValue('present', $date);
+            $stmt->execute();
+        });        
+    }
+  
+    private function getEntity($params){
         $store = new Store();
-        $store->setId($array['id']);
-        $store->setName($array['name']);
-        $store->setStreet($array['street']);
-        $store->setCity($array['city']);
-        $store->setCreatedAt(new \DateTime($array['created_at']));
-        $store->setUpdatedAt(new \DateTime($array['updated_at']));
-        $store->setUpdatedAt(new \DateTime($array['deleted_at']));
+        $store->setId($params['id']);
+        $store->setName($params['name']);
+        $store->setStreet($params['street']);
+        $store->setCity($params['city']);
+        $store->setCreatedAt(new \DateTime($params['created_at']));
+        $store->setUpdatedAt(new \DateTime($params['updated_at']));
         return $store;
     }
 
-    // /**
-    //  * @return Store[] Returns an array of Store objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    private function getEntityArray($array)
+    {   
+        $entityArray = [];
+        foreach ($array as $element) {
+            array_push($entityArray, $this->getEntity($element));
+        }
+        return $entityArray;    
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Store
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
