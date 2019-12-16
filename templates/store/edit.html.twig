@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Store Manager{% endblock %}
-
 {% block stylesheets %}
   <link href="{{ asset('back/css/bootstrap4.2.1.min.css') }}" rel="stylesheet">
   <!-- page css -->
@@ -40,37 +38,40 @@
   </script>
 
 {% endblock %}
+{#
+    value="{{ first_name }}
+#}
 
 {% block content %}
-<div class="container-fluid">
 
 
-<!-- ============================================================== --> 
-<!-- Start Page Content --> 
-<!-- ============================================================== -->
-<div class="row">
-    <div class="col-lg-3 col-md-12">
-        
+
+<div class="page-wrapper">
+  <div class="container-fluid">
+    <div class="page-titles row">
     </div>
-    <div class="col-lg-6 col-md-12">
-        <div class="card ">
-            <div class="card-body">
-                <h4 class="card-title text-uppercase mb-20">
-                    EDIT STORE MANAGER
-                </h4>
-                <h6 class="card-subtitle m-b-5">
-                    
-                </h6>
-                {{ include( 'store_manager/_formEdit.html.twig' )}}
-            </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-12">
         </div>
-    </div>
-    <div class="col-lg-3 col-md-12">
-    </div>
-</div>
-</div>
-
-{% endblock content %}
-
-
         
+        <div class="col-lg-6 col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-uppercase mb-20">
+                EDIT STORE
+              </h4>
+
+              <h6 class="card-subtitle m-b-5">
+                You can register a new store. Not required to have a store manager to create a store.
+              </h6>
+                {{ include('store/_form.html.twig') }}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-12">
+        </div>        
+    </div>
+  </div>
+</div>
+{% endblock content %}

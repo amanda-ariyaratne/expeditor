@@ -62,6 +62,13 @@ class User implements UserInterface
      */
     private $deleted_at;
 
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
