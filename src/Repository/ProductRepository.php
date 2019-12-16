@@ -47,4 +47,24 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
+    public function getAllProducts(): ?Array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM product";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function getProductByID($id): ?Array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM product WHERE id = :id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('id', $id);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }

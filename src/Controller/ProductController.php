@@ -27,19 +27,25 @@ class ProductController extends AbstractController
 
 
     /**
-     * @Route("/product_list" , name="product_list")
+     * @Route("/productList" , name="productList")
      */
-    public function productList()    {
-        $products =  $this->getDoctrine()->getRepository(Product::class)->findAll();
-        return $this->render('front/product/productList.html.twig', ['products' => $products]);
+    public function productList(ProductRepository $productRepository): Response 
+    {   
+        $p = $productRepository->getAllProducts();
+        // var_dump($p);
+        // die();
+        return $this->render('product/productList.html.twig', [
+            'products' => $productRepository->getAllProducts(),
+        ]);
     }
 
     /**
-     * @Route("/product/{id}")
+     * @Route("/{id}")
      */
-    public function product($id)    {
-        $product =  $this->getDoctrine()->getRepository(Product::class)->find($id);
-        return $this->render('front/product/product.html.twig' ,  ['product' => $product]);
+    public function product($id , ProductRepository $productRepository): Response   
+    {
+        $product =  $productRepository->getProductByID($id);
+        return $this->render('product/product.html.twig' ,   ['product' => $product]);
 
 
     }
@@ -70,7 +76,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="product_show", methods={"GET"})
+     * @Route("/product/{id}", name="product_show", methods={"GET"})
      */
     public function show(Product $product): Response
     {
