@@ -99,7 +99,7 @@ class DriverAssistantController extends AbstractController
     {
         if ($this->isCsrfTokenValid('driver_assistant', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $storeManager = $entityManager->getRepository(DriverAssistant::class)->deleteById($id);
+            $driverAssistant = $entityManager->getRepository(DriverAssistant::class)->deleteById($id);
             return new JsonResponse([
                 'status' => 'true'
             ]);
