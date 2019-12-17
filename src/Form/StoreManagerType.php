@@ -34,6 +34,7 @@ class StoreManagerType extends AbstractType
         $stores = $this->entityManager->createQueryBuilder()
                                     ->select('s')
                                     ->from(Store::class, 's')
+                                    ->where('s.deleted_at is null')
                                     ->getQuery()
                                     ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $storeArray = [];
@@ -91,12 +92,8 @@ class StoreManagerType extends AbstractType
         $resolver->setDefaults([
             'data_class' => StoreManager::class,
             'required' => false,
-            // enable/disable CSRF protection for this form
             'csrf_protection' => true,
-            // the name of the hidden HTML field that stores the token
             'csrf_field_name' => '_token',
-            // an arbitrary string used to generate the value of the token
-            // using a different string for each form improves its security
             'csrf_token_id'   => 'store_manager',
             'validation_groups' => ['new', 'edit'],
         ]);

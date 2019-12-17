@@ -35,7 +35,7 @@ class StoreRepository extends ServiceEntityRepository
     public function getAll(){
         $conn = $this->getEntityManager()->getConnection();
         $results = $conn->transactional(function($conn){
-            $sql = "SELECT * FROM store";
+            $sql = "SELECT * FROM store WHERE deleted_at IS NULL";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
