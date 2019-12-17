@@ -49,6 +49,16 @@ class StoreController extends AbstractController
     }
 
     /**
+     * @Route("/{id}", name="store_show", requirements={"id"="\d+"})
+     */
+    public function show(Store $store): Response
+    {           
+        return $this->render('store/show.html.twig', [
+            'stores' => $store,
+        ]);
+    }
+
+    /**
      * @Route("/edit/{id}", name="store_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Store $store, StoreRepository $storeRepository): Response

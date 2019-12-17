@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Store Manager{% endblock %}
+{% block title %}Driver Assistant{% endblock %}
 
 {% block stylesheets %}
     <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
@@ -9,20 +9,21 @@
         td {
             text-align:center
         }
-        .plus-icon {
-            background: #db3838;
-            width: 28px;
-            height: 28px;
-            line-height: 28px;
-            text-align: center;
-            display: inline-block;
-            color: #fff!important;
-            border-radius: 100px;
-        }
-        .plus-icon:hover {
-            background: #002661;
-            color: #fff;
-        }
+            .plus-icon {
+                background: #025a83;
+                width: 22px;
+                height: 22px;
+                line-height: 22px;
+                text-align: center;
+                display: inline-block;
+                color: #fff!important;
+                border-radius: 100px;
+                margin-right: 35px;
+            }
+            .plus-icon:hover {
+                background: #002661;
+                color: #fff;
+            }
     </style>
 {% endblock %}
 
@@ -32,9 +33,9 @@
     <div class="col-lg-12 col-md-12">
         <div class="card ">
             <div class="card-body">
-                <h4 class="card-title text-uppercase mb-20 pull-left"> Store Managers</h4>
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Driver Assistants</h4>
                 <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
-                <a href="{{ path('store_manager_new') }}" class="plus-icon pull-left">
+                <a href="{{ path('driver_assistant_new') }}" class="plus-icon pull-left">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
                 <div class="table-responsive mt-40">
@@ -43,9 +44,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
-                                <th>Email</th>
                                 <th>NIC</th>
-                                <th>Service ID</th>
                                 <th>Store</th>
                                 <th>Joined Date</th>
                                 <th>Action</th>
@@ -53,21 +52,19 @@
                         </thead>
                         <tbody>
                             {%set i = 1 %}
-                            {% for manager in managers %}
+                            {% for assistant in assistants %}
                                 <tr>
                                     <td>{{~i~}}</td>
                                     {% set i = i + 1 %}
-                                    <td class="text-dark font-semibold">{{ manager.user.firstName }} {{ manager.user.lastName }}</td>
-                                    <td>{{ manager.user.email }}</td>
-                                    <td>{{ manager.NIC }}</td>
-                                    <td>{{ manager.serviceNo }}</td>
-                                    <td>{{ manager.store.name }}</td>
-                                    <td>{{ manager.createdAt|date("d/m/Y") }}</td>
+                                    <td class="text-dark font-semibold">{{ assistant.firstName }} {{ assistant.lastName }}</td>
+                                    <td>{{ assistant.NIC }}</td>
+                                    <td>{{ assistant.store.name }}</td>
+                                    <td>{{ assistant.createdAt|date("d/m/Y") }}</td>
                                     <td>
-                                        <a href="{{path('store_manager_edit', { 'id': manager.user.id}) }}" class="pencil-icon">
+                                        <a href="{{path('driver_assistant_edit', { 'id': assistant.id}) }}" class="pencil-icon">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
-                                        <a href="#" class="delete-icon" data-id="{{ manager.user.id }}" >
+                                        <a href="#" class="delete-icon" data-id="{{ assistant.id }}" >
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
                                     </td>
@@ -118,9 +115,9 @@
                             text: 'Confirm',
                             btnClass: 'btn-red',
                             action: function(){
-                                url = "{{path('store_manager_delete', { 'id': 0}) }}";
+                                url = "{{path('driver_assistant_delete', { 'id': 0}) }}";
                                 url = url.replace("0",id);
-                                token = "{{ csrf_token('store_manager') }}"
+                                token = "{{ csrf_token('driver_assistant') }}"
                                 $.ajax({
                                     url: url,
                                     type: 'DELETE',

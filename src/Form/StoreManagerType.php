@@ -31,23 +31,32 @@ class StoreManagerType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $stores = $this->entityManager->getRepository(Store::class)->getAllAsArray();
+        $stores = $this->entityManager->createQueryBuilder()
+                                    ->select('s')
+                                    ->from(Store::class, 's')
+                                    ->where('s.deleted_at is null')
+                                    ->getQuery()
+                                    ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $storeArray = [];
         foreach ($stores as $store) {
             $storeArray[$store['name']] = $store['id'];
         }
         $builder
-            ->add('user', UserType::class)
+            ->add('user', UserType::class, [
+                'validation_groups' => ['edit']
+            ])
             ->add('nic', TextType::class, [
                 'constraints' => [
                     new NotNull([
-                        'message' => 'NIC number is required'
+                        'message' => 'NIC number is required',
+                        'groups' => ['new', 'edit']
                     ]),
                     new Length([
                         'min' => 10,
                         'max' => 12,
                         'minMessage' => 'NIC number must be at least {{ limit }} characters long',
                         'maxMessage' => 'NIC number must be at least {{ limit }} characters long',
+                        'groups' => ['new', 'edit']
                     ])
                 ]
             ])
@@ -55,15 +64,19 @@ class StoreManagerType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new NotNull([
-                        'message' => 'Service ID is required'
+                        'message' => 'Service ID is required',
+                        'groups' => ['new', 'edit']
                     ]),
                     new Length([
                         'min' => 5,
                         'max' => 5,
                         'minMessage' => 'Invalid service ID. Length must be 5 and should start with "SM"',
                         'maxMessage' => 'Invalid service ID. Length must be 5 and should start with "SM"',
+                        'groups' => ['new', 'edit']
                     ]),
-                    new UniqueServiceId()
+                    new UniqueServiceId([
+                        'groups' => ['new']
+                    ])
                 ]
             ])
             ->add('store_id', ChoiceType::class, [
@@ -79,13 +92,10 @@ class StoreManagerType extends AbstractType
         $resolver->setDefaults([
             'data_class' => StoreManager::class,
             'required' => false,
-            // enable/disable CSRF protection for this form
             'csrf_protection' => true,
-            // the name of the hidden HTML field that stores the token
             'csrf_field_name' => '_token',
-            // an arbitrary string used to generate the value of the token
-            // using a different string for each form improves its security
-            'csrf_token_id'   => 'delete_store_manager',
+            'csrf_token_id'   => 'store_manager',
+            'validation_groups' => ['new', 'edit'],
         ]);
     }
 }

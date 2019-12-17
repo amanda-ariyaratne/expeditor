@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Store Manager{% endblock %}
+{% block title %}Create Store Manager{% endblock %}
 
 {% block stylesheets %}
   <link href="{{ asset('back/css/bootstrap4.2.1.min.css') }}" rel="stylesheet">
@@ -43,31 +43,26 @@
 
 {% block content %}
 <div class="container-fluid">
-
-
-<!-- ============================================================== --> 
-<!-- Start Page Content --> 
-<!-- ============================================================== -->
-<div class="row">
-    <div class="col-lg-3 col-md-12">
-        
-    </div>
-    <div class="col-lg-6 col-md-12">
-        <div class="card ">
-            <div class="card-body">
-                <h4 class="card-title text-uppercase mb-20">
-                    EDIT STORE MANAGER
-                </h4>
-                <h6 class="card-subtitle m-b-5">
-                    
-                </h6>
-                {{ include( 'store_manager/_formEdit.html.twig' )}}
+    <div class="row" style="margin-top: 50px; margin-bottom: 50px;">
+        <div class="col-lg-3 col-md-12">
+            
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <div class="card ">
+                <div class="card-body">
+                    <h4 class="card-title text-uppercase mb-20">
+                        NEW DRIVER ASSISTANT
+                    </h4>
+                    <h6 class="card-subtitle m-b-5">
+                        You can create a new driver assistant here.
+                    </h6>
+                    {{ include( 'driver_assistant/_form.html.twig' ) }}
+                </div>
             </div>
         </div>
+        <div class="col-lg-3 col-md-12">
+        </div>
     </div>
-    <div class="col-lg-3 col-md-12">
-    </div>
-</div>
 </div>
 
 {% endblock content %}

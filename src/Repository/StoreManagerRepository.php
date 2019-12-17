@@ -22,6 +22,19 @@ class StoreManagerRepository extends ServiceEntityRepository
         parent::__construct($registry, StoreManager::class);
     }
 
+    public function getById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id) {
+            $sql = "SELECT * FROM store_manager WHERE user_id = :id AND deleted_at IS NULL LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntity($result);
+    }
+
     public function getAll()
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -54,6 +67,26 @@ class StoreManagerRepository extends ServiceEntityRepository
         return $lastInsertId;
     }
 
+    public function update(StoreManager $sm)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $status = $conn->transactional(function($conn) use(&$sm) {
+            $user = $sm->getUser();
+            $user_id = $this->getEntityManager()
+                            ->getRepository(User::class)
+                            ->update($user);
+            $sql = "UPDATE store_manager SET NIC=:nic, service_no=:service_no, store_id=:store WHERE user_id=:user AND deleted_at IS NULL";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('nic', $sm->getNIC());
+            $stmt->bindValue('service_no', $sm->getServiceNo());
+            $stmt->bindValue('store', $sm->getStore()->getId());
+            $stmt->bindValue('user', $sm->getUser()->getId());
+            $stmt->execute();
+            return true;
+        });
+        return $status;
+    }
+
     public function deleteById($id)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -61,7 +94,7 @@ class StoreManagerRepository extends ServiceEntityRepository
             $this->getEntityManager()
                  ->getRepository(User::class)
                  ->deleteById($id);
-            $sql = "UPDATE store_manager SET deleted_at = now(), updated_at = now() WHERE user_id = :id";
+            $sql = "UPDATE store_manager SET deleted_at = now() WHERE user_id = :id";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();

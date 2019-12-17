@@ -66,6 +66,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $lastInsertId;
     }
 
+    public function update($user)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $status = $conn->transactional(function($conn) use(&$user) {
+            $sql = "UPDATE user SET first_name=:fname, last_name=:lname, email=:email WHERE id=:id AND deleted_at IS NULL";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('email', $user->getEmail());
+            $stmt->bindValue('fname', $user->getFirstName());
+            $stmt->bindValue('lname', $user->getLastName());
+            $stmt->bindValue('id', $user->getId());
+            $stmt->execute();
+            return true;
+        });
+        return $status;
+    }
+
     public function deleteById($id)
     {
         $conn = $this->getEntityManager()->getConnection();
