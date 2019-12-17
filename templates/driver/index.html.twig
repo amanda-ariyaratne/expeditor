@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Expeditor - Store List{% endblock %}
+{% block title %}Expeditor - Drivers List{% endblock %}
 
 {% block stylesheets %}
     <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
@@ -58,9 +58,9 @@
                             text: 'Confirm',
                             btnClass: 'btn-red',
                             action: function(){
-                                url = "{{path('store_delete', { 'id': 0}) }}";
+                                url = "{{path('driver_delete', { 'id': 0}) }}";
                                 url = url.replace("0",id);
-                                token = "{{ csrf_token('store-token') }}";
+                                token = "{{ csrf_token('driver-token') }}";
                                 
                                 $.ajax({
                                     url: url,
@@ -69,19 +69,34 @@
                                         _token: token
                                     },
                                     success: function(result) {
-                                        $.confirm({
-                                            title: 'Deleted',
-                                            content: 'The record was successfully deleted',
-                                            type: 'green',
-                                            typeAnimated: true,
-                                            buttons: {
-                                                close: function () {
-                                                    console.log('2');
-                                                    location.reload();
+                                        if (result){
+                                            $.confirm({
+                                                title: 'Deleted',
+                                                content: 'The record was successfully deleted',
+                                                type: 'green',
+                                                typeAnimated: true,
+                                                buttons: {
+                                                    close: function () {
+                                                        console.log('2');
+                                                        location.reload();
+                                                    }
                                                 }
-                                            }
-                                        });
+                                            });
+                                        }
+                                        else{
+                                            $.confirm({
+                                                title: 'Deleted',
+                                                content: 'Sorry! We were unable to delete the record!',
+                                                type: 'yellow',
+                                                typeAnimated: true,
+                                                buttons: {
+                                                    close: function () {
+                                                    }
+                                                }
+                                            });
+                                        }   
                                     }
+                                            
                                 });
                             }
                         },
@@ -108,9 +123,9 @@
     <div class="col-lg-12 col-md-12">
         <div class="card ">
             <div class="card-body">
-                <h4 class="card-title text-uppercase mb-20 pull-left"> Stores </h4>
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Driver </h4>
                 <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
-                <a href="{{ path('store_new') }}" class="plus-icon pull-left">
+                <a href="{{ path('driver_new') }}" class="plus-icon pull-left">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
                 <div class="table-responsive mt-40">
@@ -118,34 +133,38 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>NIC</th>
+                                <th>License_no</th>
+                                <th>Name</th>
                                 <th>Store</th>
-                                <th>Street</th>
-                                <th>City</th>
-                                <th>Created at</th>
-                                <th>Updated at</th>
-                                <th>Action</th>
+                                <th>Created_at</th>
+                                <th>Updated_at</th>
+                                <th>actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% set index = 1 %}
-                            {% for store in stores %}
+                            {% for driver in drivers %}
                                 <tr>
                                     <td>{{~index~}}</td>
                                     {% set index = index + 1 %}
-                                    <td class="text-dark font-semibold">{{ store.getName() }}</td>
-                                    <td>{{ store.getStreet()}}</td>
-                                    <td>{{ store.getCity() }}</td>
-                                    <td>{{ store.getCreatedAt()|date('Y-m-d H:i:s') }}</td>
-                                    <td>{{ store.getUpdatedAt()|date('Y-m-d H:i:s') }}</td>
+                                    <td>{{ driver.NIC }}</td>
+                                    <td>{{ driver.licenseNo }}</td>
+                                    <td>{{ driver.firstName }} {{ driver.lastName }}</td>
+                                    <td>{{ driver.store.name }}</td>
+                                    <td>{{ driver.createdAt ? driver.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                                    <td>{{ driver.updatedAt ? driver.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                                        
                                     <td>
-                                        <a href="{{ path('store_edit', {id: store.id} )}}" class="pencil-icon">
+                                        <a href="{{ path('driver_edit', {id: driver.id} )}}" class="pencil-icon">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
-                                        <a href="#" class="delete-icon" data-id="{{ store.id }}">
+                                        <a href="#" class="delete-icon" data-id="{{ driver.id }}">
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
                                     </td>
                                 </tr>
+
                             {% endfor %}
                             
                         </tbody>
@@ -161,5 +180,4 @@
 <!-- ============================================================== --> 
 </div>
 {% endblock content %}
-
 

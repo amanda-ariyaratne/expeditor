@@ -35,12 +35,23 @@ class StoreRepository extends ServiceEntityRepository
     public function getAll(){
         $conn = $this->getEntityManager()->getConnection();
         $results = $conn->transactional(function($conn){
-            $sql = "SELECT * FROM store";
+            $sql = "SELECT * FROM store WHERE deleted_at IS NULL";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
         });         
         return $this->getEntityArray($results);
+    }
+
+    public function getAllAsArray(){
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn){
+            $sql = "SELECT * FROM store WHERE deleted_at IS NULL";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });         
+        return $results;
     }
 
     public function update($store)
@@ -57,21 +68,17 @@ class StoreRepository extends ServiceEntityRepository
         });        
     }
 
-    public function insert(User $user)
+    public function insert(Store $store)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $lastInsertId = $conn->transactional(function($conn) use(&$user) {
-            $sql = "INSERT INTO user (email, roles, `password`, first_name, last_name) VALUES (:email, :roles, :pass, :fname, :lname);";
+        $result = $conn->transactional(function($conn) use(&$store) {
+            $sql = "INSERT INTO store (name, street, city) VALUES (:name, :street, :city);";
             $stmt = $conn->prepare($sql);
-            $stmt->bindValue('email', $user->getEmail());
-            $stmt->bindValue('roles', json_encode($user->getRoles()));
-            $stmt->bindValue('pass', $user->getPassword());
-            $stmt->bindValue('fname', $user->getFirstName());
-            $stmt->bindValue('lname', $user->getLastName());
+            $stmt->bindValue('name', $store->getName());
+            $stmt->bindValue('street',$store->getStreet());
+            $stmt->bindValue('city', $store->getCity());
             $stmt->execute();
-            return $conn->lastInsertId();
         });
-        return $lastInsertId;
     }
 
     public function delete($id)
@@ -79,13 +86,15 @@ class StoreRepository extends ServiceEntityRepository
         $date = new \DateTime();
         $date = $date->format('Y-m-d H:i:s');
         $conn = $this->getEntityManager()->getConnection();
-        $result = $conn->transactional(function($conn) use(&$id, $date) {
-            $sql = "UPDATE store SET deleted_at=:present WHERE id = :id AND deleted_at IS NULL";
+        $result = $conn->transactional(function($conn) use(&$id, &$date) {
+            $sql = "UPDATE store SET deleted_at=:present WHERE id = :id";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->bindValue('present', $date);
-            $stmt->execute();
-        });        
+            $stmt->execute(); 
+            return true;  
+        });     
+        return $result;
     }
   
     private function getEntity($params){

@@ -94,7 +94,7 @@ class StoreManagerRepository extends ServiceEntityRepository
             $this->getEntityManager()
                  ->getRepository(User::class)
                  ->deleteById($id);
-            $sql = "UPDATE store_manager SET deleted_at = now(), updated_at = now() WHERE user_id = :id";
+            $sql = "UPDATE store_manager SET deleted_at = now() WHERE user_id = :id";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
