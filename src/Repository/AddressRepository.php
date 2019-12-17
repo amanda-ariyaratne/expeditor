@@ -19,6 +19,26 @@ class AddressRepository extends ServiceEntityRepository
         parent::__construct($registry, Address::class);
     }
 
+    public function insert(Address $address)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $lastInsertId = $conn->transactional(function($conn) use(&$address) {
+            $sql = "INSERT INTO `address` (`house_no`, street,  city) VALUES (:house , :street, :city );";
+
+            $stmt = $conn->prepare($sql);
+
+            $stmt->bindValue('house', $address->getHouseNo());
+            $stmt->bindValue('street', $address->getStreet());
+            $stmt->bindValue('city', $address->getCity());
+
+            $stmt->execute();
+            return $conn->lastInsertId();
+        });
+        return $lastInsertId;
+    }
+
+
+
     // /**
     //  * @return Address[] Returns an array of Address objects
     //  */

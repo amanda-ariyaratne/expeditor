@@ -1,0 +1,41 @@
+{% extends 'frontbase.html.twig' %}
+
+{% block title %}Cart index{% endblock %}
+
+{% block body %}
+    <h1>Cart index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Quantity</th>
+                <th>Created_at</th>
+                <th>Updated_at</th>
+                <th>Deleted_at</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cart in carts %}
+            <tr>
+                <td>{{ cart.id }}</td>
+                <td>{{ cart.quantity }}</td>
+                <td>{{ cart.createdAt ? cart.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ cart.updatedAt ? cart.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ cart.deletedAt ? cart.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('cart_show', {'id': cart.id}) }}">show</a>
+                    <a href="{{ path('cart_edit', {'id': cart.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('cart_new') }}">Create new</a>
+{% endblock %}

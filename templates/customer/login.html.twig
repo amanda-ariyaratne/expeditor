@@ -1,0 +1,85 @@
+{% extends 'frontbase.html.twig'%}
+
+{% block title%}Login{% endblock %}
+
+{% block body %}
+
+<div id="body-content" class="layout-boxed">
+    <div id="main-content">
+        <div class="main-content">
+            <div class="wrap-breadcrumb bw-color">
+                <div id="breadcrumb" class="breadcrumb-holder container">
+                    <div class="row">
+                        <div class="col-lg-6 d-none d-lg-block">
+                            <div class="page-title">Account</div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                            <ul class="breadcrumb">
+                            <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+                                <a itemprop="url" href="/">
+                                    <span itemprop="title" class="d-none">Expeditor</span>Home
+                                </a>
+                            </li>
+                            <li class="active">Account</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div id="col-main" class="page-login">
+                    <div class="row">
+
+                        <div class="col-sm-6 col-xs-12">
+                            <div class="form-wrapper">
+                                <div id="customer-login" class="content">
+                                    <h2 class="heading">Login</h2>
+
+                                    <form class="form-horizontal form-material" id="loginform" method="post">
+
+                                        {% if error %}
+                                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                        {% endif %}
+
+                                        {% if app.user %}
+                                            <div class="mb-3">
+                                                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                                            </div>
+                                        {% endif %}
+
+                                        <div class="control-wrapper">
+                                            <label for="email">Email<span class="req">*</span></label>
+                                            <input class="form-control text-center" type="text" required="" placeholder="Email" name="email" value="{{ last_username }}">
+                                        </div>
+
+                                        
+                                        <div class="control-wrapper">
+                                            <label for="password">Password<span class="req">*</span></label>
+                                            <input class="form-control text-center" type="password" required="" name="password" placeholder="Password"> </div>
+                                        </div>
+
+                                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" >
+
+                                        <div class="control-wrapper last">
+                                        <div class="action">
+                                            <a class="forgot-pass" href="">Lost your password?</a>
+                                        </div>
+                                        <input class="btn btn-1" type="submit" value="Login">
+                                        </div>
+                                    </form>
+                                </div>
+                                <div id="recover-password" style="display: none;">
+                                    <h2 class="heading">Reset Password</h2>
+                                    <p class="note">We will send you an email to reset your password.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

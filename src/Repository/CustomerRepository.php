@@ -3,6 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Customer;
+use App\Entity\User;
+use App\Entity\Address;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -18,6 +21,34 @@ class CustomerRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Customer::class);
     }
+
+    public function insert(Customer $c)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $lastInsertId = $conn->transactional(function($conn) use(&$c) {
+            $user = $c->getUser();
+            $adrs = $c->getAddress();
+
+            $address = new Address();
+            $address->setHouseNo($adrs->first());
+            $address->setStreet($adrs->next());
+            $address->setCity($adrs->next());
+
+            $user_id = $this->getEntityManager()->getRepository(User::class)->insert($user);
+            $address_id = $this->getEntityManager()->getRepository(Address::class)->insert($address);
+
+            $sql = "INSERT INTO customer (`user_id`, `address_id`) VALUES (:user, :adrs);";
+            $stmt = $conn->prepare($sql);
+
+            $stmt->bindValue('user', $user_id);
+            $stmt->bindValue('adrs', $address_id);
+
+            $stmt->execute();
+            return $conn->lastInsertId();
+        });
+        return $lastInsertId;
+    }
+
 
     // /**
     //  * @return Customer[] Returns an array of Customer objects

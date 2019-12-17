@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
 
-        <link rel="shortcut icon" href="{{ asset('front/images/icon-main.jpg') }}" type="image/jpg" />
+        <link rel="shortcut icon" href="{{ asset('front/images/icon-main.png') }}" type="image/png" />
 
         <link rel="stylesheet" href=" {{ asset('front/css/bootstrap.min.css  ') }}">
         <link rel="stylesheet" href=" {{ asset('front/css/style.css') }}">
@@ -163,20 +163,14 @@
                     
                       <div class="top-bar-left col-lg-3">
                         <ul class="list-inline">
-
                             <li class="customer-account lazyload waiting">
-
-                             
-                              
-                              
-                                <a href="" title="Account"><i class="demo-icon icon-user"></i>Login</a>
-                              
-                                
+                              {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <a href="/" title="Account"><i class="demo-icon icon-user"></i>{{ app.user.firstname }} {{ app.user.lastname }} </a>
+                              {% else %}
+                                <a href="{{path('customer_login')}}" title="Account"><i class="demo-icon icon-user"></i>Login</a>
+                              {% endif %}
+                                  
                             </li>
-
-                            
-                          
-
                         </ul>
                       </div>
                     
@@ -186,20 +180,17 @@
 
                     <div class="top-bar-right col-lg-3">
                       <ul class="list-inline">
-
-                        
                           <li class="customer-register lazyload waiting">
-                            
-                            <a href="{{path('customer_register')}}" title="Register">
-                              
-                              <i class="demo-icon icon-pencil-2"></i>
-
-                              Register
-                              
-                            </a>
-                            
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                              <a href="{{ path('back_logout') }}" title="Logout">
+                                <i class="demo-icon icon-pencil-2"></i>Logout
+                              </a>
+                            {% else %}
+                              <a href="{{path('customer_register')}}" title="Register">
+                                <i class="demo-icon icon-pencil-2"></i>Register
+                              </a>
+                            {% endif %} 
                           </li>
-                        
                       </ul>
                     </div>
 

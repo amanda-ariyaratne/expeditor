@@ -31,11 +31,11 @@
                           </li>
 
                           
-                          <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb" class="d-none">
+                          {# <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb" class="d-none">
                             <a href="" itemprop="url">
                               <span itemprop="title">{{product[0]['name']}}</span>
                             </a>
-                          </li>    
+                          </li>     #}
                           
                           <li>
                             <a href="" title="">{{product[0]['name']}}</a>
@@ -48,7 +48,7 @@
                           </li>
 
                           <li>
-                            <a href="" title="">Retail</a>
+                            <a href="" title="">Whole sale</a>
                           </li>
 
                           
@@ -131,7 +131,7 @@
                                       
                                       <div id="purchase-1588808155195" class="product-price">
                                         <div class="detail-price" itemprop="price" content="0.0">
-                                            <span class="price-sale"><span class=money> $ {{product[0]['retail_price']}}</span></span>
+                                            <span class="price-sale"><span class=money>$ {{product[0]['wholesale_price']}}</span></span>
                                         </div>
                                       </div> 
                                         
@@ -141,10 +141,10 @@
                                             <ul>
                                               {{product[0]['description']}}
                                             </ul>
-                                          </div>
-                                          <div class="">
+                                         </div>
+                                         <div class="">
                                             <ul>
-                                              retail limit - {{product[0]['retail_limit']}}
+                                              Whole sale limit above - {{product[0]['retail_limit']}}
                                             </ul>
                                           </div>
                                       <meta itemprop="priceCurrency" content="USD" /> 
@@ -153,28 +153,25 @@
 
                                         <form method="post" action="#" id="product_form"  class="product-form product-action variants" >
                                           <div class="qty-add-cart">
-                                            
                                             <div class="quantity-product">
                                               <div class="">
                                                 <script type="text/javascript">
                                                   function incrementValue(){
                                                     var value = parseInt(document.getElementById('quantity').value, 10);
-                                                    var retail_limit = {{product[0]['retail_limit']}};
                                                     value = isNaN(value) ? 0 : value;
-                                                    value > retail_limit-1 ? value = retail_limit-1 : '';
                                                     value++;
                                                     document.getElementById('quantity').value = value;
                                                   }
                                                   function decreaseValue() {
                                                     var value = parseInt(document.getElementById('quantity').value, 10);
+                                                    var retail_limit = {{product[0]['retail_limit']}};
                                                     value = isNaN(value) ? 0 : value;
-                                                    value < 2 ? value = 2 : '';
+                                                    value < retail_limit+2 ? value = retail_limit+2 : '';
                                                     value--;
                                                     document.getElementById('quantity').value = value;
                                                   }
                                                 </script>
-                                                
-                                                <input style="color:black" type="number" id="quantity" class="" name="quantity" value="1" />
+                                                <input style="color:black" type="number" id="quantity" class="" name="quantity" value="{{product[0]['retail_limit'] +1 }}" />
                                                 <span class="qty-inner qty-wrapper"> 
 
                                                   <span class="qty-up btn" style="padding: 0px 14px; font-size: 8px; opacity: 0.6;" title="Increase" data-src="#quantity" onclick="incrementValue()">

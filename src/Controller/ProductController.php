@@ -46,12 +46,18 @@ class ProductController extends AbstractController
     {
         $product =  $productRepository->getProductByID($id);
         return $this->render('product/product.html.twig' ,   ['product' => $product]);
-
-
     }
 
+    /**
+     * @Route("/sale/{id}")
+     */
+    public function sale_product($id , ProductRepository $productRepository): Response   
+    {
+        $product =  $productRepository->getProductByID($id);
+        return $this->render('product/sale_product.html.twig' ,   ['product' => $product]);
+    }
 
-
+    
     /**
      * @Route("/new", name="product_new", methods={"GET","POST"})
      */

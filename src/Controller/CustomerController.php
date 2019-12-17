@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use App\Entity\User;
 use App\Entity\Customer;
@@ -21,13 +22,26 @@ use App\Entity\Address;
  */
 class CustomerController extends AbstractController
 {
+    /**
+     * @Route("/login", name="customer_login")
+     */
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
 
+        return $this->render('customer/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+    }
 
     /**
      * @Route("/register", name="customer_register" , methods={"GET","POST"})
      */
-	public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder){
-		$customer = new Customer();
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    {
+        $customer = new Customer();
+        
 		$form = $this->createForm(CustomerType::class, $customer);
 		$form->handleRequest($request);
 
@@ -39,14 +53,9 @@ class CustomerController extends AbstractController
             $customer->getUser()->setPassword($hashed_password);
             $customer->getUser()->setRoles(['ROLE_CUSTOMER']);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($customer->getUser());
-            $entityManager->persist($customer->getAddress());
-            $entityManager->persist($customer);
-            $entityManager->flush();
-
-			
-			return $this->redirectToRoute('home');
+			$entityManager = $this->getDoctrine()->getRepository(Customer::class)->insert($customer);
+            $this->login();
+			return $this->redirectToRoute('productList');
 		}
 
 		return $this->render('customer/register.html.twig', [

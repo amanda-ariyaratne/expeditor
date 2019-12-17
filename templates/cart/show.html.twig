@@ -1,0 +1,38 @@
+{% extends 'frontbase.html.twig' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+    <h1>Cart</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cart.id }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ cart.quantity }}</td>
+            </tr>
+            <tr>
+                <th>Created_at</th>
+                <td>{{ cart.createdAt ? cart.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Updated_at</th>
+                <td>{{ cart.updatedAt ? cart.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Deleted_at</th>
+                <td>{{ cart.deletedAt ? cart.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('cart_index') }}">back to list</a>
+
+    <a href="{{ path('cart_edit', {'id': cart.id}) }}">edit</a>
+
+    {{ include('cart/_delete_form.html.twig') }}
+{% endblock %}
