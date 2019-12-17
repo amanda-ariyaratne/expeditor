@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/store")
@@ -20,7 +21,7 @@ class StoreController extends AbstractController
      */
     public function index(StoreRepository $storeRepository): Response
     {
-        $stores = $storeRepository->findAll();
+        $stores = $storeRepository->getAll();
         return $this->render('store/index.html.twig', [
             'stores' => $stores,
         ]);
@@ -29,17 +30,15 @@ class StoreController extends AbstractController
     /**
      * @Route("/new", name="store_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, StoreRepository $storeRepository): Response
     {
         $store = new Store();
         $form = $this->createForm(StoreType::class, $store);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($store);
-            $entityManager->flush();
-
+            $store =  $form->getData();
+            $storeRepository->insert($store);
             return $this->redirectToRoute('store_index');
         }
 
@@ -80,15 +79,19 @@ class StoreController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="store_delete")
+     * @Route("/delete/{id}", name="store_delete", methods={"DELETE"})
      */
     public function delete(Request $request, $id, StoreRepository $storeRepository): Response
     {   
-        $storeRepository->delete($id);
-        // if ($this->isCsrfTokenValid('delete'.$store->getId(), $request->request->get('_token'))) {
-        //     $storeRepository->delete($id);
-        // }
+        $deleted = false;
+        if ($this->isCsrfTokenValid('store-token', $request->request->get('_token'))) {
+            
+            $deleted = $storeRepository->delete($id);
+            return new JsonResponse([
+                'status' => $deleted
+            ]);
+        }
 
-        return $this->redirectToRoute('store_index');
+        return new JsonResponse(['status' => $deleted]);
     }
 }

@@ -2,12 +2,11 @@
 
 namespace App\Form;
 
-use App\Entity\DriverAssistant;
+use App\Entity\Truck;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
-
 
 use App\Entity\Store;
 
@@ -17,48 +16,34 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Length;
 
-class DriverAssistantType extends AbstractType
+class TruckType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nic', TextType::class, [
+            ->add('insurance_no', TextType::class, [
                 'constraints' => [
                     new NotNull([
-                        'message' => 'NIC number is required',
+                        'message' => 'Insurance number is required',
                     ]),
                     new Length([
                         'min' => 10,
                         'max' => 12,
-                        'minMessage' => 'NIC number must be at least {{ limit }} characters long',
-                        'maxMessage' => 'NIC number must be at least {{ limit }} characters long'
+                        'minMessage' => 'Insurance number must be at least {{ limit }} characters long',
+                        'maxMessage' => 'Insurance number must be at least {{ limit }} characters long'
                     ])
                 ]
             ])
-            ->add('first_name', TextType::class, [
+            ->add('registration_no', TextType::class, [
                 'constraints' => [
                     new NotNull([
-                        'message' => 'First Name is required'
+                        'message' => 'Registration number is required',
                     ]),
                     new Length([
-                        'min' => 2,
-                        'max' => 50,
-                        'minMessage' => 'First Name must be at least {{ limit }} characters long',
-                        'maxMessage' => 'First Name must be at most {{ limit }} characters long'
-                    ])
-                ]
-            ])
-            ->add('last_name', TextType::class, [
-                'constraints' => [
-                    new NotNull([
-                        'message' => 'Last Name is required'
-                    ]),
-                    new Length([
-                        'min' => 2,
-                        'max' => 50,
-                        'minMessage' => 'Last Name must be at least {{ limit }} characters long',
-                        'maxMessage' => 'Last Name must be at most {{ limit }} characters long'
+                        'min' => 10,
+                        'max' => 12,
+                        'minMessage' => 'Registration number must be at least {{ limit }} characters long',
+                        'maxMessage' => 'Registration number must be at least {{ limit }} characters long'
                     ])
                 ]
             ])
@@ -79,11 +64,10 @@ class DriverAssistantType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => DriverAssistant::class,
-            'required' => false,
+            'data_class' => Truck::class,
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
-            'csrf_token_id'   => 'driver_assistant'
+            'csrf_token_id'   => 'truck'
         ]);
     }
 }
