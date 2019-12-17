@@ -74,7 +74,7 @@ class StoreController extends AbstractController
     public function delete(Request $request, $id, StoreRepository $storeRepository): Response
     {   
         $deleted = false;
-        if ($this->isCsrfTokenValid('delete-store', $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('store-token', $request->request->get('_token'))) {
             
             $deleted = $storeRepository->delete($id);
             return new JsonResponse([
