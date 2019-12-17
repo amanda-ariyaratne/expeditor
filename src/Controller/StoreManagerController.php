@@ -117,7 +117,7 @@ class StoreManagerController extends AbstractController
      */
     public function delete(Request $request, $id): Response
     {
-        if ($this->isCsrfTokenValid('delete-store-manager', $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('store_manager', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $storeManager = $entityManager->getRepository(StoreManager::class)->deleteById($id);
             return new JsonResponse([

@@ -32,7 +32,7 @@ class DriverAssistant
     private $last_name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Store")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Store", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $store;
@@ -55,6 +55,13 @@ class DriverAssistant
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getNIC(): ?string
