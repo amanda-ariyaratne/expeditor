@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Driver{% endblock %}
+
+{% block body %}
+    <h1>Driver</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ driver.id }}</td>
+            </tr>
+            <tr>
+                <th>NIC</th>
+                <td>{{ driver.NIC }}</td>
+            </tr>
+            <tr>
+                <th>License_no</th>
+                <td>{{ driver.licenseNo }}</td>
+            </tr>
+            <tr>
+                <th>First_name</th>
+                <td>{{ driver.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Last_name</th>
+                <td>{{ driver.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Created_at</th>
+                <td>{{ driver.createdAt ? driver.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Updated_at</th>
+                <td>{{ driver.updatedAt ? driver.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Deleted_at</th>
+                <td>{{ driver.deletedAt ? driver.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('driver_index') }}">back to list</a>
+
+    <a href="{{ path('driver_edit', {'id': driver.id}) }}">edit</a>
+
+    {{ include('driver/_delete_form.html.twig') }}
+{% endblock %}
