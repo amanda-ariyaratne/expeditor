@@ -1,4 +1,41 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'form no-background'} }) }}
+
+    <div class="my-custom-class-for-errors">
+        {{ form_errors(form) }}
+    </div>
+
+    <div class="form-group has-success m-t-15 m-b-10 row">
+        {{ form_label(form.first_name, 'First Name', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+        <div class="col-8">
+            {{ form_widget(form.first_name, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group has-success m-t-15 m-b-10 row">
+        {{ form_label(form.last_name, 'Last Name', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+    <div class="col-8">
+        {{ form_widget(form.last_name, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+    </div>
+    </div>
+
+    <div class="form-group has-success m-t-15 m-b-10 row">
+        {{ form_label(form.nic, 'NIC Number', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+    <div class="col-8">
+        {{ form_widget(form.nic, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+    </div>
+    </div>
+
+    <div class="form-group has-success m-t-15 m-b-10 row">
+        {{ form_label(form.store, 'Store', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'}, 'errors': [] }) }}
+    <div class="col-8">
+        {{ form_widget(form.store, {'attr': {'class': 'form-control form-control-success text-success', 'id': 'inlineFormCustomSelect'}}) }}
+    </div>
+    </div>
+
+    <div class="form-group has-success m-t-15 m-b-10 row">
+    <div class="col-10"></div>
+    <div class="col-2">
+        {{ form_widget(form.submit, {'attr': {'class': 'btn btn-rounded  waves-effect waves-light btn-outline-primary font-12'}}) }}
+    </div>
+    </div>              
 {{ form_end(form) }}

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\StoreRepository")
@@ -35,11 +36,13 @@ class Store
 
     /**
      * @ORM\Column(type="datetime")
+     * 
      */
     private $created_at;
 
     /**
      * @ORM\Column(type="datetime")
+     * 
      */
     private $updated_at;
 
@@ -49,24 +52,25 @@ class Store
     private $deleted_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ChainManager", mappedBy="store")
-     */
-    private $chainManagers;
-
-    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\TrainTrip", mappedBy="store")
      */
     private $train_trip;
 
     public function __construct()
     {
-        $this->chainManagers = new ArrayCollection();
         $this->train_trip = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -142,37 +146,6 @@ class Store
     }
 
     /**
-     * @return Collection|ChainManager[]
-     */
-    public function getChainManagers(): Collection
-    {
-        return $this->chainManagers;
-    }
-
-    public function addChainManager(ChainManager $chainManager): self
-    {
-        if (!$this->chainManagers->contains($chainManager)) {
-            $this->chainManagers[] = $chainManager;
-            $chainManager->setStore($this);
-        }
-
-        return $this;
-    }
-
-    public function removeChainManager(ChainManager $chainManager): self
-    {
-        if ($this->chainManagers->contains($chainManager)) {
-            $this->chainManagers->removeElement($chainManager);
-            // set the owning side to null (unless already changed)
-            if ($chainManager->getStore() === $this) {
-                $chainManager->setStore(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
      * @return Collection|TrainTrip[]
      */
     public function getTrainTrip(): Collection
@@ -198,5 +171,10 @@ class Store
         }
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 }

@@ -9,6 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use App\Entity\Store;
 
 /**
  * @Route("/driver/assistant")
@@ -20,8 +23,11 @@ class DriverAssistantController extends AbstractController
      */
     public function index(DriverAssistantRepository $driverAssistantRepository): Response
     {
+        $assistants = $this->getDoctrine() 
+                        ->getRepository(DriverAssistant::class)
+                        ->getAll();
         return $this->render('driver_assistant/index.html.twig', [
-            'driver_assistants' => $driverAssistantRepository->findAll(),
+            'assistants' => $assistants
         ]);
     }
 
@@ -31,13 +37,14 @@ class DriverAssistantController extends AbstractController
     public function new(Request $request): Response
     {
         $driverAssistant = new DriverAssistant();
+
         $form = $this->createForm(DriverAssistantType::class, $driverAssistant);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($driverAssistant);
-            $entityManager->flush();
+
+            $entityManager = $this->getDoctrine()->getRepository(DriverAssistant::class)->insert($driverAssistant);
 
             return $this->redirectToRoute('driver_assistant_index');
         }
@@ -61,34 +68,45 @@ class DriverAssistantController extends AbstractController
     /**
      * @Route("/{id}/edit", name="driver_assistant_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, DriverAssistant $driverAssistant): Response
+    public function edit(Request $request, $id): Response
     {
+        $driverAssistant = $this->getDoctrine() 
+                             ->getRepository(DriverAssistant::class)
+                             ->getById($id);
+
         $form = $this->createForm(DriverAssistantType::class, $driverAssistant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+
+            $driverAssistant = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getRepository(DriverAssistant::class)->update($driverAssistant);
 
             return $this->redirectToRoute('driver_assistant_index');
+
         }
 
         return $this->render('driver_assistant/edit.html.twig', [
-            'driver_assistant' => $driverAssistant,
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ]);
     }
 
     /**
      * @Route("/{id}", name="driver_assistant_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, DriverAssistant $driverAssistant): Response
+    public function delete(Request $request, $id): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$driverAssistant->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('driver_assistant', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($driverAssistant);
-            $entityManager->flush();
+            $driverAssistant = $entityManager->getRepository(DriverAssistant::class)->deleteById($id);
+            return new JsonResponse([
+                'status' => 'true'
+            ]);
         }
-
-        return $this->redirectToRoute('driver_assistant_index');
+        
+        return new JsonResponse([
+            'status' => 'false'
+        ]);
     }
 }

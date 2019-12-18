@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/truck")
@@ -20,8 +21,11 @@ class TruckController extends AbstractController
      */
     public function index(TruckRepository $truckRepository): Response
     {
+        $trucks = $this->getDoctrine() 
+                        ->getRepository(Truck::class)
+                        ->getAll();
         return $this->render('truck/index.html.twig', [
-            'trucks' => $truckRepository->findAll(),
+            'trucks' => $trucks
         ]);
     }
 
@@ -31,19 +35,19 @@ class TruckController extends AbstractController
     public function new(Request $request): Response
     {
         $truck = new Truck();
+
         $form = $this->createForm(TruckType::class, $truck);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($truck);
-            $entityManager->flush();
+
+            $entityManager = $this->getDoctrine()->getRepository(Truck::class)->insert($truck);
 
             return $this->redirectToRoute('truck_index');
         }
 
         return $this->render('truck/new.html.twig', [
-            'truck' => $truck,
             'form' => $form->createView(),
         ]);
     }
@@ -61,34 +65,45 @@ class TruckController extends AbstractController
     /**
      * @Route("/{id}/edit", name="truck_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Truck $truck): Response
+    public function edit(Request $request, $id): Response
     {
+        $truck = $this->getDoctrine() 
+                        ->getRepository(Truck::class)
+                        ->getById($id);
+
         $form = $this->createForm(TruckType::class, $truck);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+
+            $truck = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getRepository(Truck::class)->update($truck);
 
             return $this->redirectToRoute('truck_index');
+
         }
 
         return $this->render('truck/edit.html.twig', [
-            'truck' => $truck,
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ]);
     }
 
     /**
      * @Route("/{id}", name="truck_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Truck $truck): Response
+    public function delete(Request $request, $id): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$truck->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('truck', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($truck);
-            $entityManager->flush();
+            $truck = $entityManager->getRepository(Truck::class)->deleteById($id);
+            return new JsonResponse([
+                'status' => 'true'
+            ]);
         }
-
-        return $this->redirectToRoute('truck_index');
+        
+        return new JsonResponse([
+            'status' => 'false'
+        ]);
     }
 }
