@@ -3,13 +3,21 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\Cart;
+use App\Entity\Customer;
+
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
+use App\Repository\CartRepository;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\Security;
 
+use App\Form\CartType;
 /**
  * @Route("/product")
  */
@@ -32,8 +40,6 @@ class ProductController extends AbstractController
     public function productList(ProductRepository $productRepository): Response 
     {   
         $p = $productRepository->getAllProducts();
-        // var_dump($p);
-        // die();
         return $this->render('product/productList.html.twig', [
             'products' => $productRepository->getAllProducts(),
         ]);
@@ -42,10 +48,23 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}")
      */
-    public function product($id , ProductRepository $productRepository): Response   
+    public function product($id ,Request $request, ProductRepository $productRepository, CartRepository $cartRepository , Security $security): Response   
     {
         $product =  $productRepository->getProductByID($id);
-        return $this->render('product/product.html.twig' ,   ['product' => $product]);
+
+        $cart = new Cart();
+        $form = $this->createForm(CartType::class, $cart);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $cart  = $form->getData();
+
+            $user = $security->getUser();
+
+            $entitym = $cartRepository->insert($cart , $user->getId() , $product[0]['id']);
+        }
+        
+        return $this->render('product/product.html.twig' ,   ['product' => $product , 'form' => $form->createView(),]);
     }
 
     /**

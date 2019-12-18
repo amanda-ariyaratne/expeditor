@@ -22,6 +22,31 @@ class CustomerRepository extends ServiceEntityRepository
         parent::__construct($registry, Customer::class);
     }
 
+
+    public function getById($id)
+    {
+        var_dump($id);
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id) {
+            $sql = "SELECT * FROM customer WHERE user_id = :id AND deleted_at IS NULL LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntity($result);
+    }
+
+    public function getCustomerByID($id): ?Array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM customer WHERE user_id = :id AND deleted_at IS NULL LIMIT 1";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('id', $id);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
     public function insert(Customer $c)
     {
         $conn = $this->getEntityManager()->getConnection();

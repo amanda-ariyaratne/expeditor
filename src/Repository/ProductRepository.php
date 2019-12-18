@@ -19,6 +19,21 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+
+    public function getById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id) {
+            $sql = "SELECT * FROM product WHERE id = :id AND deleted_at IS NULL LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntity($result);
+    }
+
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */

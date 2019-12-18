@@ -151,7 +151,7 @@
 
                                       <div class="group-cw clearfix">
 
-                                        <form method="post" action="#" id="product_form"  class="product-form product-action variants" >
+                                        <form method="post" action="{{path('add_to_cart')}}" id="product_form"  class="product-form product-action variants" >
                                           <div class="qty-add-cart">
                                             <div class="quantity-product">
                                               <div class="">
@@ -172,6 +172,9 @@
                                                   }
                                                 </script>
                                                 <input style="color:black" type="number" id="quantity" class="" name="quantity" value="{{product[0]['retail_limit'] +1 }}" />
+                                                <input type="number" id="" class="hidden" name="customer_id" value="{{ app.user.id }}" />
+                                                <input type="number" id="" class="hidden" name="product_id" value="{{product[0]['id']}}" />
+                                                
                                                 <span class="qty-inner qty-wrapper"> 
 
                                                   <span class="qty-up btn" style="padding: 0px 14px; font-size: 8px; opacity: 0.6;" title="Increase" data-src="#quantity" onclick="incrementValue()">

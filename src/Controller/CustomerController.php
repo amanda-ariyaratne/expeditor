@@ -54,7 +54,7 @@ class CustomerController extends AbstractController
             $customer->getUser()->setRoles(['ROLE_CUSTOMER']);
 
 			$entityManager = $this->getDoctrine()->getRepository(Customer::class)->insert($customer);
-            $this->login();
+            //$this->login();
 			return $this->redirectToRoute('productList');
 		}
 
@@ -65,7 +65,16 @@ class CustomerController extends AbstractController
 
 
     }
-    
+
+
+    /**
+     * @Route("/getCustomerById", name="get_customer")
+     */
+    public function getCustomerById($id): Response
+    {
+        $customer = $this->getDoctrine()->getRepository(Customer::class)->getById($id);
+        return $customer;
+    }
 
     /**
      * @Route("/", name="customer_index", methods={"GET"})

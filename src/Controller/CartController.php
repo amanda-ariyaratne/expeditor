@@ -3,8 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Cart;
+use App\Entity\Customer;
+use App\Entity\Product;
+
 use App\Form\CartType;
 use App\Repository\CartRepository;
+use App\Repository\CustomerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +19,16 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CartController extends AbstractController
 {
+    /**
+     * @Route("/add", name="add_to_cart", methods={"GET","POST"})
+     */
+    public function add($cart , $customer_id , $product_id ): Response
+    {  
+        $entityManager = $this->getDoctrine()->getRepository(Cart::class)->insert($cart , $customer_id, $product_id);
+        
+    }
+
+
     /**
      * @Route("/", name="cart_index", methods={"GET"})
      */

@@ -19,6 +19,25 @@ class CartRepository extends ServiceEntityRepository
         parent::__construct($registry, Cart::class);
     }
 
+
+
+
+
+    public function insert($cart, $customer_id,  $product_id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "INSERT INTO cart (quantity , `customer_id`, `product_id`) VALUES (:quantity , :customer, :product);";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('quantity', $cart->getQuantity());
+        $stmt->bindValue('customer', $customer_id);
+        $stmt->bindValue('product', $product_id);
+
+        $stmt->execute();
+        return $conn->lastInsertId();
+
+    }
+
+
     // /**
     //  * @return Cart[] Returns an array of Cart objects
     //  */

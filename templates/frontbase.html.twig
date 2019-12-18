@@ -117,6 +117,9 @@
     .header-container .searchbox .search-icon:hover{
       background-color: #12c71e;
     }
+    .quantity-show{
+      width:50px;
+    }
 
   </style>
 
@@ -167,7 +170,7 @@
                               {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                 <a href="/" title="Account"><i class="demo-icon icon-user"></i>{{ app.user.firstname }} {{ app.user.lastname }} </a>
                               {% else %}
-                                <a href="{{path('customer_login')}}" title="Account"><i class="demo-icon icon-user"></i>Login</a>
+                                <a href="{{path('back_login')}}" title="Login"><i class="demo-icon icon-user"></i>Login</a>
                               {% endif %}
                                   
                             </li>

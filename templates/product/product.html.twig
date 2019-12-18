@@ -150,8 +150,12 @@
                                       <meta itemprop="priceCurrency" content="USD" /> 
 
                                       <div class="group-cw clearfix">
-
-                                        <form method="post" action="#" id="product_form"  class="product-form product-action variants" >
+                                        <style>
+                                         .quantity-show{
+                                            width:100px !important ;
+                                          }
+                                        </style>
+                                        {{ form_start(form) }}
                                           <div class="qty-add-cart">
                                             
                                             <div class="quantity-product">
@@ -173,8 +177,9 @@
                                                     document.getElementById('quantity').value = value;
                                                   }
                                                 </script>
+                                                {{ form_widget(form.quantity, {'value' : '1' , 'attr': {'class': 'quantity-show' , 'id':'quantity'}}) }}
                                                 
-                                                <input style="color:black" type="number" id="quantity" class="" name="quantity" value="1" />
+                                                
                                                 <span class="qty-inner qty-wrapper"> 
 
                                                   <span class="qty-up btn" style="padding: 0px 14px; font-size: 8px; opacity: 0.6;" title="Increase" data-src="#quantity" onclick="incrementValue()">
@@ -190,11 +195,11 @@
                                             </div>
 
                                             <div class="action-button">
-                                              <button id="add-to-cart" type="submit" value="Submit" class="add-to-cart btn btn-1" >Add to cart</button> 
+                                              {{ form_widget(form.AddToCart) }}
                                             </div>
                                           </div>
                                         
-                                        </form>
+                                        {{ form_end(form) }}
                                       </div>             
 
 
