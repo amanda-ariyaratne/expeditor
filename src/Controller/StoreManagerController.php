@@ -54,11 +54,6 @@ class StoreManagerController extends AbstractController
 
             $storeManager->getUser()->setRoles(['ROLE_STORE_MANAGER']);
 
-            /* set store */
-            $storeId = $form->get('store_id')->getData();
-            $store = $this->getDoctrine()->getRepository(Store::class)->getById($storeId);
-            $storeManager->setStore($store);
-
             $entityManager = $this->getDoctrine()->getRepository(StoreManager::class)->insert($storeManager);
 
             return $this->redirectToRoute('store_manager_index');
@@ -96,11 +91,6 @@ class StoreManagerController extends AbstractController
             $storeManager = $form->getData();
 
             $storeManager->getUser()->setRoles(['ROLE_STORE_MANAGER']);
-
-            /* set store */
-            $storeId = $form->get('store_id')->getData();
-            $store = $this->getDoctrine()->getRepository(Store::class)->getById($storeId);
-            $storeManager->setStore($store);
 
             $entityManager = $this->getDoctrine()->getRepository(StoreManager::class)->update($storeManager);
 
