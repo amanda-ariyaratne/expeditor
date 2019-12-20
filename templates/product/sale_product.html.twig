@@ -150,8 +150,12 @@
                                       <meta itemprop="priceCurrency" content="USD" /> 
 
                                       <div class="group-cw clearfix">
-
-                                        <form method="post" action="{{path('add_to_cart')}}" id="product_form"  class="product-form product-action variants" >
+                                        <style>
+                                         .quantity-show{
+                                            width:100px !important ;
+                                          }
+                                        </style>
+                                        {{ form_start(form) }}
                                           <div class="qty-add-cart">
                                             <div class="quantity-product">
                                               <div class="">
@@ -171,10 +175,8 @@
                                                     document.getElementById('quantity').value = value;
                                                   }
                                                 </script>
-                                                <input style="color:black" type="number" id="quantity" class="" name="quantity" value="{{product[0]['retail_limit'] +1 }}" />
-                                                <input type="number" id="" class="hidden" name="customer_id" value="{{ app.user.id }}" />
-                                                <input type="number" id="" class="hidden" name="product_id" value="{{product[0]['id']}}" />
                                                 
+                                                {{ form_widget(form.quantity, {'value' : '1' , 'attr': {'class': 'quantity-show' , 'id':'quantity'}}) }}
                                                 <span class="qty-inner qty-wrapper"> 
 
                                                   <span class="qty-up btn" style="padding: 0px 14px; font-size: 8px; opacity: 0.6;" title="Increase" data-src="#quantity" onclick="incrementValue()">
@@ -190,7 +192,7 @@
                                             </div>
 
                                             <div class="action-button">
-                                              <button id="add-to-cart" type="submit" value="Submit" class="add-to-cart btn btn-1" >Add to cart</button> 
+                                              {{ form_widget(form.AddToCart) }}
                                             </div>
                                           </div>
                                         

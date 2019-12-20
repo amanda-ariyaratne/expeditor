@@ -43,7 +43,8 @@ class CartType extends AbstractType
             ->add('customer', HiddenType::class)
             ->add('AddToCart', SubmitType::class , [
                 'attr' => [
-                    'class' => 'add-to-cart btn btn-1'
+                    'class' => 'add-to-cart btn btn-1',
+                    'id' => 'add-to-cart'
                 ]
             ])
         ;

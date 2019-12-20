@@ -8,31 +8,33 @@
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ cart.id }}</td>
+                <th>Name</th>
+                <td>{{ cart.product[0]['name'] }}</td>
+            </tr>
+            <tr>
+                <th>Retail price</th>
+                <td>{{ cart.product[0]['retail_price'] }}</td>
+            </tr>
+            <tr>
+                <th>Whole sale price</th>
+                <td>{{ cart.product[0]['wholesale_price'] }}</td>
             </tr>
             <tr>
                 <th>Quantity</th>
-                <td>{{ cart.quantity }}</td>
+                <td>{{ cart.cart.quantity }}</td>
             </tr>
             <tr>
                 <th>Created_at</th>
-                <td>{{ cart.createdAt ? cart.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ cart.cart.createdAt ? cart.cart.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>Updated_at</th>
-                <td>{{ cart.updatedAt ? cart.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Deleted_at</th>
-                <td>{{ cart.deletedAt ? cart.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Total</th>
+                <td>{{ cart.total}}</td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('cart_index') }}">back to list</a>
-
-    <a href="{{ path('cart_edit', {'id': cart.id}) }}">edit</a>
 
     {{ include('cart/_delete_form.html.twig') }}
 {% endblock %}

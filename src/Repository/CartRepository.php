@@ -31,10 +31,21 @@ class CartRepository extends ServiceEntityRepository
         $stmt->bindValue('quantity', $cart->getQuantity());
         $stmt->bindValue('customer', $customer_id);
         $stmt->bindValue('product', $product_id);
-
+        var_dump($sql);
+        die();
         $stmt->execute();
         return $conn->lastInsertId();
 
+    }
+
+    public function getAllByID($id): ?Array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM cart WHERE customer_id = :id AND deleted_at IS NULL";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('id', $id);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
 

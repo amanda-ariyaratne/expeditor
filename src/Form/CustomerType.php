@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 use App\Form\UserType;
 use App\Form\AddressType;
+use App\Form\ContactNoType;
 
 class CustomerType extends AbstractType
 {
@@ -20,6 +21,7 @@ class CustomerType extends AbstractType
         $builder
             ->add('user', UserType::class)
             ->add('address', AddressType::class)
+            //->add('contactNo', ContactNoType::class)
             ->add('register', SubmitType::class , [
                 'attr' => [
                     'class' => 'btn btn-1'

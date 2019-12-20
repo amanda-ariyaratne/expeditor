@@ -9,10 +9,13 @@ use App\Entity\Product;
 use App\Form\CartType;
 use App\Repository\CartRepository;
 use App\Repository\CustomerRepository;
+use App\Repository\ProductRepository;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/cart")
@@ -32,10 +35,33 @@ class CartController extends AbstractController
     /**
      * @Route("/", name="cart_index", methods={"GET"})
      */
-    public function index(CartRepository $cartRepository): Response
+    public function index(CartRepository $cartRepository , ProductRepository $productRepository, Security $security): Response
     {
+        $user = $security->getUser();
+        $cart = $cartRepository->getAllByID($user->getId());
+        $cart_products = array();
+        if (count($cart) != 0){
+            foreach($cart as $c){
+                $c['product']= $productRepository->getProductByID($c['product_id']);
+
+                //calculate total
+                $product =  $c['product'][0];
+                if( $c['quantity'] > $product['retail_limit'] ){//whole sale
+                    $c['total'] = $c['quantity']*$product['wholesale_price'] ;
+                }
+                else{//retail
+                    $c['total'] = $c['quantity']*$product['retail_price'] ;
+                }
+                array_push($cart_products , $c);
+            }
+        }
+
+
+
+        // var_dump($cart_products[0]);
+        // die();
         return $this->render('cart/index.html.twig', [
-            'carts' => $cartRepository->findAll(),
+            'carts' => $cart_products,
         ]);
     }
 
@@ -65,10 +91,25 @@ class CartController extends AbstractController
     /**
      * @Route("/{id}", name="cart_show", methods={"GET"})
      */
-    public function show(Cart $cart): Response
-    {
+    public function show(Cart $cart , ProductRepository $productRepository): Response
+    {   
+        $cart_product = array();
+        $cart_product['cart']= $cart;
+
+        $cart_product['product']= $productRepository->getProductByID($cart->getProduct()->getId());
+
+        $product =  $cart_product['product'][0];
+        if( $cart->getQuantity() > $product['retail_limit']  ){//whole sale
+            $cart_product['total'] = $cart->getQuantity()*$product['wholesale_price'] ;
+        }
+        else{//retail
+            $cart_product['total'] = $cart->getQuantity()*$product['retail_price'] ;
+        }
+        // var_dump($cart_product['total']);
+        // die();
+
         return $this->render('cart/show.html.twig', [
-            'cart' => $cart,
+            'cart' => $cart_product,
         ]);
     }
 
@@ -104,5 +145,11 @@ class CartController extends AbstractController
         }
 
         return $this->redirectToRoute('cart_index');
+    }
+
+
+    public function noOfCartItems($id)
+    {
+
     }
 }

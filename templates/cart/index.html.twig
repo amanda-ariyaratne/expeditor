@@ -8,25 +8,22 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>Name</th>
                 <th>Quantity</th>
+                <th>Total</th>
                 <th>Created_at</th>
-                <th>Updated_at</th>
-                <th>Deleted_at</th>
-                <th>actions</th>
+                <th>Show Item</th>
             </tr>
         </thead>
         <tbody>
         {% for cart in carts %}
             <tr>
-                <td>{{ cart.id }}</td>
+                <td>{{ cart.product[0]['name'] }}</td>
                 <td>{{ cart.quantity }}</td>
-                <td>{{ cart.createdAt ? cart.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ cart.updatedAt ? cart.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ cart.deletedAt ? cart.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ cart.total }}</td>
+                <td>{{ cart.created_at ? cart.created_at|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('cart_show', {'id': cart.id}) }}">show</a>
-                    <a href="{{ path('cart_edit', {'id': cart.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -37,5 +34,6 @@
         </tbody>
     </table>
 
-    <a href="{{ path('cart_new') }}">Create new</a>
+    <a href="{{ path('productList') }}">Continue Shopping</a>
+    <a href="{{ path('productList') }}">Check out</a>
 {% endblock %}

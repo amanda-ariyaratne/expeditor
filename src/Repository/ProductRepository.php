@@ -76,7 +76,7 @@ class ProductRepository extends ServiceEntityRepository
     public function getProductByID($id): ?Array
     {
         $conn = $this->getEntityManager()->getConnection();
-        $sql = "SELECT * FROM product WHERE id = :id";
+        $sql = "SELECT * FROM product WHERE id = :id AND deleted_at IS NULL";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue('id', $id);
         $stmt->execute();

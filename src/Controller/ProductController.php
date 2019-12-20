@@ -58,9 +58,7 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $cart  = $form->getData();
-
             $user = $security->getUser();
-
             $entitym = $cartRepository->insert($cart , $user->getId() , $product[0]['id']);
         }
         
@@ -70,10 +68,21 @@ class ProductController extends AbstractController
     /**
      * @Route("/sale/{id}")
      */
-    public function sale_product($id , ProductRepository $productRepository): Response   
+    public function sale_product($id ,Request $request, ProductRepository $productRepository, CartRepository $cartRepository , Security $security): Response 
     {
         $product =  $productRepository->getProductByID($id);
-        return $this->render('product/sale_product.html.twig' ,   ['product' => $product]);
+        $cart = new Cart();
+        $form = $this->createForm(CartType::class, $cart);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $cart  = $form->getData();
+            var_dump($cart);
+            die();
+            $user = $security->getUser();
+            $entitym = $cartRepository->insert($cart , $user->getId() , $product[0]['id']);
+        }
+        return $this->render('product/sale_product.html.twig' ,   ['product' => $product , 'form' => $form->createView(),]);
     }
 
     
