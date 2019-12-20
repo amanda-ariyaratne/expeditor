@@ -37,6 +37,15 @@ class AddressRepository extends ServiceEntityRepository
         return $lastInsertId;
     }
 
+    public function getByAddressID($id): ?Array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM `address` WHERE id = :id AND deleted_at IS NULL LIMIT 1";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('id', $id);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 
 
     // /**

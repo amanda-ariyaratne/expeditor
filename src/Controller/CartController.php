@@ -38,7 +38,7 @@ class CartController extends AbstractController
     public function index(CartRepository $cartRepository , ProductRepository $productRepository, Security $security): Response
     {
         $user = $security->getUser();
-        $cart = $cartRepository->getAllByID($user->getId());
+        $cart = $cartRepository->getAllByCustomerID($user->getId());
         $cart_products = array();
         if (count($cart) != 0){
             foreach($cart as $c){
@@ -56,10 +56,6 @@ class CartController extends AbstractController
             }
         }
 
-
-
-        // var_dump($cart_products[0]);
-        // die();
         return $this->render('cart/index.html.twig', [
             'carts' => $cart_products,
         ]);
@@ -140,16 +136,16 @@ class CartController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$cart->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($cart);
-            $entityManager->flush();
+            $cart_deleted = $entityManager->getRepository(Cart::class)->deleteById($cart->getId());
         }
 
         return $this->redirectToRoute('cart_index');
     }
 
 
-    public function noOfCartItems($id)
+    public function noOfCartItems($id): Response
     {
-
+        $cart = $cartRepository->getAllByCustomerID($id);
+        return count($cart);
     }
 }

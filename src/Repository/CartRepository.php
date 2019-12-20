@@ -38,7 +38,7 @@ class CartRepository extends ServiceEntityRepository
 
     }
 
-    public function getAllByID($id): ?Array
+    public function getAllByCustomerID($id): ?Array
     {
         $conn = $this->getEntityManager()->getConnection();
         $sql = "SELECT * FROM cart WHERE customer_id = :id AND deleted_at IS NULL";
@@ -47,6 +47,21 @@ class CartRepository extends ServiceEntityRepository
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+    public function deleteById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $status = $conn->transactional(function($conn) use(&$id) {
+            $sql = "UPDATE cart SET deleted_at = now() WHERE id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return true;
+        });
+        return $status;
+    }
+
+
 
 
     // /**

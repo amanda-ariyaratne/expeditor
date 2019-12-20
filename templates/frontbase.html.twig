@@ -12,6 +12,7 @@
         <link rel="stylesheet" href=" {{ asset('front/css/fonts.css') }}">
 
         <link rel="stylesheet" href=" {{ asset('front/css/bootstrap.4x.css') }}">
+        <link rel="stylesheet" href=" {{ asset('front/css/order.css') }}">
         <link rel="stylesheet" href=" {{ asset('front/css/bc.style.scss.css') }}">
         <link rel="stylesheet" href=" {{ asset('front/css/arenafont.css') }}">
         <link rel="stylesheet" href=" {{ asset('front/css/bc_wl_cp_style.scss.css') }}">
@@ -250,9 +251,9 @@
                             <span>
                               <i class="fas fa-bell noti-icon-style" style="background: rgba(255,255,255,0.5); color:black; font-size:30px;padding:5px 7px; border-radius:3px; position:absolute; top:0px; "></i>
                             </span>
-                            <span class="badge-counter" style="position: absolute; top: 20px; left: 60px;">
+                            {# <span class="badge-counter" style="position: absolute; top: 20px; left: 60px;">
                                4
-                            </span>
+                            </span> #}
                         </a>
                         
                       </div>
@@ -261,13 +262,13 @@
 
                       <div class="col-md-1" style="height:36px;">
 
-                          <a href=# title="Your cart">
+                          <a href="{{path('cart_index')}}" title="Your cart">
                             <span>
                               <i class="demo-icon icon-handy-cart" style="background: rgba(255,255,255,0.5); color:black; font-size:27px; padding:5px 7px; border-radius:3px; position:absolute; top:0px;"></i>
                             </span>
-                            <span class="badge-counter" style="position: absolute; top: 20px;right: 18px;">
+                            {# <span class="badge-counter" style="position: absolute; top: 20px;right: 18px;">
                               5
-                            </span>
+                            </span> #}
                           </a>
 
 

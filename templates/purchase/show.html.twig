@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'frontbase.html.twig' %}
 
 {% block title %}Purchase{% endblock %}
 
@@ -23,14 +23,7 @@
                 <th>Created_at</th>
                 <td>{{ purchase.createdAt ? purchase.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
-            <tr>
-                <th>Updated_at</th>
-                <td>{{ purchase.updatedAt ? purchase.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Deleted_at</th>
-                <td>{{ purchase.deletedAt ? purchase.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
+
         </tbody>
     </table>
 

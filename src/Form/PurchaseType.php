@@ -7,22 +7,23 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use App\Form\AddressType;
+use App\Form\CustomerType;
+
 class PurchaseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('total_amount')
-            ->add('delivery_date')
-            ->add('created_at')
-            ->add('updated_at')
-            ->add('deleted_at')
-            ->add('status')
-            ->add('customer')
-            ->add('truck_route')
-            ->add('store')
-            ->add('train_trip')
-            ->add('address')
+            ->add('delivery_date' , TextType::class)
+            ->add('address' , AddressType::class)
+            ->add('purchase', SubmitType::class , [
+                'attr' => [
+                    'class' => 'btn btn-1'
+                ]
+            ])
         ;
     }
 

@@ -3,12 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Purchase;
+use App\Entity\Customer;
+use App\Entity\Address;
+
 use App\Form\PurchaseType;
 use App\Repository\PurchaseRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/purchase")
@@ -28,23 +32,28 @@ class PurchaseController extends AbstractController
     /**
      * @Route("/new", name="purchase_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Security $security): Response
     {
+        //address info
+        $user = $security->getUser();
+        $customer = $this->getDoctrine()->getRepository(Customer::class)->getCustomerByID($user->getId());
+        $address = $this->getDoctrine()->getRepository(Address::class)->getByAddressID($customer[0]["address_id"]);
+
+        //form
         $purchase = new Purchase();
         $form = $this->createForm(PurchaseType::class, $purchase);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($purchase);
-            $entityManager->flush();
+            
 
             return $this->redirectToRoute('purchase_index');
         }
-
         return $this->render('purchase/new.html.twig', [
             'purchase' => $purchase,
             'form' => $form->createView(),
+            'address' => $address,
         ]);
     }
 
