@@ -25,7 +25,7 @@ class TruckRoute
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Store")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $store;
 

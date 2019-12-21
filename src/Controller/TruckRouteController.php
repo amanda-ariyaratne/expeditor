@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\TruckRoute;
+use App\Entity\StoreManager;
 use App\Form\TruckRouteType;
 use App\Repository\TruckRouteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,15 +16,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  * @Route("/truck/route")
  */
 class TruckRouteController extends AbstractController
-{
-    /**
+{    
+     /**
      * @Route("/", name="truck_route_index", methods={"GET"})
      */
     public function index(TruckRouteRepository $truckRouteRepository): Response
     {
-        // dd($truckRouteRepository->getAll());
+        $user = $this->getUser()->getId();
+        $store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore()->getId();
+
         return $this->render('truck_route/index.html.twig', [
-            'truck_routes' => $truckRouteRepository->getAll(),
+            'truck_routes' => $truckRouteRepository->getAll($store),
         ]);
     }
 
@@ -32,13 +35,16 @@ class TruckRouteController extends AbstractController
      */
     public function new(Request $request, TruckRouteRepository $truckRouteRepository): Response
     {
+        $user = $this->getUser()->getId();
+        $store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore()->getId();
+
         $truck_route = new TruckRoute();
         $form = $this->createForm(TruckRouteType::class, $truck_route);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) 
         {     
-            $truckRouteRepository->insert($truck_route);
+            $truckRouteRepository->insert($truck_route, $store);
             return $this->redirectToRoute('truck_route_index');
         }
 
@@ -63,11 +69,15 @@ class TruckRouteController extends AbstractController
      */
     public function edit(Request $request, TruckRoute $truck_route, TruckRouteRepository $truckRouteRepository): Response
     {
+        $user = $this->getUser()->getId();
+        $store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore()->getId();
+
         $form = $this->createForm(TruckRouteType::class, $truck_route);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $truckRouteRepository->update($truck_route);
+            $user = $this->getUser()->getId();
+            $truckRouteRepository->update($truck_route, $store);
             return $this->redirectToRoute('truck_route_index');
         }
 
