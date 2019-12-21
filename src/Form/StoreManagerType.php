@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Length;
 use App\Validator\Constraints\UniqueServiceId;
@@ -28,7 +29,11 @@ class StoreManagerType extends AbstractType
     {
         $builder
             ->add('user', UserType::class, [
-                'validation_groups' => ['edit']
+                'constraints' => [
+                    new Valid([
+                        'groups' => ['new', 'edit']
+                    ])
+                ]
             ])
             ->add('nic', TextType::class, [
                 'constraints' => [
@@ -87,6 +92,9 @@ class StoreManagerType extends AbstractType
             'csrf_field_name' => '_token',
             'csrf_token_id'   => 'store_manager',
             'validation_groups' => ['new', 'edit'],
+            'constraints' => array(
+                new Valid()
+            )
         ]);
     }
 }
