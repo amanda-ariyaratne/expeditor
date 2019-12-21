@@ -33,7 +33,7 @@ class DriverAssistant
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Store", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $store;
 

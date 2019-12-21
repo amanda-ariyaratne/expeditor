@@ -98,14 +98,17 @@ class StoreRepository extends ServiceEntityRepository
     }
   
     private function getEntity($params){
-        $store = new Store();
-        $store->setId($params['id']);
-        $store->setName($params['name']);
-        $store->setStreet($params['street']);
-        $store->setCity($params['city']);
-        $store->setCreatedAt(new \DateTime($params['created_at']));
-        $store->setUpdatedAt(new \DateTime($params['updated_at']));
-        return $store;
+        if ($params){            
+            $store = new Store();
+            $store->setId($params['id']);
+            $store->setName($params['name']);
+            $store->setStreet($params['street']);
+            $store->setCity($params['city']);
+            $store->setCreatedAt(new \DateTime($params['created_at']));
+            $store->setUpdatedAt(new \DateTime($params['updated_at']));
+            return $store;
+        }
+        return null;
     }
 
     private function getEntityArray($array)
