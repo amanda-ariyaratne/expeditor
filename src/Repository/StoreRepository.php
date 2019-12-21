@@ -119,5 +119,5 @@ class StoreRepository extends ServiceEntityRepository
         }
         return $entityArray;    
     }
-
 }
+
