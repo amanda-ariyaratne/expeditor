@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TrainTrip{% endblock %}
+
+{% block body %}
+    <h1>TrainTrip</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ train_trip.id }}</td>
+            </tr>
+            <tr>
+                <th>Allowed_capacity</th>
+                <td>{{ train_trip.allowedCapacity }}</td>
+            </tr>
+            <tr>
+                <th>Start_time</th>
+                <td>{{ train_trip.startTime ? train_trip.startTime|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Created_at</th>
+                <td>{{ train_trip.createdAt ? train_trip.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Updated_at</th>
+                <td>{{ train_trip.updatedAt ? train_trip.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Deleted_at</th>
+                <td>{{ train_trip.deletedAt ? train_trip.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('train_trip_index') }}">back to list</a>
+
+    <a href="{{ path('train_trip_edit', {'id': train_trip.id}) }}">edit</a>
+
+    {{ include('train_trip/_delete_form.html.twig') }}
+{% endblock %}
