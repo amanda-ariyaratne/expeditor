@@ -60,7 +60,7 @@ class StoreManagerRepository extends ServiceEntityRepository
             $stmt->bindValue('user', $user_id);
             $stmt->bindValue('nic', $sm->getNIC());
             $stmt->bindValue('service_no', $sm->getServiceNo());
-            $stmt->bindValue('store', $sm->getStore()->getId());
+            $stmt->bindValue('store', $sm->getStore() == null ? null : $sm->getStore()->getId());
             $stmt->execute();
             return $conn->lastInsertId();
         });
@@ -79,7 +79,7 @@ class StoreManagerRepository extends ServiceEntityRepository
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('nic', $sm->getNIC());
             $stmt->bindValue('service_no', $sm->getServiceNo());
-            $stmt->bindValue('store', $sm->getStore()->getId());
+            $stmt->bindValue('store', $sm->getStore() == null ? null : $sm->getStore()->getId());
             $stmt->bindValue('user', $sm->getUser()->getId());
             $stmt->execute();
             return true;
@@ -112,10 +112,12 @@ class StoreManagerRepository extends ServiceEntityRepository
         $sm->setUser($user);
         $sm->setNIC($array['NIC']);
         $sm->setServiceNo($array['service_no']);
-        $store = $this->getEntityManager() 
-                    ->getRepository(Store::class)
-                    ->getById($array['store_id']);
-        $sm->setStore($store);
+        if ($array['store_id']) {
+            $store = $this->getEntityManager() 
+                        ->getRepository(Store::class)
+                        ->getById($array['store_id']);
+                        $sm->setStore($store);
+        }
         $sm->setCreatedAt(new \DateTime($array['created_at']));
         $sm->setUpdatedAt(new \DateTime($array['updated_at']));
         $sm->setUpdatedAt(new \DateTime($array['deleted_at']));

@@ -3,6 +3,7 @@
 {% block title %}Store Manager{% endblock %}
 
 {% block stylesheets %}
+{{ parent() }}
     <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
     <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
     <style type="text/css">
@@ -62,7 +63,13 @@
                                     <td>{{ manager.user.email }}</td>
                                     <td>{{ manager.NIC }}</td>
                                     <td>{{ manager.serviceNo }}</td>
-                                    <td>{{ manager.store.name }}</td>
+                                    {% if manager.store %}
+                                        <td>{{ manager.store.name }}</td>
+                                    {% else %}
+                                        <td><span class="label label-warning">Unassigned</span></td>
+                                    {% endif %}
+                                    
+                                    
                                     <td>{{ manager.createdAt|date("d/m/Y") }}</td>
                                     <td>
                                         <a href="{{path('store_manager_edit', { 'id': manager.user.id}) }}" class="pencil-icon">
@@ -87,6 +94,8 @@
 
 
 {% block scripts %}
+
+    {{ parent() }}
 
     <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
     <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 
