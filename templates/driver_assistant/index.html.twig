@@ -3,6 +3,7 @@
 {% block title %}Driver Assistant{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
     <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
     <style type="text/css">
@@ -83,6 +84,8 @@
 
 
 {% block scripts %}
+
+    {{ parent() }}
 
     <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
     <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 
