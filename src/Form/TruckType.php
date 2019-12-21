@@ -65,6 +65,7 @@ class TruckType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Truck::class,
+            'required' => false,
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
             'csrf_token_id'   => 'truck'

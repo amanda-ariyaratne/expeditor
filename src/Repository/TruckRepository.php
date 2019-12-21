@@ -54,7 +54,7 @@ class TruckRepository extends ServiceEntityRepository
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('insurance', $truck->getInsuranceNo());
             $stmt->bindValue('register', $truck->getRegistrationNo());
-            $stmt->bindValue('store', $truck->getStore()->getId());
+            $stmt->bindValue('store', $truck->getStore() == null ? null : $truck->getStore()->getId());
             $stmt->execute();
             return $conn->lastInsertId();
         });
@@ -69,7 +69,7 @@ class TruckRepository extends ServiceEntityRepository
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('insurance', $truck->getInsuranceNo());
             $stmt->bindValue('register', $truck->getRegistrationNo());
-            $stmt->bindValue('store', $truck->getStore()->getId());
+            $stmt->bindValue('store', $truck->getStore() == null ? null : $truck->getStore()->getId());
             $stmt->bindValue('id', $truck->getId());
             $stmt->execute();
             return true;
@@ -105,10 +105,12 @@ class TruckRepository extends ServiceEntityRepository
         $truck->setId($array['id']);
         $truck->setInsuranceNo($array['insurance_no']);
         $truck->setRegistrationNo($array['registration_no']);
-        $store = $this->getEntityManager() 
-                    ->getRepository(Store::class)
-                    ->getById($array['store_id']);
-        $truck->setStore($store);
+        if ($array['store_id']) {
+            $store = $this->getEntityManager() 
+                        ->getRepository(Store::class)
+                        ->getById($array['store_id']);
+            $truck->setStore($store);
+        }
         $truck->setCreatedAt(new \DateTime($array['created_at']));
         $truck->setUpdatedAt(new \DateTime($array['updated_at']));
         $truck->setDeletedAt(new \DateTime($array['deleted_at']));
