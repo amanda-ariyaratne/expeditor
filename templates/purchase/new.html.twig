@@ -1,6 +1,6 @@
 {% extends 'frontbase.html.twig' %}
 
-{% block title %}New Purchase{% endblock %}
+{% block title %}Your Order{% endblock %}
 
 {% block body %}
         <div class="banner" data-header>
@@ -103,7 +103,7 @@
                                     <div class="form-group has-success m-t-15 m-b-10 row">
                                         {{ form_label(form.delivery_date, 'Delivery Date', { 'label_attr': {'class': 'form-control-label text-center col-4 col-form-label text-dark weight-500'} }) }}
                                         <div class="col-8">
-                                        {{ form_widget(form.delivery_date, {'attr': { 'class': 'form-control form-control-success' ,'placeholder': 'Delivery date'}}) }}
+                                        {{ form_widget(form.delivery_date, {'attr': {'placeholder':  "now"|date("m/d/Y") }}) }}
                                         </div>
                                     </div>
 

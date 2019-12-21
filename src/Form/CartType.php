@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -27,6 +28,7 @@ class CartType extends AbstractType
                     new NotNull([
                         'message' => 'Quantity is required'
                     ])
+
                 ]
             ])
             // ->add('customer' , CustomerType::class , [
@@ -38,6 +40,13 @@ class CartType extends AbstractType
             //     ]
             // ])
             
+            // ->add('up', ButtonType::class, [
+            //     'attr' => ['class' => 'qty-up btn'],
+            // ])
+
+            // ->add('down', ButtonType::class, [
+            //     'attr' => ['class' => 'qty-down btn'],
+            // ])
 
             ->add('product', HiddenType::class)
             ->add('customer', HiddenType::class)

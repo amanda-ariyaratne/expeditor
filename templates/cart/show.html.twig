@@ -3,38 +3,47 @@
 {% block title %}Cart{% endblock %}
 
 {% block body %}
-    <h1>Cart</h1>
+    <div id="body-content" class="layout-boxed">
+        <div id="main-content">
+            <div class="main-content">
+                <main class="site-content col-xs-9 col-md-9 col-sm-9" style="margin-left: 160px" itemscope="itemscope" itemprop="mainContentOfPage">
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Name</th>
-                <td>{{ cart.product[0]['name'] }}</td>
-            </tr>
-            <tr>
-                <th>Retail price</th>
-                <td>{{ cart.product[0]['retail_price'] }}</td>
-            </tr>
-            <tr>
-                <th>Whole sale price</th>
-                <td>{{ cart.product[0]['wholesale_price'] }}</td>
-            </tr>
-            <tr>
-                <th>Quantity</th>
-                <td>{{ cart.cart.quantity }}</td>
-            </tr>
-            <tr>
-                <th>Created_at</th>
-                <td>{{ cart.cart.createdAt ? cart.cart.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Total</th>
-                <td>{{ cart.total}}</td>
-            </tr>
-        </tbody>
-    </table>
+                    <table class="tbl-cart table">
+                        <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ cart.product[0]['name'] }}</td>
+                            </tr>
+                            <tr>
+                                <th>Retail price</th>
+                                <td>{{ cart.product[0]['retail_price'] }}</td>
+                            </tr>
+                            <tr>
+                                <th>Whole sale price</th>
+                                <td>{{ cart.product[0]['wholesale_price'] }}</td>
+                            </tr>
+                            <tr>
+                                <th>Quantity</th>
+                                <td>{{ cart.cart.quantity }}</td>
+                            </tr>
+                            <tr>
+                                <th>Created_at</th>
+                                <td>{{ cart.cart.createdAt ? cart.cart.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total</th>
+                                <td>{{ cart.total}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-    <a href="{{ path('cart_index') }}">back to list</a>
+                    <a class="add-to-cart btn btn-1" href="{{ path('cart_index') }}">back to list</a>
 
-    {{ include('cart/_delete_form.html.twig') }}
+                    <div style="float:right; ">
+                        {{ include('cart/_delete_form.html.twig') }}
+                    </div>
+                </main>
+            </div>
+        </div>
+    </div>
 {% endblock %}

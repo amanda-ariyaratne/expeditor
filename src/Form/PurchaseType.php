@@ -9,6 +9,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+
+use Symfony\Component\Validator\Constraints\Date;
 use App\Form\AddressType;
 use App\Form\CustomerType;
 
@@ -17,7 +20,9 @@ class PurchaseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('delivery_date' , TextType::class)
+            ->add('delivery_date' , DateType::class,[
+                
+            ])
             ->add('address' , AddressType::class)
             ->add('purchase', SubmitType::class , [
                 'attr' => [

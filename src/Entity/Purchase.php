@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,6 +30,9 @@ class Purchase
 
     /**
      * @ORM\Column(type="date")
+     */
+    /**
+     * @Assert\GreaterThan("+7 today")
      */
     private $delivery_date;
 

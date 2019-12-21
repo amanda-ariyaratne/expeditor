@@ -31,8 +31,6 @@ class CartRepository extends ServiceEntityRepository
         $stmt->bindValue('quantity', $cart->getQuantity());
         $stmt->bindValue('customer', $customer_id);
         $stmt->bindValue('product', $product_id);
-        var_dump($sql);
-        die();
         $stmt->execute();
         return $conn->lastInsertId();
 
