@@ -6,6 +6,8 @@ use App\Entity\Truck;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+use App\Entity\Store;
+
 /**
  * @method Truck|null find($id, $lockMode = null, $lockVersion = null)
  * @method Truck|null findOneBy(array $criteria, array $orderBy = null)
@@ -17,6 +19,111 @@ class TruckRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Truck::class);
+    }
+
+    public function getAll()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) {
+            $sql = "SELECT * FROM truck_store ;";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $this->getEntityArray($result);
+    }
+
+    public function getById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id) {
+            $sql = "SELECT * FROM truck_store WHERE id = :id ;";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntity($result);
+    }
+
+    public function insert(Truck $truck)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $lastInsertId = $conn->transactional(function($conn) use(&$truck) {
+            $sql = "INSERT INTO truck (registration_no, insurance_no, store_id) VALUES (:register, :insurance, :store);";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('insurance', $truck->getInsuranceNo());
+            $stmt->bindValue('register', $truck->getRegistrationNo());
+            $stmt->bindValue('store', $truck->getStore() == null ? null : $truck->getStore()->getId());
+            $stmt->execute();
+            return $conn->lastInsertId();
+        });
+        return $lastInsertId;
+    }
+
+    public function update(Truck $truck)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $status = $conn->transactional(function($conn) use(&$truck) {
+            $sql = "UPDATE truck SET registration_no=:register, insurance_no=:insurance, store_id=:store WHERE id=:id AND deleted_at IS NULL";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('insurance', $truck->getInsuranceNo());
+            $stmt->bindValue('register', $truck->getRegistrationNo());
+            $stmt->bindValue('store', $truck->getStore() == null ? null : $truck->getStore()->getId());
+            $stmt->bindValue('id', $truck->getId());
+            $stmt->execute();
+            return true;
+        });
+        return $status;
+    }
+
+    public function deleteById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $status = $conn->transactional(function($conn) use(&$id) {
+            $sql = "UPDATE truck SET deleted_at = now() WHERE id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return true;
+        });
+        return $status;
+    }
+
+    private function getEntityArray($array)
+    {
+        $entityArray = [];
+        foreach ($array as $element) {
+            array_push($entityArray, $this->getEntity($element));
+        }
+        return $entityArray;
+    }
+
+    private function getEntity($array)
+    {
+        $truck = new Truck();
+        $truck->setId($array['id']);
+        $truck->setInsuranceNo($array['insurance_no']);
+        $truck->setRegistrationNo($array['registration_no']);
+        if ($array['store_id']) {
+            $storeArray = [
+                'id' => $array['store_id'],
+                'name' => $array['name'],
+                'street' => $array['street'],
+                'city' => $array['city'],
+                'created_at' => $array['store_created_at'],
+                'updated_at' => $array['store_updated_at'],
+                'deleted_at' => $array['store_deleted_at']
+            ];
+            $store = $this->getEntityManager() 
+                        ->getRepository(Store::class)
+                        ->getEntity($storeArray);
+            $truck->setStore($store);
+        }
+        $truck->setCreatedAt(new \DateTime($array['truck_created_at']));
+        $truck->setUpdatedAt(new \DateTime($array['truck_updated_at']));
+        $truck->setDeletedAt(new \DateTime($array['truck_deleted_at']));
+        return $truck;
     }
 
     // /**

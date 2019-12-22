@@ -1,10 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create Driver Assistant{% endblock %}
+{% block title %}Create Truck{% endblock %}
+
 
 {% block content %}
 <div class="container-fluid">
-    <div class="row" >
+    <div class="row">
         <div class="col-lg-3 col-md-12">
             
         </div>
@@ -12,12 +13,12 @@
             <div class="card ">
                 <div class="card-body">
                     <h4 class="card-title text-uppercase mb-20">
-                        NEW DRIVER ASSISTANT
+                        NEW TRUCK
                     </h4>
                     <h6 class="card-subtitle m-b-5">
-                        You can create a new driver assistant here.
+                        
                     </h6>
-                    {{ include( 'driver_assistant/_form.html.twig' ) }}
+                    {{ include( 'truck/_form.html.twig' ) }}
                 </div>
             </div>
         </div>

@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Expeditor - Store Managers List{% endblock %}
+{% block title %}Truck{% endblock %}
 
 {% block stylesheets %}
-{{ parent() }}
+    {{ parent() }}
     <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
     <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
     <style type="text/css">
@@ -34,9 +34,9 @@
     <div class="col-lg-12 col-md-12">
         <div class="card ">
             <div class="card-body">
-                <h4 class="card-title text-uppercase mb-20 pull-left"> Store Managers</h4>
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Trucks</h4>
                 <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
-                <a href="{{ path('store_manager_new') }}" class="plus-icon pull-left">
+                <a href="{{ path('truck_new') }}" class="plus-icon pull-left">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
                 <div class="table-responsive mt-40">
@@ -44,38 +44,32 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>NIC</th>
-                                <th>Service ID</th>
+                                <th>Registration Number</th>
+                                <th>Insurance Number</th>
                                 <th>Store</th>
-                                <th>Joined Date</th>
+                                <th>Date Added</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {%set i = 1 %}
-                            {% for manager in managers %}
+                            {% for truck in trucks %}
                                 <tr>
                                     <td>{{~i~}}</td>
                                     {% set i = i + 1 %}
-                                    <td class="text-dark font-semibold">{{ manager.user.firstName }} {{ manager.user.lastName }}</td>
-                                    <td>{{ manager.user.email }}</td>
-                                    <td>{{ manager.NIC }}</td>
-                                    <td>{{ manager.serviceNo }}</td>
-                                    {% if manager.store %}
-                                        <td>{{ manager.store.name }}</td>
+                                    <td class="text-dark font-semibold">{{ truck.registrationNo }}</td>
+                                    <td>{{ truck.insuranceNo }}</td>
+                                    {% if truck.store %}
+                                        <td>{{ truck.store.name }}</td>
                                     {% else %}
                                         <td><span class="label label-warning">Unassigned</span></td>
                                     {% endif %}
-                                    
-                                    
-                                    <td>{{ manager.createdAt|date("d/m/Y") }}</td>
+                                    <td>{{ truck.createdAt|date("d/m/Y") }}</td>
                                     <td>
-                                        <a href="{{path('store_manager_edit', { 'id': manager.user.id}) }}" class="pencil-icon">
+                                        <a href="{{path('truck_edit', { 'id': truck.id}) }}" class="pencil-icon">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
-                                        <a href="#" class="delete-icon" data-id="{{ manager.user.id }}" >
+                                        <a href="#" class="delete-icon" data-id="{{ truck.id }}" >
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
                                     </td>
@@ -128,9 +122,9 @@
                             text: 'Confirm',
                             btnClass: 'btn-red',
                             action: function(){
-                                url = "{{path('store_manager_delete', { 'id': 0}) }}";
+                                url = "{{path('truck_delete', { 'id': 0}) }}";
                                 url = url.replace("0",id);
-                                token = "{{ csrf_token('store_manager') }}"
+                                token = "{{ csrf_token('truck') }}"
                                 $.ajax({
                                     url: url,
                                     type: 'DELETE',
