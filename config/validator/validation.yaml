@@ -7,3 +7,37 @@ App\Entity\Store:
             - NotNull: ~
         city:
             - NotNull: ~
+
+App\Entity\Driver:
+    properties:
+        NIC:
+            - NotNull: ~  
+            - App\Validator\Constraints\IsNIC: ~       
+        license_no:
+            - NotNull: ~
+            - App\Validator\Constraints\IsLicense: ~   
+        first_name:
+            - NotNull: ~
+            - Length:
+                max: 50
+                maxMessage: 'Your first name cannot be longer than {{ limit }} characters'
+        last_name:
+            - NotNull: ~  
+            - Length:
+                max: 50
+                maxMessage: 'Your first name cannot be longer than {{ limit }} characters'      
+
+App\Entity\TruckRoute:
+    properties:
+        name:
+            - NotNull: ~  
+            - Length:
+                max: 150
+                maxMessage: 'Your first name cannot be longer than {{ limit }} characters'       
+        map:
+            - NotNull: ~
+            - Length:
+                max: 512
+                maxMessage: 'Your first name cannot be longer than {{ limit }} characters' 
+
+                
