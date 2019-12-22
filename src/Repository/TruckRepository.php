@@ -25,7 +25,7 @@ class TruckRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) {
-            $sql = "SELECT * FROM truck WHERE deleted_at IS NULL;";
+            $sql = "SELECT * FROM truck WHERE deleted_at IS NULL";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();

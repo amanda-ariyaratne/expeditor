@@ -26,7 +26,7 @@ class StoreManagerRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM store_manager WHERE user_id = :id AND deleted_at IS NULL LIMIT 1";
+            $sql = "SELECT * FROM user_store_manager WHERE id = :id";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
@@ -39,7 +39,7 @@ class StoreManagerRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) {
-            $sql = "SELECT * FROM store_manager WHERE deleted_at IS NULL;";
+            $sql = "SELECT * FROM user_store_manager WHERE deleted_at IS NULL;";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -106,21 +106,41 @@ class StoreManagerRepository extends ServiceEntityRepository
     private function getEntity($array)
     {
         $sm = new StoreManager();
+        $userArray = [
+            'id' => $array['id'],
+            'email' => $array['email'],
+            'roles' => $array['roles'],
+            'password' => $array['password'],
+            'first_name' => $array['first_name'],
+            'last_name' => $array['last_name'],
+            'created_at' => $array['user_created_at'],
+            'updated_at' => $array['user_updated_at'],
+            'deleted_at' => $array['user_deleted_at']
+        ];
         $user = $this->getEntityManager() 
                     ->getRepository(User::class)
-                    ->getById($array['user_id']);
+                    ->getEntity($userArray);
         $sm->setUser($user);
         $sm->setNIC($array['NIC']);
         $sm->setServiceNo($array['service_no']);
         if ($array['store_id']) {
+            $storeArray = [
+                'id' => $array['store_id'],
+                'name' => $array['name'],
+                'street' => $array['street'],
+                'city' => $array['city'],
+                'created_at' => $array['store_created_at'],
+                'updated_at' => $array['store_updated_at'],
+                'deleted_at' => $array['store_deleted_at']
+            ];
             $store = $this->getEntityManager() 
                         ->getRepository(Store::class)
-                        ->getById($array['store_id']);
+                        ->getEntity($storeArray);
                         $sm->setStore($store);
         }
-        $sm->setCreatedAt(new \DateTime($array['created_at']));
-        $sm->setUpdatedAt(new \DateTime($array['updated_at']));
-        $sm->setUpdatedAt(new \DateTime($array['deleted_at']));
+        $sm->setCreatedAt(new \DateTime($array['sm_created_at']));
+        $sm->setUpdatedAt(new \DateTime($array['sm_updated_at']));
+        $sm->setUpdatedAt(new \DateTime($array['sm_deleted_at']));
         return $sm;
     }
 
