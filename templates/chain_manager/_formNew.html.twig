@@ -6,9 +6,9 @@
 
     <div class="form-group has-success m-t-15 m-b-10 row">
         {{ form_label(form.user.first_name, 'First Name', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
-    <div class="col-8">
-        {{ form_widget(form.user.first_name, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
-    </div>
+        <div class="col-8">
+            {{ form_widget(form.user.first_name, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+        </div>
     </div>
 
     <div class="form-group has-success m-t-15 m-b-10 row">
@@ -39,25 +39,28 @@
     </div>
     </div>
 
+    
+
     <div class="form-group has-success m-t-15 m-b-10 row">
-        {{ form_label(form.store, 'Assigned Store', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'}, 'errors': [] }) }}
+        {{ form_label(form.user.password.first, 'Password', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
     <div class="col-8">
-        {{ form_widget(form.store, {'attr': {'class': 'form-control form-control-success text-success', 'id': 'inlineFormCustomSelect'}}) }}
+        {{ form_widget(form.user.password.first, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
     </div>
     </div>
 
-    {{ form_row(form._token) }}
+    <div class="form-group has-success m-t-15 m-b-10 row">
+        {{ form_label(form.user.password.second, 'Confirm Password', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+    <div class="col-8">
+        {{ form_widget(form.user.password.second, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+    </div>
+    </div>
+
+    
 
     <div class="form-group has-success m-t-15 m-b-10 row">
     <div class="col-10"></div>
     <div class="col-2">
         {{ form_widget(form.submit, {'attr': {'class': 'btn btn-rounded  waves-effect waves-light btn-outline-primary font-12'}}) }}
     </div>
-    </div>  
-
-    <div style="display: none;"> 
-        {{ form_widget(form.user.password.first, {'value' : 'Default title'}) }}
-        {{ form_widget(form.user.password.second, {'value' : 'Default title'}) }}
-    </div>
-       
-{{ form_end(form, {'render_rest': false}) }}
+    </div>              
+{{ form_end(form) }}

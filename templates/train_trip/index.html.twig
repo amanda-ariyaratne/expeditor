@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TrainTrip index{% endblock %}
+
+{% block body %}
+    <h1>TrainTrip index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Allowed_capacity</th>
+                <th>Start_time</th>
+                <th>Created_at</th>
+                <th>Updated_at</th>
+                <th>Deleted_at</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for train_trip in train_trips %}
+            <tr>
+                <td>{{ train_trip.id }}</td>
+                <td>{{ train_trip.allowedCapacity }}</td>
+                <td>{{ train_trip.startTime ? train_trip.startTime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ train_trip.createdAt ? train_trip.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ train_trip.updatedAt ? train_trip.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ train_trip.deletedAt ? train_trip.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('train_trip_show', {'id': train_trip.id}) }}">show</a>
+                    <a href="{{ path('train_trip_edit', {'id': train_trip.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('train_trip_new') }}">Create new</a>
+{% endblock %}
