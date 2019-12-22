@@ -107,6 +107,7 @@ class StoreRepository extends ServiceEntityRepository
         $store->setUpdatedAt(new \DateTime($params['updated_at']));
         $store->setDeletedAt(new \DateTime($params['deleted_at']));
         return $store;
+
     }
 
     private function getEntityArray($array)
@@ -117,5 +118,5 @@ class StoreRepository extends ServiceEntityRepository
         }
         return $entityArray;    
     }
-
 }
+
