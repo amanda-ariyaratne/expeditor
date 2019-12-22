@@ -1,29 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Driver Assistant{% endblock %}
+{% block title %}Expeditor - Driver Assistant List{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
     <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
     <style type="text/css">
         td {
             text-align:center
         }
-            .plus-icon {
-                background: #025a83;
-                width: 22px;
-                height: 22px;
-                line-height: 22px;
-                text-align: center;
-                display: inline-block;
-                color: #fff!important;
-                border-radius: 100px;
-                margin-right: 35px;
-            }
-            .plus-icon:hover {
-                background: #002661;
-                color: #fff;
-            }
+        .plus-icon {
+            background: #025a83;
+            width: 22px;
+            height: 22px;
+            line-height: 22px;
+            text-align: center;
+            display: inline-block;
+            color: #fff!important;
+            border-radius: 100px;
+            margin-right: 35px;
+        }
+        .plus-icon:hover {
+            background: #002661;
+            color: #fff;
+        }
     </style>
 {% endblock %}
 
@@ -58,7 +59,11 @@
                                     {% set i = i + 1 %}
                                     <td class="text-dark font-semibold">{{ assistant.firstName }} {{ assistant.lastName }}</td>
                                     <td>{{ assistant.NIC }}</td>
-                                    <td>{{ assistant.store.name }}</td>
+                                    {% if assistant.store %}
+                                        <td>{{ assistant.store.name }}</td>
+                                    {% else %}
+                                        <td><span class="label label-warning">Unassigned</span></td>
+                                    {% endif %}
                                     <td>{{ assistant.createdAt|date("d/m/Y") }}</td>
                                     <td>
                                         <a href="{{path('driver_assistant_edit', { 'id': assistant.id}) }}" class="pencil-icon">
@@ -83,6 +88,8 @@
 
 
 {% block scripts %}
+
+    {{ parent() }}
 
     <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
     <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 

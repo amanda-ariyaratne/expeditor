@@ -8,7 +8,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
 
-
 use App\Entity\Store;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;

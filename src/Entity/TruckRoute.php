@@ -30,9 +30,9 @@ class TruckRoute
     private $store;
 
     /**
-     * @ORM\Column(type="decimal", precision=12, scale=2)
+     * @ORM\Column(type="string", length=512)
      */
-    private $delivery_charge;
+    private $map;
 
     /**
      * @ORM\Column(type="datetime")
@@ -49,19 +49,16 @@ class TruckRoute
      */
     private $deleted_at;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Road", inversedBy="truck_route")
-     */
-    private $road;
-
-    public function __construct()
-    {
-        $this->road = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -88,14 +85,14 @@ class TruckRoute
         return $this;
     }
 
-    public function getDeliveryCharge(): ?string
+    public function getMap(): ?string
     {
-        return $this->delivery_charge;
+        return $this->map;
     }
 
-    public function setDeliveryCharge(string $delivery_charge): self
+    public function setMap(string $map): self
     {
-        $this->delivery_charge = $delivery_charge;
+        $this->map = $map;
 
         return $this;
     }
@@ -132,32 +129,6 @@ class TruckRoute
     public function setDeletedAt(?\DateTimeInterface $deleted_at): self
     {
         $this->deleted_at = $deleted_at;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Road[]
-     */
-    public function getRoad(): Collection
-    {
-        return $this->road;
-    }
-
-    public function addRoad(Road $road): self
-    {
-        if (!$this->road->contains($road)) {
-            $this->road[] = $road;
-        }
-
-        return $this;
-    }
-
-    public function removeRoad(Road $road): self
-    {
-        if ($this->road->contains($road)) {
-            $this->road->removeElement($road);
-        }
 
         return $this;
     }

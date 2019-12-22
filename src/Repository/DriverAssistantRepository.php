@@ -55,7 +55,7 @@ class DriverAssistantRepository extends ServiceEntityRepository
             $stmt->bindValue('fname', $da->getFirstName());
             $stmt->bindValue('lname', $da->getLastName());
             $stmt->bindValue('nic', $da->getNIC());
-            $stmt->bindValue('store', $da->getStore()->getId());
+            $stmt->bindValue('store', $da->getStore() == null ? null : $da->getStore()->getId());
             $stmt->execute();
             return $conn->lastInsertId();
         });
@@ -71,7 +71,7 @@ class DriverAssistantRepository extends ServiceEntityRepository
             $stmt->bindValue('fname', $da->getFirstName());
             $stmt->bindValue('lname', $da->getLastName());
             $stmt->bindValue('nic', $da->getNIC());
-            $stmt->bindValue('store', $da->getStore()->getId());
+            $stmt->bindValue('store', $da->getStore() == null ? null : $da->getStore()->getId());
             $stmt->bindValue('id', $da->getId());
             $stmt->execute();
             return true;
@@ -108,10 +108,12 @@ class DriverAssistantRepository extends ServiceEntityRepository
         $da->setNIC($array['NIC']);
         $da->setFirstName($array['first_name']);
         $da->setLastName($array['last_name']);
-        $store = $this->getEntityManager() 
-                    ->getRepository(Store::class)
-                    ->getById($array['store_id']);
-        $da->setStore($store);
+        if ($array['store_id']) {
+            $store = $this->getEntityManager() 
+                        ->getRepository(Store::class)
+                        ->getById($array['store_id']);
+            $da->setStore($store);
+        }
         $da->setCreatedAt(new \DateTime($array['created_at']));
         $da->setUpdatedAt(new \DateTime($array['updated_at']));
         $da->setDeletedAt(new \DateTime($array['deleted_at']));
