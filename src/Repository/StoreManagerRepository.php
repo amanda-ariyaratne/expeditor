@@ -26,7 +26,7 @@ class StoreManagerRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM user_store_manager WHERE id = :id";
+            $sql = "SELECT * FROM user_store_manager WHERE id = :id ;";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
@@ -39,7 +39,7 @@ class StoreManagerRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) {
-            $sql = "SELECT * FROM user_store_manager WHERE deleted_at IS NULL;";
+            $sql = "SELECT * FROM user_store_manager;";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -136,7 +136,7 @@ class StoreManagerRepository extends ServiceEntityRepository
             $store = $this->getEntityManager() 
                         ->getRepository(Store::class)
                         ->getEntity($storeArray);
-                        $sm->setStore($store);
+            $sm->setStore($store);
         }
         $sm->setCreatedAt(new \DateTime($array['sm_created_at']));
         $sm->setUpdatedAt(new \DateTime($array['sm_updated_at']));
