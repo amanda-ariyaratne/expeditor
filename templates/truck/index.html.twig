@@ -3,6 +3,7 @@
 {% block title %}Truck{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
     <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
     <style type="text/css">
@@ -58,7 +59,11 @@
                                     {% set i = i + 1 %}
                                     <td class="text-dark font-semibold">{{ truck.registrationNo }}</td>
                                     <td>{{ truck.insuranceNo }}</td>
-                                    <td>{{ truck.store.name }}</td>
+                                    {% if truck.store %}
+                                        <td>{{ truck.store.name }}</td>
+                                    {% else %}
+                                        <td><span class="label label-warning">Unassigned</span></td>
+                                    {% endif %}
                                     <td>{{ truck.createdAt|date("d/m/Y") }}</td>
                                     <td>
                                         <a href="{{path('truck_edit', { 'id': truck.id}) }}" class="pencil-icon">
@@ -83,6 +88,8 @@
 
 
 {% block scripts %}
+
+    {{ parent() }}
 
     <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
     <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 

@@ -95,7 +95,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $status;
     }
 
-    private function getEntity($array)
+    public function getEntity($array)
     {
         $user = new User();
         $user->setId($array['id']);

@@ -25,7 +25,7 @@ class DriverAssistantRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM driver_assistant WHERE id = :id AND deleted_at IS NULL LIMIT 1";
+            $sql = "SELECT * FROM driver_assistant_store WHERE id = :id";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
@@ -38,7 +38,7 @@ class DriverAssistantRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) {
-            $sql = "SELECT * FROM driver_assistant WHERE deleted_at IS NULL;";
+            $sql = "SELECT * FROM driver_assistant_store;";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -55,7 +55,7 @@ class DriverAssistantRepository extends ServiceEntityRepository
             $stmt->bindValue('fname', $da->getFirstName());
             $stmt->bindValue('lname', $da->getLastName());
             $stmt->bindValue('nic', $da->getNIC());
-            $stmt->bindValue('store', $da->getStore()->getId());
+            $stmt->bindValue('store', $da->getStore() == null ? null : $da->getStore()->getId());
             $stmt->execute();
             return $conn->lastInsertId();
         });
@@ -71,7 +71,7 @@ class DriverAssistantRepository extends ServiceEntityRepository
             $stmt->bindValue('fname', $da->getFirstName());
             $stmt->bindValue('lname', $da->getLastName());
             $stmt->bindValue('nic', $da->getNIC());
-            $stmt->bindValue('store', $da->getStore()->getId());
+            $stmt->bindValue('store', $da->getStore() == null ? null : $da->getStore()->getId());
             $stmt->bindValue('id', $da->getId());
             $stmt->execute();
             return true;
@@ -108,13 +108,24 @@ class DriverAssistantRepository extends ServiceEntityRepository
         $da->setNIC($array['NIC']);
         $da->setFirstName($array['first_name']);
         $da->setLastName($array['last_name']);
-        $store = $this->getEntityManager() 
-                    ->getRepository(Store::class)
-                    ->getById($array['store_id']);
-        $da->setStore($store);
-        $da->setCreatedAt(new \DateTime($array['created_at']));
-        $da->setUpdatedAt(new \DateTime($array['updated_at']));
-        $da->setDeletedAt(new \DateTime($array['deleted_at']));
+        if ($array['store_id']) {
+            $storeArray = [
+                'id' => $array['store_id'],
+                'name' => $array['name'],
+                'street' => $array['street'],
+                'city' => $array['city'],
+                'created_at' => $array['store_created_at'],
+                'updated_at' => $array['store_updated_at'],
+                'deleted_at' => $array['store_deleted_at']
+            ];
+            $store = $this->getEntityManager() 
+                        ->getRepository(Store::class)
+                        ->getEntity($storeArray);
+            $da->setStore($store);
+        }
+        $da->setCreatedAt(new \DateTime($array['da_created_at']));
+        $da->setUpdatedAt(new \DateTime($array['da_updated_at']));
+        $da->setDeletedAt(new \DateTime($array['da_deleted_at']));
         return $da;
     }
 

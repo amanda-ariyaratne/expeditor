@@ -25,7 +25,7 @@ class TruckRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) {
-            $sql = "SELECT * FROM truck WHERE deleted_at IS NULL;";
+            $sql = "SELECT * FROM truck_store ;";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -37,7 +37,7 @@ class TruckRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM truck WHERE id = :id AND deleted_at IS NULL LIMIT 1";
+            $sql = "SELECT * FROM truck_store WHERE id = :id ;";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
@@ -54,7 +54,7 @@ class TruckRepository extends ServiceEntityRepository
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('insurance', $truck->getInsuranceNo());
             $stmt->bindValue('register', $truck->getRegistrationNo());
-            $stmt->bindValue('store', $truck->getStore()->getId());
+            $stmt->bindValue('store', $truck->getStore() == null ? null : $truck->getStore()->getId());
             $stmt->execute();
             return $conn->lastInsertId();
         });
@@ -69,7 +69,7 @@ class TruckRepository extends ServiceEntityRepository
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('insurance', $truck->getInsuranceNo());
             $stmt->bindValue('register', $truck->getRegistrationNo());
-            $stmt->bindValue('store', $truck->getStore()->getId());
+            $stmt->bindValue('store', $truck->getStore() == null ? null : $truck->getStore()->getId());
             $stmt->bindValue('id', $truck->getId());
             $stmt->execute();
             return true;
@@ -105,13 +105,24 @@ class TruckRepository extends ServiceEntityRepository
         $truck->setId($array['id']);
         $truck->setInsuranceNo($array['insurance_no']);
         $truck->setRegistrationNo($array['registration_no']);
-        $store = $this->getEntityManager() 
-                    ->getRepository(Store::class)
-                    ->getById($array['store_id']);
-        $truck->setStore($store);
-        $truck->setCreatedAt(new \DateTime($array['created_at']));
-        $truck->setUpdatedAt(new \DateTime($array['updated_at']));
-        $truck->setDeletedAt(new \DateTime($array['deleted_at']));
+        if ($array['store_id']) {
+            $storeArray = [
+                'id' => $array['store_id'],
+                'name' => $array['name'],
+                'street' => $array['street'],
+                'city' => $array['city'],
+                'created_at' => $array['store_created_at'],
+                'updated_at' => $array['store_updated_at'],
+                'deleted_at' => $array['store_deleted_at']
+            ];
+            $store = $this->getEntityManager() 
+                        ->getRepository(Store::class)
+                        ->getEntity($storeArray);
+            $truck->setStore($store);
+        }
+        $truck->setCreatedAt(new \DateTime($array['truck_created_at']));
+        $truck->setUpdatedAt(new \DateTime($array['truck_updated_at']));
+        $truck->setDeletedAt(new \DateTime($array['truck_deleted_at']));
         return $truck;
     }
 

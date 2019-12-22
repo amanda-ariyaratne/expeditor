@@ -1,8 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Store Manager{% endblock %}
+{% block title %}Expeditor - Store Managers List{% endblock %}
 
 {% block stylesheets %}
+{{ parent() }}
     <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
     <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
     <style type="text/css">
@@ -10,14 +11,15 @@
             text-align:center
         }
         .plus-icon {
-            background: #db3838;
-            width: 28px;
-            height: 28px;
-            line-height: 28px;
+            background: #025a83;
+            width: 22px;
+            height: 22px;
+            line-height: 22px;
             text-align: center;
             display: inline-block;
             color: #fff!important;
             border-radius: 100px;
+            margin-right: 35px;
         }
         .plus-icon:hover {
             background: #002661;
@@ -61,7 +63,13 @@
                                     <td>{{ manager.user.email }}</td>
                                     <td>{{ manager.NIC }}</td>
                                     <td>{{ manager.serviceNo }}</td>
-                                    <td>{{ manager.store.name }}</td>
+                                    {% if manager.store %}
+                                        <td>{{ manager.store.name }}</td>
+                                    {% else %}
+                                        <td><span class="label label-warning">Unassigned</span></td>
+                                    {% endif %}
+                                    
+                                    
                                     <td>{{ manager.createdAt|date("d/m/Y") }}</td>
                                     <td>
                                         <a href="{{path('store_manager_edit', { 'id': manager.user.id}) }}" class="pencil-icon">
@@ -86,6 +94,8 @@
 
 
 {% block scripts %}
+
+    {{ parent() }}
 
     <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
     <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 
