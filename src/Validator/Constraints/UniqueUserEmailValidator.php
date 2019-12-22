@@ -45,7 +45,13 @@ class UniqueUserEmailValidator extends ConstraintValidator
                                 ->setParameter(1, $value)
                                 ->getQuery()
                                 ->getSingleScalarResult();
-        if($emailCount > 0){
+        $validationGroup = $constraint->getValidationGroup();
+
+        if($emailCount > 0 && $validationGroup['validation_group'] == 'new'){
+            $this->context->buildViolation($constraint->message)
+                ->setParameter('{{ string }}', $value)
+                ->addViolation();
+        } else if ($emailCount > 1 && $validationGroup == 'edit'){
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', $value)
                 ->addViolation();

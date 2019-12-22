@@ -40,7 +40,9 @@ class StoreManagerController extends AbstractController
     {
         $storeManager = new StoreManager();
         
-        $form = $this->createForm(StoreManagerType::class, $storeManager, ['validation_groups'=>'new']);
+        $form = $this->createForm(StoreManagerType::class, $storeManager, [
+            'validation_group' => 'new',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -83,7 +85,9 @@ class StoreManagerController extends AbstractController
                              ->getRepository(StoreManager::class)
                              ->getById($id);
         
-        $form = $this->createForm(StoreManagerType::class, $storeManager, ['validation_groups'=>'edit']);
+        $form = $this->createForm(StoreManagerType::class, $storeManager, [
+            'validation_group' => 'edit',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
