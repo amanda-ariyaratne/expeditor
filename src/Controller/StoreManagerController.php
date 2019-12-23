@@ -25,6 +25,7 @@ class StoreManagerController extends AbstractController
      */
     public function index(StoreManagerRepository $storeManagerRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $managers = $this->getDoctrine() 
                         ->getRepository(StoreManager::class)
                         ->getAll();
@@ -38,6 +39,7 @@ class StoreManagerController extends AbstractController
      */
     public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $storeManager = new StoreManager();
         
         $form = $this->createForm(StoreManagerType::class, $storeManager, [
@@ -81,6 +83,7 @@ class StoreManagerController extends AbstractController
      */
     public function edit(Request $request, $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $storeManager = $this->getDoctrine() 
                              ->getRepository(StoreManager::class)
                              ->getById($id);
@@ -111,6 +114,7 @@ class StoreManagerController extends AbstractController
      */
     public function delete(Request $request, $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         if ($this->isCsrfTokenValid('store_manager', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $storeManager = $entityManager->getRepository(StoreManager::class)->deleteById($id);
