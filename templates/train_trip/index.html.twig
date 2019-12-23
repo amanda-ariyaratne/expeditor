@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Truck{% endblock %}
+{% block title %}TrainTrip{% endblock %}
 
 {% block stylesheets %}
     <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
@@ -53,22 +53,22 @@
                         </thead>
                         <tbody>
                             {%set i = 1 %}
-                            {% for train_trip in train_trips %}
+                            {% for train_trips in train_trip %}
                                 <tr>
                                     <td>{{~i~}}</td>
                                     {% set i = i + 1 %}
-                                    <td >{{ train_trip.allowed_capacity }}</td>
+                                    <td >{{ train_trips.allowed_capacity }}</td>
                                     
-                                    <td>{{ train_trip.start_time|date('Y:m:d H:i:s') }}</td>
+                                    <td>{{ train_trips.start_time|date('Y:m:d H:i:s') }}</td>
                                     <td>
                                     
 
                                     
                                     <td>
-                                        <a href="{{path('train_trip_edit', { 'id': train_trip.id}) }}" class="pencil-icon">
+                                        <a href="{{path('train_trip_edit', { 'id': train_trips.id}) }}" class="pencil-icon">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
-                                        <a href="#" class="delete-icon" data-id="{{ train_trip.id }}" >
+                                        <a href="#" class="delete-icon" data-id="{{ train_trips.id }}" >
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
                                     </td>
