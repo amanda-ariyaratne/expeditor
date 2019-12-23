@@ -26,7 +26,7 @@ class TruckRouteRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$store) {
-            $sql = "SELECT * FROM truck_route WHERE id = :id AND store_id=:store AND deleted_at IS NULL";            
+            $sql = "SELECT * FROM truck_route_store WHERE id = :id AND store_id=:store AND deleted_at IS NULL";            
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->bindValue('store', $store);
@@ -117,9 +117,6 @@ class TruckRouteRepository extends ServiceEntityRepository
                     ->getRepository(Store::class)
                     ->getById($params['store_id']);
         $truck_route->setStore($store);
-
-        
-        
         return $truck_route;
     }
 
