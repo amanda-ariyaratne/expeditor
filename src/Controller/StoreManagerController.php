@@ -25,6 +25,7 @@ class StoreManagerController extends AbstractController
      */
     public function index(StoreManagerRepository $storeManagerRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $managers = $this->getDoctrine() 
                         ->getRepository(StoreManager::class)
                         ->getAll();
@@ -38,9 +39,12 @@ class StoreManagerController extends AbstractController
      */
     public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $storeManager = new StoreManager();
         
-        $form = $this->createForm(StoreManagerType::class, $storeManager);
+        $form = $this->createForm(StoreManagerType::class, $storeManager, [
+            'validation_group' => 'new',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -79,11 +83,14 @@ class StoreManagerController extends AbstractController
      */
     public function edit(Request $request, $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $storeManager = $this->getDoctrine() 
                              ->getRepository(StoreManager::class)
                              ->getById($id);
         
-        $form = $this->createForm(StoreManagerType::class, $storeManager, array('validation_groups'=>'edit'));
+        $form = $this->createForm(StoreManagerType::class, $storeManager, [
+            'validation_group' => 'edit',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -107,6 +114,7 @@ class StoreManagerController extends AbstractController
      */
     public function delete(Request $request, $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         if ($this->isCsrfTokenValid('store_manager', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $storeManager = $entityManager->getRepository(StoreManager::class)->deleteById($id);

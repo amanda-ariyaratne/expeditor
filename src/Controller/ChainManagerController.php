@@ -24,6 +24,7 @@ class ChainManagerController extends AbstractController
      */
     public function index(ChainManagerRepository $chainManagerRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $managers = $this->getDoctrine() 
                         ->getRepository(ChainManager::class)
                         ->getAll();
@@ -37,9 +38,12 @@ class ChainManagerController extends AbstractController
      */
     public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $chainManager = new ChainManager();
         
-        $form = $this->createForm(ChainManagerType::class, $chainManager);
+        $form = $this->createForm(ChainManagerType::class, $chainManager, [
+            'validation_group' => 'new',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -79,11 +83,14 @@ class ChainManagerController extends AbstractController
      */
     public function edit(Request $request, $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $chainManager = $this->getDoctrine() 
                              ->getRepository(ChainManager::class)
                              ->getById($id);
         
-        $form = $this->createForm(ChainManagerType::class, $chainManager, array('validation_groups'=>'edit'));
+        $form = $this->createForm(ChainManagerType::class, $chainManager, [
+            'validation_group' => 'edit',
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -111,6 +118,7 @@ class ChainManagerController extends AbstractController
      */
     public function delete(Request $request, $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         if ($this->isCsrfTokenValid('chain_manager', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $chainManager = $entityManager->getRepository(ChainManager::class)->deleteById($id);

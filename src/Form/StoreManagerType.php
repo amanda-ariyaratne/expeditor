@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Length;
 use App\Validator\Constraints\UniqueServiceId;
@@ -26,22 +27,24 @@ class StoreManagerType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $validationGroup = $options['validation_group'];
         $builder
             ->add('user', UserType::class, [
-                'validation_groups' => ['edit']
+                'constraints' => [
+                    new Valid()
+                ],
+                'validation_group' => [ 'validation_group' => $validationGroup ]
             ])
             ->add('nic', TextType::class, [
                 'constraints' => [
                     new NotNull([
-                        'message' => 'NIC number is required',
-                        'groups' => ['new', 'edit']
+                        'message' => 'NIC number is required'
                     ]),
                     new Length([
                         'min' => 10,
                         'max' => 12,
                         'minMessage' => 'NIC number must be at least {{ limit }} characters long',
-                        'maxMessage' => 'NIC number must be at least {{ limit }} characters long',
-                        'groups' => ['new', 'edit']
+                        'maxMessage' => 'NIC number must be at least {{ limit }} characters long'
                     ])
                 ]
             ])
@@ -49,19 +52,15 @@ class StoreManagerType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new NotNull([
-                        'message' => 'Service ID is required',
-                        'groups' => ['new', 'edit']
+                        'message' => 'Service ID is required'
                     ]),
                     new Length([
                         'min' => 5,
                         'max' => 5,
                         'minMessage' => 'Invalid service ID. Length must be 5 and should start with "SM"',
-                        'maxMessage' => 'Invalid service ID. Length must be 5 and should start with "SM"',
-                        'groups' => ['new', 'edit']
+                        'maxMessage' => 'Invalid service ID. Length must be 5 and should start with "SM"'
                     ]),
-                    new UniqueServiceId([
-                        'groups' => ['new']
-                    ])
+                    new UniqueServiceId()
                 ]
             ])
             ->add('store', EntityType::class, [
@@ -86,7 +85,8 @@ class StoreManagerType extends AbstractType
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
             'csrf_token_id'   => 'store_manager',
-            'validation_groups' => ['new', 'edit'],
+            
         ]);
+        $resolver->setRequired('validation_group');
     }
 }
