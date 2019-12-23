@@ -119,9 +119,9 @@
                             text: 'Confirm',
                             btnClass: 'btn-red',
                             action: function(){
-                                url = "{{path('truck_delete', { 'id': 0}) }}";
+                                url = "{{path('train_trip_delete', { 'id': 0}) }}";
                                 url = url.replace("0",id);
-                                token = "{{ csrf_token('truck') }}"
+                                token = "{{ csrf_token('train_trip') }}"
                                 $.ajax({
                                     url: url,
                                     type: 'DELETE',

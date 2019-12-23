@@ -71,21 +71,17 @@ class TrainTripController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="truck_route_delete", methods={"DELETE"})
+     * @Route("/{id}", name="train_trip_delete", methods={"DELETE"})
      */
     public function delete(Request $request, TrainTrip $truckRoute): Response
     {
         if ($this->isCsrfTokenValid('train_trip', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $storeManager = $entityManager->getRepository(TrainTrip::class)->deleteById($id);
-            return new JsonResponse([
-                'status' => 'true'
-            ]);
+            $entityManager->remove($truckRoute);
+            $entityManager->flush();
         }
-        
-        return new JsonResponse([
-            'status' => 'false'
-        ]);
+
+        return $this->redirectToRoute('train_trip_index');
     }
 }
 
