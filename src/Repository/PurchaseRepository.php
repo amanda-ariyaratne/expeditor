@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Purchase;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * @method Purchase|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +19,40 @@ class PurchaseRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Purchase::class);
     }
+
+
+    public function insert(Purchase $purchase)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$purchase) {
+            $sql = "INSERT INTO purchase (status_id,  delivery_date,  customer_id,  truck_route_id,  store_id,  address_id) 
+                                 VALUES (:status_id, :delivery_date, :customer_id, :truck_route_id, :store_id, :address_id);";
+            $stmt = $conn->prepare($sql);
+
+            $status_id = $purchase->getStatus()->getId();
+            $delivery_date = $purchase->getDeliveryDate();
+            $customer_id = $purchase->getCustomer()->getUser()->getId();
+            $truck_route_id = $purchase->getTruckRoute()->getId();
+            $store_id = $purchase->getStore()->getId();
+            $address_id = $purchase->getAddress()->getId();
+            
+
+            $newDate = $delivery_date->format('Y-m-d');
+
+            $stmt->bindValue('status_id', $status_id);
+            $stmt->bindValue('delivery_date', $newDate);
+            $stmt->bindValue('customer_id', $customer_id);
+            $stmt->bindValue('truck_route_id', $truck_route_id);
+            $stmt->bindValue('store_id', $store_id);
+            $stmt->bindValue('address_id', $address_id);
+
+            $stmt->execute();
+            return $conn->lastInsertId();
+        });
+        return $result;
+    }
+
+
 
     // /**
     //  * @return Purchase[] Returns an array of Purchase objects

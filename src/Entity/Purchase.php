@@ -19,11 +19,6 @@ class Purchase
     private $id;
 
     /**
-     * @ORM\Column(type="decimal", precision=12, scale=2)
-     */
-    private $total_amount;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\PurchaseStatus")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -85,15 +80,10 @@ class Purchase
     {
         return $this->id;
     }
-
-    public function getTotalAmount(): ?string
+    
+    public function setId(int $id): self
     {
-        return $this->total_amount;
-    }
-
-    public function setTotalAmount(string $total_amount): self
-    {
-        $this->total_amount = $total_amount;
+        $this->id = $id;
 
         return $this;
     }

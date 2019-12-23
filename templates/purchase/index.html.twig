@@ -9,7 +9,6 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Total_amount</th>
                 <th>Delivery_date</th>
                 <th>Created_at</th>
                 <th>Updated_at</th>
@@ -21,7 +20,6 @@
         {% for purchase in purchases %}
             <tr>
                 <td>{{ purchase.id }}</td>
-                <td>{{ purchase.totalAmount }}</td>
                 <td>{{ purchase.deliveryDate ? purchase.deliveryDate|date('Y-m-d') : '' }}</td>
                 <td>{{ purchase.createdAt ? purchase.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ purchase.updatedAt ? purchase.updatedAt|date('Y-m-d H:i:s') : '' }}</td>

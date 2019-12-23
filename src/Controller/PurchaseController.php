@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Purchase;
+use App\Entity\PurchaseStatus;
 use App\Entity\Customer;
 use App\Entity\Address;
 use App\Entity\Store;
 use App\Entity\TruckRoute;
+use App\Entity\Cart;
 
 use App\Form\PurchaseType;
 use App\Repository\PurchaseRepository;
@@ -61,11 +63,18 @@ class PurchaseController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+            //add purchase
             $purchase = $form->getData();
-            var_dump($purchase);
-            //$entityManager = $this->getDoctrine()->getManager();
-            var_dump("order submitted");
-            die();
+            $purchase->setStatus($this->getDoctrine()->getRepository(PurchaseStatus::class)->getByID('1'));
+            $purchase->setCustomer($this->getDoctrine()->getRepository(Customer::class)->getByID($user->getId()));
+            $purchase->setStore($purchase->getTruckRoute()->getStore());
+            $purchase->setAddress($this->getDoctrine()->getRepository(Address::class)->getAddress_afterINSERT($purchase->getAddress()));
+
+            $entitym = $this->getDoctrine()->getRepository(Purchase::class)->insert($purchase);
+
+            //remove from cart
+            $entityMDel = $this->getDoctrine()->getRepository(Cart::class)->deleteAllByCustomerId($purchase->getCustomer()->getUser()->getId());
+
             return $this->redirectToRoute('purchase_index');
         }
         return $this->render('purchase/new.html.twig', [

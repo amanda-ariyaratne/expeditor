@@ -59,7 +59,18 @@ class CartRepository extends ServiceEntityRepository
         return $status;
     }
 
-
+    public function deleteAllByCustomerId($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $status = $conn->transactional(function($conn) use(&$id) {
+            $sql = "UPDATE cart SET deleted_at = now() WHERE customer_id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return true;
+        });
+        return $status;
+    }
 
 
     // /**

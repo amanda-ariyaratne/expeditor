@@ -25,10 +25,9 @@ class CustomerRepository extends ServiceEntityRepository
 
     public function getById($id)
     {
-        var_dump($id);
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM customer WHERE user_id = :id AND deleted_at IS NULL LIMIT 1";
+            $sql = "SELECT * FROM customer WHERE `user_id` = :id AND deleted_at IS NULL LIMIT 1";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
@@ -72,6 +71,20 @@ class CustomerRepository extends ServiceEntityRepository
             return $conn->lastInsertId();
         });
         return $lastInsertId;
+    }
+
+    public function getEntity($params){
+        $customer = new Customer();
+        
+        $user = $this->getEntityManager()->getRepository(User::class)->getById($params['user_id']);
+        $customer->setUser($user);
+        $address = $this->getEntityManager()->getRepository(Address::class)->getById($params['address_id']);
+        $customer->addAddress($address);
+        $customer->setCreatedAt(new \DateTime($params['created_at']));
+        $customer->setUpdatedAt(new \DateTime($params['updated_at']));
+        $customer->setDeletedAt(new \DateTime($params['deleted_at']));
+
+        return $customer;
     }
 
 

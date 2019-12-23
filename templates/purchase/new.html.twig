@@ -192,14 +192,14 @@
                             TRUCK ROUTE
                         </h2>
                         <p>Select the suitable truck route for you by referring the following pre-defined map routes</p>
-                        <p>Additional charge of $1.50 for every additinal kilometre will be added to the delivery charges</p>
+
                         {% for key1,store in stores %}
                           <div class="" >
-                              <p class="total-line__name" scope="row" style="padding: 12px; font-weight:800;">Store no {{key1+1}} - {{store[0].name}}, {{store[0].street}}, {{store[0].city}}</p>
-                              <div class="" style="border-color:white; padding: 0px 25px 12px 50px;">
+                              <p class="total-line__name" scope="row" style="padding: 5px; font-weight:800; margin:0px;"><i class="fas fa-store"></i> {{store[0].name}}, {{store[0].street}}, {{store[0].city}}</p>
+                              <div class="" style="border-color:white; padding: 0px 25px 5px 50px;">
                                 {% for key,route in store[1] %}
-                                  <div style="padding:0 0 10px 0;">
-                                    <input type="radio" name="map" value="{{route.id}}"><span class="order-summary__emphasis"><a target="_blank" href="https://{{route.map}}" style="padding:5px 0;">{{route.name}}</a></span><br>
+                                  <div style="padding:0 0 5px 0;">
+                                    <input type="radio" name="map" value="{{route.id}}"><span class="order-summary__emphasis"><a target="_blank" href="https://{{route.map}}" style="padding:5px 0;"><i class="fas fa-road"></i> {{route.name}}</a></span><br>
                                   </div>
                                   
                                 {% endfor %}
