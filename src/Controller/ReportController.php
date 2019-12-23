@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\QuarterlySalesReportType;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ use App\Entity\Store;
 class ReportController extends AbstractController
 {
     /**
-     * @Route("/quarterly/sales", name="report_quarterly_sales")
+     * @Route("/quarterly/sales", name="report_quarterly_sales", methods={"GET"})
      */
     public function getQuarterlySalesReport(Request $request): Response
     {

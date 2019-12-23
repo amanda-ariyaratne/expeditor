@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Expeditor - Store Managers List{% endblock %}
+{% block title %}Expeditor - Quarterly Sales{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -10,11 +10,14 @@
         td {
             text-align:center
         }
+        th {
+            text-align:center
+        }
         .plus-icon {
-            background: #025a83;
-            width: 22px;
-            height: 22px;
-            line-height: 22px;
+            background: #db3838;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
             text-align: center;
             display: inline-block;
             color: #fff!important;
@@ -29,18 +32,52 @@
 {% endblock %}
 
 {% block content %}
-{{ form_start(form) }}
-    {{ form_row(form.year) }}    {# <select id="meetup_sport" ... #}
-    {{ form_row(form.store) }} {# <select id="meetup_position" ... #}
-    {{ form_row(form.truck_route) }}
-    {# ... #}
-{{ form_end(form) }}
+
+<div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+        <div class="card ">
+            <div class="card-body">
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Quarterly Sales</h4>
+                <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
+                
+                {{ form_start(form) }}
+                    {{ form_row(form.year) }}    {# <select id="meetup_sport" ... #}
+                    {{ form_row(form.store) }} {# <select id="meetup_position" ... #}
+                    {{ form_row(form.truck_route) }}
+                    {# ... #}
+                {{ form_end(form) }}
+                <div class="table-responsive mt-40">
+                    <table id="myTable" class="display nowrap table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Quater-1</th>
+                                <th>Quater-2</th>
+                                <th>Quater-3</th>
+                                <th>Quater-4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 {% endblock content %}
 
+
 {% block scripts %}
-
     {{ parent() }}
-
     <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
     <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 
     <script src="{{ asset('back/js/buttons.flash.min.js') }}"></script> 
@@ -49,7 +86,6 @@
     <script src="{{ asset('back/js/vfs_fonts.js') }}"></script> 
     <script src="{{ asset('back/js/buttons.html5.min.js') }}"></script> 
     <script src="{{ asset('back/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('back/js/data-table.js') }}"></script>
 
     <script>
         var $store = $('#quarterly_sales_report_store');
@@ -78,5 +114,5 @@
         });
         </script>
 
-{% endblock %}
+{% endblock scripts %}
 
