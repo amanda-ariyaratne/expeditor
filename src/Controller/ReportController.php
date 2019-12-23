@@ -3,10 +3,6 @@
 namespace App\Controller;
 
 use App\Form\QuarterlySalesReportType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/report")
@@ -31,6 +27,4 @@ class ReportController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-    
 }
