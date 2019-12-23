@@ -91,9 +91,6 @@ class ChainManagerRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $status = $conn->transactional(function($conn) use(&$id) {
-            $this->getEntityManager()
-                 ->getRepository(User::class)
-                 ->deleteById($id);
             $sql = "UPDATE chain_manager SET deleted_at = now() WHERE user_id = :id";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
