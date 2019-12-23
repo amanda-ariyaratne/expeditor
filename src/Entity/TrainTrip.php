@@ -21,12 +21,12 @@ class TrainTrip
     /**
      * @ORM\Column(type="decimal", precision=14, scale=4)
      */
-    private $allowed_capacity;
-
+    public $allowed_capacity;
+    
     /**
      * @ORM\Column(type="datetime")
      */
-    private $start_time;
+    public $start_time;
 
     /**
      * @ORM\Column(type="datetime")
@@ -45,6 +45,7 @@ class TrainTrip
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Store", inversedBy="train_trip")
+     * @ORM\JoinColumn(name="store_id",referencedColumnName="id")
      */
     private $store;
 
@@ -57,6 +58,13 @@ class TrainTrip
     {
         return $this->id;
     }
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
 
     public function getAllowedCapacity(): ?string
     {
@@ -69,6 +77,7 @@ class TrainTrip
 
         return $this;
     }
+    
 
     public function getStartTime(): ?\DateTimeInterface
     {
