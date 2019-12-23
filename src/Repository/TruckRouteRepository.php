@@ -33,7 +33,7 @@ class TruckRouteRepository extends ServiceEntityRepository
             return $stmt->fetch();
         });
         return $this->getEntity($result);
-    }  
+    }   
   
     public function getAllByStore($store){
         $conn = $this->getEntityManager()->getConnection();
@@ -44,6 +44,31 @@ class TruckRouteRepository extends ServiceEntityRepository
             $stmt->execute();
             return $stmt->fetchAll();
         });         
+        return $this->getEntityArray($results);
+    }
+
+    public function getAllAsArray($store){
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn) use(&$store){
+            $sql = "SELECT * FROM truck_route WHERE deleted_at IS NULL AND store_id:store";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store', $store);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });         
+        return $results;
+    }
+
+    public function getByStore($store)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn) use(&$store) {
+            $sql = "SELECT * FROM truck_route_store WHERE store_id=:store";            
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store', $store->getId());
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
         return $this->getEntityArray($results);
     }
 
@@ -99,9 +124,18 @@ class TruckRouteRepository extends ServiceEntityRepository
         $truck_route->setId($params['id']);
         $truck_route->setName($params['name']);
         $truck_route->setMap($params['map']);
+        $storeArray = [
+            'id' => $params['store_id'],
+            'name' => $params['store_name'],
+            'street' => $params['street'],
+            'city' => $params['city'],
+            'created_at' => $params['store_created_at'],
+            'updated_at' => $params['store_updated_at'],
+            'deleted_at' => $params['store_deleted_at']
+        ];
         $store = $this->getEntityManager() 
                     ->getRepository(Store::class)
-                    ->getById($params['store_id']);
+                    ->getEntity($storeArray);
         $truck_route->setStore($store);
         return $truck_route;
     }

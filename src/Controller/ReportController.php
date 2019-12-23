@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Form\QuarterlySalesReportType;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+use App\Entity\Store;
 
 /**
  * @Route("/report")
@@ -20,7 +22,9 @@ class ReportController extends AbstractController
     public function getQuarterlySalesReport(Request $request): Response
     {
         $defaultData = [];
-        $form = $this->createForm(QuarterlySalesReportType::class, $defaultData);
+        $form = $this->createForm(QuarterlySalesReportType::class, $defaultData, [
+            'entityManager' => $this->getDoctrine()->getManager(),
+        ]);
 
         $form->handleRequest($request);
 
