@@ -40,6 +40,9 @@ class CartController extends AbstractController
         $user = $security->getUser();
         $cart = $cartRepository->getAllByCustomerID($user->getId());
         $cart_products = array();
+
+        $cart_total = 0;
+
         if (count($cart) != 0){
             foreach($cart as $c){
                 $c['product']= $productRepository->getProductByID($c['product_id']);
@@ -52,12 +55,14 @@ class CartController extends AbstractController
                 else{//retail
                     $c['total'] = $c['quantity']*$product['retail_price'] ;
                 }
+                $cart_total += $c['total'];
                 array_push($cart_products , $c);
             }
         }
 
         return $this->render('cart/index.html.twig', [
             'carts' => $cart_products,
+            'cart_total'=> $cart_total ,
         ]);
     }
 

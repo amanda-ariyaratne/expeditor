@@ -128,22 +128,22 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group has-success m-t-15 m-b-10 row">
+                                    {# <div class="form-group has-success m-t-15 m-b-10 row">
                                         <div class="col-10"></div>
                                         <div class="col-8">
                                             {{ form_widget(form.purchase) }}
                                         </div>
-                                    </div>
+                                    </div> #}
 
                                 </div>
                             </div>
                         </div>
                     </div>
+                {# end of first form #}
+                {# {{ form_end(form) }} #}
 
-                {{ form_end(form) }}
 
-
-                    <a class="step__footer__previous-link" data-trekkie-id="previous_step_link" href="<?=PROOT?>cartController/cart">
+                    <a class="step__footer__previous-link" data-trekkie-id="previous_step_link" href="{{path('cart_index')}}">
                         <svg focusable="false" aria-hidden="true" class="icon-svg icon-svg--color-accent icon-svg--size-10 previous-link__icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
                         <path d="M8 1L7 0 3 4 2 5l1 1 4 4 1-1-4-4"/>
                         </svg>
@@ -158,7 +158,7 @@
 
 
    
-        <div class="sidebar" role="complementary">
+        <div class="sidebar" role="complementary" style="margin-top: 0px;">
           <div class="sidebar__header">
             <a class="logo logo--center" href="https://store...com">
                 <img alt="Online Store" class="logo__image logo__image--small" src="" />
@@ -172,55 +172,47 @@
               <h1></h1>
 
               <div class="order-summary__sections">
-
                 <div class="order-summary__section order-summary__section--total-lines" data-order-summary-section="payment-lines">
                   <table class="total-line-table">
                     <caption class="visually-hidden">Cost summary</caption>
-                    <style type="text/css">
-                      tbody{
-                        display: table-row-group;
-                        vertical-align: middle;
-                        border-color: inherit;
-                      }
-                      table{
-                        border-collapse: collapse;
-                        border-spacing: 0;
-                      }
-                      tr{
-                        display: table-row;
-                        vertical-align: inherit;
-                        border-color: inherit;
-                      }
-                      table thead th{
-                        color: white;
-                        background-color: white;
-                        border-color: white;
-                      }
-                    </style>
-                    <thead>
-                      <tr>
-                        <th scope="col"><span class="visually-hidden" >Description</span></th>
-                        <th scope="col"><span class="visually-hidden">Price</span></th>
-                      </tr>
-                    </thead>
-                    <tbody class="total-line-table__tbody">
-                        <h2 id="paymentsummery" style="width: 380px ;padding: 20px 100px; background-color: #c1939e; border-style: solid; border-width: 5px; border-color: white;font-size: 1.2857em;line-height: 1.3em;font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,sans-serif;background-image: linear-gradient(#12c71e,#1294c7);">
-                            PAYMENT SUMMARY
-                        </h2>
-                      
+                    {# <style type="text/css">
+                      input[type="radio"]{
+                          -webkit-appearance: radio !important;
+                          display: inline !important ;
+                          box-sizing: border-box !important;
+                          padding:5;
+                          height:20px;
+                          width:50px;
 
-                            <tr class="total-line total-line--subtotal">
-                              <th class="total-line__name" scope="row" style="padding: 12px;">item name</th>
-                              <td class="total-line__price" style="border-color:white; padding: 12px;">
-                                <span class="order-summary__emphasis" >$ item price
+                      }
+                    </style> #}
+
+                    <div class="">
+                        <h2 id="paymentsummery" style="width: 380px ;padding: 20px 120px; background-color: #c1939e; border-style: solid; border-width: 5px; border-color: white;font-size: 1.2857em;line-height: 1.3em;font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,sans-serif;background-image: linear-gradient(#12c71e,#1294c7);">
+                            TRUCK ROUTE
+                        </h2>
+                        <p>Select the suitable truck route for you by referring the following pre-defined map routes</p>
+                        <p>Additional charge of $1.50 for every additinal kilometre will be added to the delivery charges</p>
+                        {% for key1,store in stores %}
+                          <div class="" >
+                              <p class="total-line__name" scope="row" style="padding: 12px; font-weight:800;">Store no {{key1+1}} - {{store[0].name}}, {{store[0].street}}, {{store[0].city}}</p>
+                              <div class="" style="border-color:white; padding: 0px 25px 12px 50px;">
+                                {% for key,route in store[1] %}
+                                  <div style="padding:0 0 10px 0;">
+                                    <input type="radio" name="map" value="{{route.id}}"><span class="order-summary__emphasis"><a target="_blank" href="https://{{route.map}}" style="padding:5px 0;">{{route.name}}</a></span><br>
+                                  </div>
                                   
-                                </span>
-                              </td>
-                            </tr>
+                                {% endfor %}
+                              </div>
+                            </div>
+                        {% endfor %}
+
+                           
 
                           
-                    </tbody>
-                    <tfoot class="total-line-table__footer">
+                    </div>
+                    
+                    {# <tfoot class="total-line-table__footer">
                       <tr class="total-line">
                         <th class="total-line__name payment-due-label" scope="row" style="padding:50px 10px;">
                           <i class="demo-icon icon-handy-cart" style="font-size: 15px; padding: 0px 20px 0 0;"></i>
@@ -233,15 +225,14 @@
                           </span>
                         </td>
                       </tr>
-                    </tfoot>
+                    </tfoot> #}
                   </table>
-
-                  <div class="visually-hidden" aria-live="polite" aria-atomic="true" role="status">
-                    Updated total price:
-                    <span data-checkout-payment-due-target="1300">
-                    </span>
-                  </div>
-
+                  <div class="form-group has-success m-t-15 m-b-10 row total-line">
+                        {{ form_label(form.truck_route, 'Truck route', { 'label_attr': {'class': 'form-control-label text-center col-4 col-form-label text-dark weight-500'} }) }}
+                        <div class="col-8">
+                        {{ form_widget(form.truck_route, {'attr': {'class': 'form-control form-control-success' ,'placeholder': 'City'}}) }}
+                        </div>
+                    </div> 
                 </div>
               </div>
             </div>
@@ -256,9 +247,23 @@
                 <symbol id="arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M16 8.1l-8.1 8.1-1.1-1.1L13 8.9H0V7.3h13L6.8 1.1 7.9 0 16 8.1z"/></svg></symbol>
                 <symbol id="spinner-small"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M32 16c0 8.837-7.163 16-16 16S0 24.837 0 16 7.163 0 16 0v2C8.268 2 2 8.268 2 16s6.268 14 14 14 14-6.268 14-14h2z"/></svg></symbol></svg></div>
             </div>
+        </div> 
+        {# end of sidebar #}
+
+        <div class="main__footer Container" style="width:500px; float:right"> 
+          <center>
+            <div class="form-group has-success m-t-15 m-b-10 row">
+                <div class="col-10"></div>
+                <div class="col-8">
+                    {{ form_widget(form.purchase) }}
+                </div>
+            </div>
+          </center>
         </div>
-</div>
-</div>
+        {{ form_end(form) }}
+
+      </div>
     </div>
+  </div>
 </div>
 {% endblock %}

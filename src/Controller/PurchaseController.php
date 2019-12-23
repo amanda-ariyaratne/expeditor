@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Purchase;
 use App\Entity\Customer;
 use App\Entity\Address;
+use App\Entity\Store;
+use App\Entity\TruckRoute;
 
 use App\Form\PurchaseType;
 use App\Repository\PurchaseRepository;
@@ -13,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/purchase")
@@ -39,21 +42,37 @@ class PurchaseController extends AbstractController
         $customer = $this->getDoctrine()->getRepository(Customer::class)->getCustomerByID($user->getId());
         $address = $this->getDoctrine()->getRepository(Address::class)->getByAddressID($customer[0]["address_id"]);
 
+        //stores and truck route info
+        $stores = $this->getDoctrine()->getRepository(Store::class)->getAll();
+        $store_with_routes = array();
+        foreach($stores as $store){
+            $truckRoute = $this->getDoctrine()->getRepository(TruckRoute::class)->getAll($store->getId());
+            
+            if(!empty( $truckRoute )){
+                $arr = array();
+                array_push($arr , $store);
+                array_push($arr , $truckRoute);
+                array_push($store_with_routes , $arr);
+            }
+        }
         //form
         $purchase = new Purchase();
         $form = $this->createForm(PurchaseType::class, $purchase);
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            
-
+            $purchase = $form->getData();
+            var_dump($purchase);
+            //$entityManager = $this->getDoctrine()->getManager();
+            var_dump("order submitted");
+            die();
             return $this->redirectToRoute('purchase_index');
         }
         return $this->render('purchase/new.html.twig', [
             'purchase' => $purchase,
             'form' => $form->createView(),
             'address' => $address,
+            'stores'=>$store_with_routes,
         ]);
     }
 
