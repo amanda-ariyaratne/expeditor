@@ -38,15 +38,26 @@
     <div class="col-lg-12 col-md-12">
         <div class="card ">
             <div class="card-body">
-                <h4 class="card-title text-uppercase mb-20 pull-left"> Quarterly Sales</h4>
-                <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
                 
-                {{ form_start(form) }}
-                    {{ form_row(form.year) }}    {# <select id="meetup_sport" ... #}
-                    {{ form_row(form.store) }} {# <select id="meetup_position" ... #}
-                    {{ form_row(form.truck_route) }}
-                    {# ... #}
-                {{ form_end(form) }}
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Quarterly Sales</h4>
+                <div>
+                    {{ form_start(form) }}
+
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2"></div> 
+                            <div class="col-lg-2 col-md-2">
+                                {{ form_row(form.year) }} 
+                            </div>   
+                            <div class="col-lg-2 col-md-2">
+                                {{ form_row(form.store) }}
+                            </div>   
+                            <div class="col-lg-4 col-md-4">
+                                {{ form_row(form.truck_route) }}
+                            </div>   
+                            <div class="col-lg-2 col-md-2"></div>              
+                        </div>
+                    {{ form_end(form) }}
+                </div>
                 <div class="table-responsive mt-40">
                     <table id="myTable" class="display nowrap table table-hover table-bordered">
                         <thead>
