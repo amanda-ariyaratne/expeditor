@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TruckRoute index{% endblock %}
+
+{% block body %}
+    <h1>TruckRoute index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Delivery_charge</th>
+                <th>Created_at</th>
+                <th>Updated_at</th>
+                <th>Deleted_at</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for truck_route in truck_routes %}
+            <tr>
+                <td>{{ truck_route.id }}</td>
+                <td>{{ truck_route.name }}</td>
+                <td>{{ truck_route.deliveryCharge }}</td>
+                <td>{{ truck_route.createdAt ? truck_route.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ truck_route.updatedAt ? truck_route.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ truck_route.deletedAt ? truck_route.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('truck_route_show', {'id': truck_route.id}) }}">show</a>
+                    <a href="{{ path('truck_route_edit', {'id': truck_route.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('truck_route_new') }}">Create new</a>
+{% endblock %}
