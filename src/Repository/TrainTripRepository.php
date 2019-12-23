@@ -48,11 +48,11 @@ class TrainTripRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $lastInsertId = $conn->transactional(function($conn) use(&$train_trip) {
-            $sql = "INSERT INTO train_trip (store_id,allowed_capacity,start_time) VALUES (:store,:allowed_capacity, :start_time);";
+            $sql = "INSERT INTO train_trip (allowed_capacity,start_time) VALUES (:allowed_capacity, :start_time);";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('allowed_capacity', $train_trip->getAllowedCapacity());
             $stmt->bindValue('start_time', $train_trip->getStartTime(),'datetime');
-            
+           
             $stmt->execute();
             
             

@@ -16,86 +16,77 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class TrainTripController extends AbstractController
 {
-    /**
-     * @Route("/", name="train_trip_index", methods={"GET"})
-     */
-    public function index(TrainTripRepository $trainTripRepository): Response
-    {
-        
-        
-        $train_trips=  $trainTripRepository->getAll();
-        return $this->render('train_trip/index.html.twig', [
-            'train_trips' => $train_trips
-        ]);
-    }
-
     
-
-    /**
+/**
      * @Route("/new", name="train_trip_new", methods={"GET","POST"})
      */
-    public function new(Request $request, TrainTripRepository $trainTripRepository): Response
+    public function new(Request $request): Response
     {
-        $trainTrip = new TrainTrip();
-        $form = $this->createForm(TrainTripType::class, $trainTrip);
+        $truckRoute = new TrainTrip();
+        $form = $this->createForm(TrainTripType::class, $truckRoute);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trainTrip =  $form->getData();
-            $trainTripRepository->insert($trainTrip);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($truckRoute);
+            $entityManager->flush();
+
             return $this->redirectToRoute('train_trip_index');
         }
 
         return $this->render('train_trip/new.html.twig', [
-            'train_trip' => $trainTrip,
+            'truck_route' => $truckRoute,
             'form' => $form->createView(),
         ]);
     }
-
     /**
-     * @Route("/{id}", name="train_trip_show", requirements={"id"="\d+"})
+     * @Route("/", name="train_trip_index", methods={"GET"})
      */
-    public function show(TrainTrip $trainTrip): Response
+    public function index(TrainTripRepository $truckRouteRepository): Response
     {
-        return $this->render('train_trip/show.html.twig', [
-            'train_trip' => $trainTrip,
+        return $this->render('train_trip/index.html.twig', [
+            'train_trip' => $truckRouteRepository->getAll(),
         ]);
     }
+    
 
     /**
-     * @Route("/edit/{id}", name="train_trip_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="train_trip_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, TrainTrip $trainTrip, TrainTripRepository $trainTripRepository): Response
+    public function edit(Request $request, TrainTrip $truckRoute): Response
     {
-        $form = $this->createForm(TrainTripType::class, $trainTrip);
+        $form = $this->createForm(TrainTripType::class, $truckRoute);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $trainTripRepository->update($trainTrip);
+            $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('train_trip_index');
         }
 
         return $this->render('train_trip/edit.html.twig', [
-            'train_trip' => $trainTrip,
+            'train_trip' => $truckRoute,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/delete/{id}", name="train_trip_delete", methods={"DELETE"})
+     * @Route("/{id}", name="truck_route_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, $id, TrainTripRepository $trainTripRepository): Response
+    public function delete(Request $request, TrainTrip $truckRoute): Response
     {
-        $deleted = false;
         if ($this->isCsrfTokenValid('train_trip', $request->request->get('_token'))) {
-            
-            $deleted = $trainTripRepository->delete($id);
+            $entityManager = $this->getDoctrine()->getManager();
+            $storeManager = $entityManager->getRepository(TrainTrip::class)->deleteById($id);
             return new JsonResponse([
-                'status' => $deleted
+                'status' => 'true'
             ]);
         }
-
-        return $this->redirectToRoute('train_trip_index');
+        
+        return new JsonResponse([
+            'status' => 'false'
+        ]);
     }
 }
+
+
