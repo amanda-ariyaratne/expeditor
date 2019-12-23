@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 /**
  * @Route("/reports")
  */
+
 class ReportController extends AbstractController
 {
     /**
