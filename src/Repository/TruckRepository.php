@@ -25,7 +25,7 @@ class TruckRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) {
-            $sql = "SELECT * FROM truck_store ;";
+            $sql = "CALL getTrucks(0);";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -37,7 +37,7 @@ class TruckRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM truck_store WHERE id = :id ;";
+            $sql = "CALL getTrucks(:id);";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
@@ -105,24 +105,13 @@ class TruckRepository extends ServiceEntityRepository
         $truck->setId($array['id']);
         $truck->setInsuranceNo($array['insurance_no']);
         $truck->setRegistrationNo($array['registration_no']);
-        if ($array['store_id']) {
-            $storeArray = [
-                'id' => $array['store_id'],
-                'name' => $array['name'],
-                'street' => $array['street'],
-                'city' => $array['city'],
-                'created_at' => $array['store_created_at'],
-                'updated_at' => $array['store_updated_at'],
-                'deleted_at' => $array['store_deleted_at']
-            ];
-            $store = $this->getEntityManager() 
-                        ->getRepository(Store::class)
-                        ->getEntity($storeArray);
-            $truck->setStore($store);
-        }
-        $truck->setCreatedAt(new \DateTime($array['truck_created_at']));
-        $truck->setUpdatedAt(new \DateTime($array['truck_updated_at']));
-        $truck->setDeletedAt(new \DateTime($array['truck_deleted_at']));
+        $store = $this->getEntityManager() 
+                    ->getRepository(Store::class)
+                    ->getById($array['store_id']);   
+        $truck->setWorkedHours($array['worked_hours']);
+        $truck->setStore($store);     
+        $truck->setCreatedAt(new \DateTime($array['created_at']));
+        $truck->setUpdatedAt(new \DateTime($array['updated_at']));
         return $truck;
     }
 

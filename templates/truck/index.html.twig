@@ -47,6 +47,7 @@
                                 <th>Registration Number</th>
                                 <th>Insurance Number</th>
                                 <th>Store</th>
+                                <th>Used Hours</th>
                                 <th>Date Added</th>
                                 <th>Action</th>
                             </tr>
@@ -64,6 +65,10 @@
                                     {% else %}
                                         <td><span class="label label-warning">Unassigned</span></td>
                                     {% endif %}
+                                    {% set hours = truck.workedHours // 60 %}
+                                    {% set minutes = truck.workedHours % 60 %}
+                                    <td>{{~hours~}}&nbsp; hours &nbsp; {{~minutes~}} &nbsp; minutes</td> 
+
                                     <td>{{ truck.createdAt|date("d/m/Y") }}</td>
                                     <td>
                                         <a href="{{path('truck_edit', { 'id': truck.id}) }}" class="pencil-icon">
@@ -73,6 +78,7 @@
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
                                     </td>
+
                                 </tr>
                             {% endfor %}
                             

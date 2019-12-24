@@ -48,6 +48,7 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Created Date</th>
+                                <th>Max Time Allocation</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -59,6 +60,7 @@
                                     {% set i = i + 1 %}
                                     <td style="text-align:left; max-width:400px; white-space: normal;"><a href="{{ truck_route.map }}" target="_blank">{{ truck_route.name }}</a></td>
                                     <td>{{ truck_route.createdAt|date("d/m/Y") }}</td>
+                                    <td>{{ truck_route.maxTimeAllocation }}</td>
                                     <td>
                                         <a href="{{path('truck_route_edit', { 'id': truck_route.id}) }}" class="pencil-icon">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -66,7 +68,7 @@
                                         <a href="#" class="delete-icon" data-id="{{ truck_route.id }}" >
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
-                                    </td>
+                                    </td>                                    
                                 </tr>
                             {% endfor %}
                             

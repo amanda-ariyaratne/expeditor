@@ -24,6 +24,7 @@ class TruckController extends AbstractController
         $trucks = $this->getDoctrine() 
                         ->getRepository(Truck::class)
                         ->getAll();
+
         return $this->render('truck/index.html.twig', [
             'trucks' => $trucks
         ]);

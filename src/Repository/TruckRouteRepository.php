@@ -35,6 +35,19 @@ class TruckRouteRepository extends ServiceEntityRepository
         return $this->getEntity($result);
     }   
   
+    public function getByStore($store_id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn) use(&$store_id) {
+            $sql = "SELECT * FROM truck_route_store WHERE store_id=:store AND truck_route_deleted_at IS NULL";            
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store', $store_id);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $this->getEntityArray($results);
+    }
+
     public function getAllByStore($store){
         $conn = $this->getEntityManager()->getConnection();
         $results = $conn->transactional(function($conn) use(&$store){
@@ -59,19 +72,6 @@ class TruckRouteRepository extends ServiceEntityRepository
         return $results;
     }
 
-    public function getByStore($store)
-    {
-        $conn = $this->getEntityManager()->getConnection();
-        $results = $conn->transactional(function($conn) use(&$store) {
-            $sql = "SELECT * FROM truck_route_store WHERE store_id=:store";            
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue('store', $store->getId());
-            $stmt->execute();
-            return $stmt->fetchAll();
-        });
-        return $this->getEntityArray($results);
-    }
-
     public function insert($truck_route)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -81,6 +81,7 @@ class TruckRouteRepository extends ServiceEntityRepository
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('name', $truck_route->getName());
             $stmt->bindValue('map',$truck_route->getMap());
+            $stmt->bindValue('max_time_allocation',$truck_route->getMaxTimeAllocation());
             $stmt->bindValue('store', $truck_route->getStore()->getId());
             $stmt->execute();
         });
@@ -96,6 +97,7 @@ class TruckRouteRepository extends ServiceEntityRepository
             $stmt->bindValue('id', $truck_route->getId());
             $stmt->bindValue('_name', $truck_route->getName());
             $stmt->bindValue('map',$truck_route->getMap());
+            $stmt->bindValue('max_time_allocation',$truck_route->getMaxTimeAllocation());
             $stmt->bindValue('store', $truck_route->getStore()->getId());
             $stmt->execute();
         });        
@@ -124,6 +126,7 @@ class TruckRouteRepository extends ServiceEntityRepository
         $truck_route->setId($params['id']);
         $truck_route->setName($params['name']);
         $truck_route->setMap($params['map']);
+        $truck_route->setMaxTimeAllocation($params['max_time_allocation']);
         $storeArray = [
             'id' => $params['store_id'],
             'name' => $params['store_name'],

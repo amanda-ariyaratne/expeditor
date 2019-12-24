@@ -26,6 +26,7 @@ class DriverAssistantController extends AbstractController
         $assistants = $this->getDoctrine() 
                         ->getRepository(DriverAssistant::class)
                         ->getAll();
+                        // dd($assistants);
         return $this->render('driver_assistant/index.html.twig', [
             'assistants' => $assistants
         ]);

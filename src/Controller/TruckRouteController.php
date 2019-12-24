@@ -26,7 +26,7 @@ class TruckRouteController extends AbstractController
         $store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore()->getId();
 
         return $this->render('truck_route/index.html.twig', [
-            'truck_routes' => $truckRouteRepository->getAllByStore($store),
+            'truck_routes' => $truckRouteRepository->getByStore($store),
         ]);
     }
 

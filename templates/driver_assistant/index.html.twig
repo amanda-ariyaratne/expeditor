@@ -47,6 +47,7 @@
                                 <th>Name</th>
                                 <th>NIC</th>
                                 <th>Store</th>
+                                <th>Worked Hours</th>
                                 <th>Joined Date</th>
                                 <th>Action</th>
                             </tr>
@@ -56,15 +57,24 @@
                             {% for assistant in assistants %}
                                 <tr>
                                     <td>{{~i~}}</td>
+
                                     {% set i = i + 1 %}
                                     <td class="text-dark font-semibold">{{ assistant.firstName }} {{ assistant.lastName }}</td>
+
                                     <td>{{ assistant.NIC }}</td>
+
                                     {% if assistant.store %}
                                         <td>{{ assistant.store.name }}</td>
                                     {% else %}
                                         <td><span class="label label-warning">Unassigned</span></td>
                                     {% endif %}
+
+                                    {% set hours = assistant.workedHours // 60 %}
+                                    {% set minutes = assistant.workedHours % 60 %}
+                                    <td>{{~hours~}}&nbsp; hours &nbsp; {{~minutes~}} &nbsp; minutes</td> 
+
                                     <td>{{ assistant.createdAt|date("d/m/Y") }}</td>
+
                                     <td>
                                         <a href="{{path('driver_assistant_edit', { 'id': assistant.id}) }}" class="pencil-icon">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>

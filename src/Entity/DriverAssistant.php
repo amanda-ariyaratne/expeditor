@@ -52,6 +52,8 @@ class DriverAssistant
      */
     private $deleted_at;
 
+    private $worked_hours;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -144,6 +146,19 @@ class DriverAssistant
     public function setDeletedAt(?\DateTimeInterface $deleted_at): self
     {
         $this->deleted_at = $deleted_at;
+
+        return $this;
+    }
+
+    public function getWorkedHours(): ?int
+    {
+        return $this->worked_hours;
+    }
+
+    public function setWorkedHours(int $worked_hours): self
+    {
+
+        $this->worked_hours = $worked_hours;
 
         return $this;
     }

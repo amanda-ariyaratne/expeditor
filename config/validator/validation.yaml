@@ -33,11 +33,15 @@ App\Entity\TruckRoute:
             - NotNull: ~  
             - Length:
                 max: 150
-                maxMessage: 'Your first name cannot be longer than {{ limit }} characters'       
+                maxMessage: 'Your route description cannot be longer than {{ limit }} characters'       
         map:
             - NotNull: ~
             - Length:
                 max: 512
-                maxMessage: 'Your first name cannot be longer than {{ limit }} characters' 
-
+                maxMessage: 'URL length exceeded!' 
+        max_time_allocation:
+            - NotNull: ~  
+            - Length:
+                max: 3
+                maxMessage: 'Maximum time should be less than 999 minutes'
                 

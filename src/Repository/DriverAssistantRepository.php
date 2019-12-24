@@ -25,7 +25,7 @@ class DriverAssistantRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM driver_assistant_store WHERE id = :id";
+            $sql = "CALL getDriverAssistants(:id)";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
@@ -38,7 +38,7 @@ class DriverAssistantRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) {
-            $sql = "SELECT * FROM driver_assistant_store;";
+            $sql = "CALL getDriverAssistants(0)";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
@@ -101,31 +101,22 @@ class DriverAssistantRepository extends ServiceEntityRepository
         return $entityArray;
     }
 
-    private function getEntity($array)
+    private function getEntity($params)
     {
+        // dd($params);
         $da = new DriverAssistant();
-        $da->setId($array['id']);
-        $da->setNIC($array['NIC']);
-        $da->setFirstName($array['first_name']);
-        $da->setLastName($array['last_name']);
-        if ($array['store_id']) {
-            $storeArray = [
-                'id' => $array['store_id'],
-                'name' => $array['name'],
-                'street' => $array['street'],
-                'city' => $array['city'],
-                'created_at' => $array['store_created_at'],
-                'updated_at' => $array['store_updated_at'],
-                'deleted_at' => $array['store_deleted_at']
-            ];
-            $store = $this->getEntityManager() 
-                        ->getRepository(Store::class)
-                        ->getEntity($storeArray);
-            $da->setStore($store);
-        }
-        $da->setCreatedAt(new \DateTime($array['da_created_at']));
-        $da->setUpdatedAt(new \DateTime($array['da_updated_at']));
-        $da->setDeletedAt(new \DateTime($array['da_deleted_at']));
+        $da->setId($params['id']);
+        $da->setFirstName($params['first_name']);
+        $da->setLastName($params['last_name']);
+        $da->setNIC($params['NIC']);
+        $store = $this->getEntityManager() 
+                    ->getRepository(Store::class)
+                    ->getById($params['store_id']);         
+        $da->setStore($store);
+        $da->setCreatedAt(new \DateTime($params['created_at']));
+        $da->setUpdatedAt(new \DateTime($params['updated_at']));
+        $da->setWorkedHours($params['worked_hours']);
+
         return $da;
     }
 
