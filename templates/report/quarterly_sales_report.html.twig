@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Expeditor - Quarterly Sales{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
+    <style type="text/css">
+        td {
+            text-align:center
+        }
+        th {
+            text-align:center
+        }
+        .plus-icon {
+            background: #db3838;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            display: inline-block;
+            color: #fff!important;
+            border-radius: 100px;
+            margin-right: 35px;
+        }
+        .plus-icon:hover {
+            background: #002661;
+            color: #fff;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+        <div class="card ">
+            <div class="card-body">
+                
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Quarterly Sales</h4>
+                <div>
+                    {{ form_start(form) }}
+
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2"></div> 
+                            <div class="col-lg-2 col-md-2">
+                                {{ form_row(form.year) }} 
+                            </div>   
+                            <div class="col-lg-2 col-md-2">
+                                {{ form_row(form.store) }}
+                            </div>   
+                            <div class="col-lg-4 col-md-4">
+                                {{ form_row(form.truck_route) }}
+                            </div>   
+                            <div class="col-lg-2 col-md-2"></div>              
+                        </div>
+                    {{ form_end(form) }}
+                </div>
+                <div class="table-responsive mt-40">
+                    <table id="myTable" class="display nowrap table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Quater-1</th>
+                                <th>Quater-2</th>
+                                <th>Quater-3</th>
+                                <th>Quater-4</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}
+
+
+{% block scripts %}
+    {{ parent() }}
+    <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
+    <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.flash.min.js') }}"></script> 
+    <script src="{{ asset('back/js/jszip.min.js') }}"></script> 
+    <script src="{{ asset('back/js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('back/js/vfs_fonts.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.html5.min.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.print.min.js') }}"></script>
+
+    <script>
+        var $store = $('#quarterly_sales_report_store');
+        // When sport gets selected ...
+        $store.change(function() {
+        // ... retrieve the corresponding form.
+        var $form = $(this).closest('form');
+        // Simulate form data, but only include the selected sport value.
+        var data = {};
+        data[$store.attr('name')] = $store.val();
+        // Submit data via AJAX to the form's action path.
+        console.log(data);
+        $.ajax({
+            url : $form.attr('action'),
+            type: $form.attr('method'),
+            data : data,
+            success: function(html) {
+            // Replace current position field ...
+            $('#quarterly_sales_report_truck_route').replaceWith(
+                // ... with the returned one from the AJAX response.
+                $(html).find('#quarterly_sales_report_truck_route')
+            );
+            // Position field now displays the appropriate positions.
+            }
+        });
+        });
+        </script>
+
+{% endblock scripts %}
+
