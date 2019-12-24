@@ -151,4 +151,18 @@ class TruckRouteRepository extends ServiceEntityRepository
         }
         return $entityArray;    
     }
+
+
+    public function getTruckRouteById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id) {
+            $sql = "SELECT * FROM truck_route WHERE id = :id AND deleted_at IS NULL";            
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntity($result);
+    } 
 }

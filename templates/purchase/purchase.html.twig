@@ -1,0 +1,98 @@
+{% extends 'frontbase.html.twig' %}
+
+{% block title %}Purchase{% endblock %}
+
+{% block body %}
+    <div id="body-content" class="layout-boxed">
+        <div id="main-content">
+            <div class="main-content">
+                <main class="site-content col-xs-9 col-md-9 col-sm-9" style="margin-left: 160px" itemscope="itemscope" itemprop="mainContentOfPage">
+                    <style>
+                        th , td {
+                            text-align:center !important;
+                        }
+                        .btn:hover{
+                            background-color:#12c71e;
+                        }
+                        .btn:after{
+                            background-color:#10947c;
+                        }
+                        table, td , th ,tr{
+                            background-color:#82b8ad!important;
+                            color:black;
+                            font-size:20px;
+                            font-weight: 500;
+                        }
+                        
+                    </style>
+                    <table class="tbl-cart table" style="">
+                        <tbody>
+                            <tr>
+                                <th>Order Id</th>
+                                <td>{{ purchase[0].id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total amount</th>
+                                <td>$ {{total}}</td>
+                            </tr>
+                            <tr>
+                                <th>Delivery date</th>
+                                <td>{{ purchase[0].delivery_date ? purchase[0].delivery_date|date('Y-m-d') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Created at</th>
+                                <td>{{ purchase[0].created ? purchase[0].created|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Address</th>
+                                <td>{{ purchase[0].house_no }}, {{ purchase[0].street }}, {{ purchase[0].city }}</td>
+                            </tr>
+                            <tr>
+                                <th>Order status</th>
+                                <td>{{ purchase[0].status }}</td>
+                            </tr>
+                            <tr>
+                                <th>Product details</th>
+                                <td>
+                                    <table style="border: 1px solid transparent">
+                                        <tbody style="border: 1px solid transparent">
+                                            <style>
+                                                img{
+                                                    border:solid;
+                                                    border-size:3px;
+                                                    border-color:black;
+                                                    width:80px;
+                                                    height:80px;
+                                                    display:block;
+                                                    margin-left: auto;
+                                                    margin-right: auto;
+                                                }
+                                                td .nann{
+                                                    width:30%;
+                                                }
+                                                
+                                            </style>
+                                            {% for p in purchase  %}
+                                                <tr style="border: 1px solid transparent">
+                                                    <th style="border: 1px solid transparent;">
+                                                        <img src="/front/images/products/{{ p['image'] }}">
+                                                    </th>
+                                                    <td class="nann"style="border: 1px solid transparent;">{{p["product_name"]}}</td>
+                                                    <td style="border: 1px solid transparent">x {{p["quantity"]}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <a class="add-to-cart btn btn-1" href="{{ path('purchase_index') }}">back to list</a>
+                </main>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -19,6 +19,32 @@ class PurchaseStatusRepository extends ServiceEntityRepository
         parent::__construct($registry, PurchaseStatus::class);
     }
 
+
+    public function getById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id) {
+            $sql = "SELECT * FROM purchase_status WHERE id = :id AND deleted_at IS NULL LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntity($result);
+    } 
+
+
+    public function getEntity($params){
+        $status = new PurchaseStatus();
+        $status->setId($params['id']);
+        $status->setName($params['name']);
+        $status->setCreatedAt(new \DateTime($params['created_at']));
+        $status->setUpdatedAt(new \DateTime($params['updated_at']));
+        $status->setDeletedAt(new \DateTime($params['deleted_at']));
+        return $status;
+
+    }
+
     // /**
     //  * @return PurchaseStatus[] Returns an array of PurchaseStatus objects
     //  */

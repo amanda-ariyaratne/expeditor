@@ -1,0 +1,232 @@
+  .shopify-payment-button__button--hidden {
+	  visibility: hidden;
+	}
+
+	.shopify-payment-button__button {
+	  border-radius: 4px;
+	  border: none;
+	  box-shadow: 0 0 0 0 transparent;
+	  color: white;
+	  cursor: pointer;
+	  display: block;
+	  font-size: 1em;
+	  font-weight: 500;
+	  line-height: 1;
+	  text-align: center;
+	  width: 100%;
+	  transition: background 0.2s ease-in-out;
+	}
+
+	.shopify-payment-button__button[disabled] {
+	  opacity: 0.6;
+	  cursor: default;
+	}
+
+	.shopify-payment-button__button--unbranded {
+	  background-color: #1990c6;
+	  padding: 1em 2em;
+	}
+
+	.shopify-payment-button__button--unbranded:hover:not([disabled]) {
+	  background-color: #136f99;
+	}
+
+	.shopify-payment-button__more-options {
+	  background: transparent;
+	  border: 0 none;
+	  cursor: pointer;
+	  display: block;
+	  font-size: 1em;
+	  margin-top: 1em;
+	  text-align: center;
+	  width: 100%;
+	}
+
+	.shopify-payment-button__more-options:hover:not([disabled]) {
+	  text-decoration: underline;
+	}
+
+	.shopify-payment-button__more-options[disabled] {
+	  opacity: 0.6;
+	  cursor: default;
+	}
+
+	.shopify-payment-button__button--branded {
+	  display: flex;
+	  flex-direction: column;
+	  min-height: 44px;
+	  position: relative;
+	  z-index: 1;
+	}
+
+	.shopify-payment-button__button--branded .shopify-cleanslate {
+	  flex: 1 !important;
+	  display: flex !important;
+	  flex-direction: column !important;
+	}
+
+
+	.far.fa-star{color:#12c71e }
+	.far.fa-star::before{color:#12c71e ;}
+
+  .owl-item{
+    display: inline-block;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 0px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 15%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  background-color: #1294c7;
+  color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #fff;
+  color: white;
+}
+
+
+
+
+
+.slide-container{
+  width: 400px;
+  height: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  text-align: center;
+}
+
+.image-container{
+  width: 2400px;
+  height: 600px;
+  position: relative;
+  transition:left 2s;
+  -webkit-transition: left 2s;
+  -moz-transition: left 2s;
+  -o-transition: left 2s;
+}
+
+.slider-image{
+  float:left;
+  margin: 0px;
+  padding:0px;
+}
+
+
+
+/*rating*/
+
+/*.rating{
+  transform: translate(-50%, -50%);
+  display: flex;
+}
+.rating input{
+  display: none;
+}
+.rating label{
+  display: block;
+  cursor: pointer;
+  width: 50px;
+  background:#ccc;
+}
+.rating label::before{
+  content:'\2606';
+  cursor: pointer;
+}
+*/
+
+
+/*.star{
+  color: #7f4956;
+  font-size: 1.5rem;
+  padding: 0.1rem;
+}
+.star::before{
+  content:'\2606';
+  cursor: pointer;
+}
+.star.rated::before{
+  content:'\2605';
+}
+.stars{
+  counter-reset: rateme 0 ;
+  font-size: 1.3 rem;
+  font-weight: 400;
+}
+.star.rated{
+  counter-increment: rateme 1;
+}
+.stars::after{
+  content: counter(rateme) '/5' ;
+}*/

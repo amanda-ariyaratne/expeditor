@@ -1,0 +1,81 @@
+{% extends 'frontbase.html.twig' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block body %}
+    <div id="body-content" class="layout-boxed">
+        <div id="main-content">
+            <div class="main-content">
+                <main class="site-content col-xs-9 col-md-9 col-sm-9" style="margin-left: 160px" itemscope="itemscope" itemprop="mainContentOfPage">
+                    <style>
+                        .btn:hover{
+                            background-color:#12c71e;
+                        }
+                        .btn:after{
+                            background-color:#10947c;
+                        }
+                    </style>
+                    {% if carts is  empty %}
+                    <table class="tbl-cart table" cellpadding="10" cellspacing="1">
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="font-size:30px; text-align:center;">Your cart is empty</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% else %}
+                    
+                    <center>
+                        <h2 id="paymentsummery" style="width: 430px ;padding: 20px 120px; border: 15px solid; background-color: #c1939e; border-style: solid; border-color: white;font-size: 1.2857em;line-height: 1.3em;font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,sans-serif;background-image: linear-gradient(#12c71e,#1294c7);">
+                            YOUR CART
+                        </h2>
+                    </center>
+                    <table class="tbl-cart table" cellpadding="10" cellspacing="1">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;">Name</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Created_at</th>
+                                <th style="text-align:center;" >Show Item</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for cart in carts %}
+                            <tr>
+                                <td style="text-align:center;" >{{ cart.product[0]['name'] }}</td>
+                                <td>{{ cart.quantity }}</td>
+                                <td>$ {{ cart.total }}</td>
+                                <td>{{ cart.created_at ? cart.created_at|date('Y-m-d H:i:s') : '' }}</td>
+                                <td style="text-align:center;">
+                                    <a style="text-align:center;" href="{{ path('cart_show', {'id': cart.id}) }}" class="add-to-cart btn btn-1">view</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" style="font-size:30px">Your cart is empty</td>
+                            </tr>
+                        {% endfor %}
+                            <tr style="background-color:#87ada3">
+                                <td style="text-align:center;font-weight: bold;" >FINAL TOTAL</td>
+                                <td></td>
+                                <td style="font-weight: bold;">$ {{ cart_total }}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% endif %}
+                    <a href="{{ path('productList') }}" class="add-to-cart btn btn-1">Continue Shopping</a>
+                    {% if carts is not empty %}
+                        <a href="{{ path('purchase_new') }}" class="add-to-cart btn btn-1">Check out</a>
+                    {% endif %}
+                </main>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

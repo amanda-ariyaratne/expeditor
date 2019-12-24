@@ -1,0 +1,43 @@
+{% extends 'frontbase.html.twig' %}
+
+{% block title %}Customer{% endblock %}
+
+{% block body %}
+    <div id="body-content" class="layout-boxed">
+        <div id="main-content">
+            <div class="main-content">
+                <main class="site-content col-xs-9 col-md-9 col-sm-9" style="margin-left: 160px" itemscope="itemscope" itemprop="mainContentOfPage">
+                    <center>
+                        <h2 id="paymentsummery" style="width: 430px ;padding: 20px 120px; border: 15px solid; background-color: #c1939e; border-style: solid; border-color: white;font-size: 1.2857em;line-height: 1.3em;font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,sans-serif;background-image: linear-gradient(#12c71e,#1294c7);">
+                            MY ACCOUNT
+                        </h2>
+                    </center>
+                    <table class="tbl-cart table">
+                        <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <td>{{ customer.user.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email Address</th>
+                                <td>{{ customer.user.email}}</td>
+                            </tr>
+                            <tr>
+                                <th>First name</th>
+                                <td>{{ customer.user.firstName}}</td>
+                            </tr>
+                            <tr>
+                                <th>Last name</th>
+                                <td>{{ customer.user.lastName }}</td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+
+
+                </main>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
