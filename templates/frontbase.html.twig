@@ -122,6 +122,10 @@
       width:50px;
     }
 
+    .btn:hover{
+        background-color:#12c71e;
+    }
+                    
   </style>
 
         {% block stylesheets %}{% endblock %}
@@ -144,7 +148,7 @@
                         
                           <li><a href="" title="About us" >About us</a></li>
 
-                          <li><a href="" title="Customer Request" >All Orders</a></li>
+                          <li><a href="{{path('purchase_index')}}" title="Customer Request" >All Orders</a></li>
 
                           <li><a href="" title="Contact us" >Contact us</a></li>
                         
@@ -167,9 +171,9 @@
                     
                       <div class="top-bar-left col-lg-3">
                         <ul class="list-inline">
-                            <li class="customer-account lazyload waiting">
+                            <li class="customer-account  waiting">
                               {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                <a href="/" title="Account"><i class="demo-icon icon-user"></i>{{ app.user.firstname }} {{ app.user.lastname }} </a>
+                                <a href="/customer/{{app.user.id }}" title="Account"><i class="demo-icon icon-user"></i>{{ app.user.firstname }} {{ app.user.lastname }} </a>
                               {% else %}
                                 <a href="{{path('back_login')}}" title="Login"><i class="demo-icon icon-user"></i>Login</a>
                               {% endif %}
@@ -184,7 +188,7 @@
 
                     <div class="top-bar-right col-lg-3">
                       <ul class="list-inline">
-                          <li class="customer-register lazyload waiting">
+                          <li class="customer-register  waiting">
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                               <a href="{{ path('app_logout') }}" title="Logout">
                                 <i class="demo-icon icon-pencil-2"></i>Logout
@@ -213,7 +217,7 @@
                     <div class="header-logo col-lg-2 col-md-12">
                       
                       
-                      <a href="{{path('productList')}}" title="Expeditor" class="logo-site lazyload waiting">
+                      <a href="{{path('productList')}}" title="Expeditor" class="logo-site  waiting">
                         <img class=" lazyloaded" data-srcset="{{ asset('front/images/logo.png') }}, {{ asset('front/images/logo.png') }}" alt="" style="width: 300px; border-radius: 0%; height: 80px; background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(255,255,255,1));" srcset="{{ asset('front/images/logo.png') }}, {{ asset('front/images/logo.png') }}">
                       </a>
                     </div>
@@ -228,7 +232,7 @@
                             <input id="bc-product-search" type="text" name="q" class="form-control"  placeholder="Search" autocomplete="off" />
 
                             <button type="submit" class="search-icon">
-                              <span class="lazyload waiting">
+                              <span class=" waiting">
 
                                 
                                 <i class="demo-icon icon-search"></i>
@@ -299,175 +303,175 @@
                           
                           
                               <li class="dropdown">
-                                <a href="" class="dropdown-link">
+                                <a href="{{path('productList')}}" class="dropdown-link">
                                     <span>All products</span>
                                 </a>
                                 <span class="expand"></span>
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Clothes</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Bags</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Shoes</span>
                                       </a>
                                     </li>
 
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <a href="" class="dropdown-link">
+                                <a href="{{path('productList')}}" class="dropdown-link">
                                     <span>Clothes</span>
                                 </a>
                                 <span class="expand"></span>
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Men</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Women</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Kids</span>
                                       </a>
                                     </li>
 
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <a href="" class="dropdown-link">
+                                <a href="{{path('productList')}}" class="dropdown-link">
                                     <span>Funiture</span>
                                 </a>
                                 <span class="expand"></span>
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Chair</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Tables</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Cupboard</span>
                                       </a>
                                     </li>
 
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <a href="" class="dropdown-link">
+                                <a href="{{path('productList')}}" class="dropdown-link">
                                     <span>Kitchen equipment</span>
                                 </a>
                                 <span class="expand"></span>
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Knife</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Cups</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Plates</span>
                                       </a>
                                     </li>
 
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <a href="" class="dropdown-link">
+                                <a href="{{path('productList')}}" class="dropdown-link">
                                     <span>Shoes</span>
                                 </a>
                                 <span class="expand"></span>
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Men</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Women</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Kids</span>
                                       </a>
                                     </li>
 
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <a href="" class="dropdown-link">
+                                <a href="{{path('productList')}}" class="dropdown-link">
                                     <span>Beauty and Health</span>
                                 </a>
                                 <span class="expand"></span>
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Makeup sets</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Brushes</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Slippers</span>
                                       </a>
                                     </li>
 
                                 </ul>
                             </li>
                             <li class="dropdown">
-                                <a href="" class="dropdown-link">
+                                <a href="{{path('productList')}}" class="dropdown-link">
                                     <span>Bags</span>
                                 </a>
                                 <span class="expand"></span>
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Men</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Women</span>
                                       </a>
                                     </li>
                                     <li>
-                                      <a tabindex="-1" href="">
-                                        <span>item</span>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Kids</span>
                                       </a>
                                     </li>
 
@@ -501,7 +505,7 @@
             
             
             <li class="m-customer-account">
-              <a href="" title="Account" class="lazyload waiting">
+              <a href="" title="Account" class=" waiting">
                 
                   <i class="demo-icon icon-user"></i>
                 
@@ -601,7 +605,7 @@
                                           <a href="/" title="Handy Store" class="logo-site lazyload waiting">
                                             <img  class="lazyload" data-srcset="images/handylogo_225x.png"
                                                   
-                                                 alt="Handy Store"
+                                                 alt="Expeditor"
                                                  style="max-width: 225px;" />
                                           </a>
                                         </li>
@@ -651,7 +655,11 @@
 
                                     <ul class="f-list">
                                       
-                                      <li><a href="" ><span>Login</span></a></li>
+                                      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                        <li><a href="" ><span>Account</span></a></li>
+                                      {% else %}
+                                        <li><a href="{{path('back_login')}}" ><span>Login</span></a></li>
+                                      {% endif %}
                                       
                                       <li><a href=""><span>Register</span></a></li>
                                       
@@ -659,7 +667,7 @@
                                       
                                       <li><a href=""><span>Contact us</span></a></li>
                                       
-                                      <li><a href=""><span>Orders</span></a></li>
+                                      <li><a href="{{path('purchase_index')}}"><span>Orders</span></a></li>
                                       
                                     </ul>
 

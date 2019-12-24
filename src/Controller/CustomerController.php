@@ -87,58 +87,36 @@ class CustomerController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/new", name="customer_new", methods={"GET","POST"})
-     */
-    // public function new(Request $request): Response
-    // {
-    //     $customer = new Customer();
-    //     $form = $this->createForm(CustomerType::class, $customer);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $entityManager = $this->getDoctrine()->getManager();
-    //         $entityManager->persist($customer);
-    //         $entityManager->flush();
-
-    //         return $this->redirectToRoute('customer_index');
-    //     }
-
-    //     return $this->render('customer/new.html.twig', [
-    //         'customer' => $customer,
-    //         'form' => $form->createView(),
-    //     ]);
-    // }
 
     /**
      * @Route("/{id}", name="customer_show", methods={"GET"})
      */
-    public function show(Customer $customer): Response
+    public function show($id): Response
     {
         return $this->render('customer/show.html.twig', [
-            'customer' => $customer,
+            'customer' =>  $this->getDoctrine()->getRepository(Customer::class)->getById($id),
         ]);
     }
 
     /**
      * @Route("/{id}/edit", name="customer_edit", methods={"GET","POST"})
      */
-    // public function edit(Request $request, Customer $customer): Response
-    // {
-    //     $form = $this->createForm(CustomerType::class, $customer);
-    //     $form->handleRequest($request);
+    public function edit(Request $request, Customer $customer): Response
+    {
+        $form = $this->createForm(CustomerType::class, $customer);
+        $form->handleRequest($request);
 
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $this->getDoctrine()->getManager()->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
 
-    //         return $this->redirectToRoute('customer_index');
-    //     }
+            return $this->redirectToRoute('customer_index');
+        }
 
-    //     return $this->render('customer/edit.html.twig', [
-    //         'customer' => $customer,
-    //         'form' => $form->createView(),
-    //     ]);
-    // }
+        return $this->render('customer/edit.html.twig', [
+            'customer' => $customer,
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * @Route("/{id}", name="customer_delete", methods={"DELETE"})

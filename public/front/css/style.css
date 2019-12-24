@@ -434,7 +434,6 @@ td {
 }
 /* Lazysizes extra class */
 .lazyload {
-    opacity: 0;
     -webkit-transform: scale(0.8);
     -moz-transform: scale(0.8);
     -ms-transform: scale(0.8);

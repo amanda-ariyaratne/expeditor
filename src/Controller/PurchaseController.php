@@ -9,6 +9,7 @@ use App\Entity\Address;
 use App\Entity\Store;
 use App\Entity\TruckRoute;
 use App\Entity\Cart;
+use App\Entity\PurchaseProduct;
 
 use App\Form\PurchaseType;
 use App\Repository\PurchaseRepository;
@@ -29,18 +30,40 @@ class PurchaseController extends AbstractController
      */
     public function index(PurchaseRepository $purchaseRepository): Response
     {
+        $user = $this->getUser();
         return $this->render('purchase/index.html.twig', [
-            'purchases' => $purchaseRepository->findAll(),
+            'purchases' => $purchaseRepository->getAllByCustomerID($user->getId()),
+        ]);
+    }
+
+    /**
+     * @Route("/purchase/{id}")
+     */
+    public function viewOrder($id): Response
+    {
+        $purchase = $this->getDoctrine()->getRepository(Purchase::class)->getDetailsByPurchaseID($id);
+        $total = 0;
+        foreach($purchase as $p){
+            if($p["quantity"] > $p["retail_limit"]){//wholesale
+                $total += $p["quantity"]*$p["wholesale_price"];
+            }
+            else{//retail
+                $total += $p["quantity"]*$p["retail_price"];
+            }
+        }
+        return $this->render('purchase/purchase.html.twig', [
+            'purchase' => $purchase,
+            'total'=> $total,
         ]);
     }
 
     /**
      * @Route("/new", name="purchase_new", methods={"GET","POST"})
      */
-    public function new(Request $request, Security $security): Response
+    public function new(Request $request): Response
     {
         //address info
-        $user = $security->getUser();
+        $user = $this->getUser();
         $customer = $this->getDoctrine()->getRepository(Customer::class)->getCustomerByID($user->getId());
         $address = $this->getDoctrine()->getRepository(Address::class)->getByAddressID($customer[0]["address_id"]);
 
@@ -63,14 +86,18 @@ class PurchaseController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            //add purchase
+            //add to purchase
             $purchase = $form->getData();
             $purchase->setStatus($this->getDoctrine()->getRepository(PurchaseStatus::class)->getByID('1'));
             $purchase->setCustomer($this->getDoctrine()->getRepository(Customer::class)->getByID($user->getId()));
             $purchase->setStore($purchase->getTruckRoute()->getStore());
             $purchase->setAddress($this->getDoctrine()->getRepository(Address::class)->getAddress_afterINSERT($purchase->getAddress()));
 
-            $entitym = $this->getDoctrine()->getRepository(Purchase::class)->insert($purchase);
+            $lastInsertId = $this->getDoctrine()->getRepository(Purchase::class)->insert($purchase);
+
+            //add to purchase_product
+            $cart_products = $this->getDoctrine()->getRepository(Cart::class)->getAllByCustomerID($purchase->getCustomer()->getUser()->getId());
+            $entityPP = $this->getDoctrine()->getRepository(PurchaseProduct::class)->insert($cart_products , $lastInsertId);
 
             //remove from cart
             $entityMDel = $this->getDoctrine()->getRepository(Cart::class)->deleteAllByCustomerId($purchase->getCustomer()->getUser()->getId());

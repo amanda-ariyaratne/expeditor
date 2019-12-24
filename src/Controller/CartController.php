@@ -95,8 +95,8 @@ class CartController extends AbstractController
     public function show(Cart $cart , ProductRepository $productRepository): Response
     {   
         $cart_product = array();
+        $cart = $this->getDoctrine()->getRepository(Cart::class)->getById($cart->getId());
         $cart_product['cart']= $cart;
-
         $cart_product['product']= $productRepository->getProductByID($cart->getProduct()->getId());
 
         $product =  $cart_product['product'][0];

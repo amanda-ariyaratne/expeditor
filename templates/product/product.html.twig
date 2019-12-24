@@ -141,15 +141,16 @@
                                             <ul>
                                               {{product[0]['description']}}
                                             </ul>
+                                            <ul>
+                                              Quantity in stock - {{product[0]['quantity_in_stock']}}
+                                            </ul>
                                           </div>
                                           <div class="">
                                             <ul>
                                               Retail limit is {{product[0]['retail_limit']}}.The orders above that will be added to the cart with the whole sale price
                                             </ul>
 
-                                            <ul>
-                                              Quantity in stock - {{product[0]['quantity_in_stock']}}
-                                            </ul>
+                                            
                                           </div>
                                       <meta itemprop="priceCurrency" content="USD" /> 
 
@@ -184,7 +185,7 @@
                                                 <div class="row">
                                                   {{ form_label(form.quantity, 'Quantity', { 'label_attr': {'class': 'form-control-label text-center col-4 col-form-label text-dark weight-500'} }) }}
                                                   <div class="col-8">
-                                                    {{ form_widget(form.quantity, {'value' : '1' , 'attr': {'class': 'quantity-show' , 'id':'quantity' ,  'max' : '10'  }}) }}
+                                                    {{ form_widget(form.quantity, {'type':'number' , 'value' : '1' , 'attr': {'class': 'quantity-show' , 'id':'quantity' ,  'min':'1' , 'max' : product[0]['quantity_in_stock']  }}) }}
                                                   </div>
                                                 </div>
                                                 <div style="padding:10px;"></div>

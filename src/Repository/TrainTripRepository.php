@@ -19,32 +19,35 @@ class TrainTripRepository extends ServiceEntityRepository
         parent::__construct($registry, TrainTrip::class);
     }
 
-    // /**
-    //  * @return TrainTrip[] Returns an array of TrainTrip objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getById($id)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id) {
+            $sql = "SELECT * FROM train_trip WHERE id = :id AND deleted_at IS NULL LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntity($result);
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?TrainTrip
+    private function getEntity($array)
     {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $train_trip = new TrainTrip();
+        $train_trip->setId($array['id']);
+        $train_trip->setAllowedCapacity($array['allowed_capacity']);
+        $train_trip->setStartTime(new \DateTime($array['start_time']));
+        
+       /* 
+        $train_trip = $this->getEntityManager() 
+                    ->getRepository(Store::class)
+                    ->getById($array['assigned_store']);
+        $train_trip->setStore(new Store ($array['assigned_store']));
+        */
+        $train_trip->setCreatedAt(new \DateTime($array['created_at']));
+        $train_trip->setUpdatedAt(new \DateTime($array['updated_at']));
+        $train_trip->setDeletedAt(new \DateTime($array['deleted_at']));
+        return $train_trip;
     }
-    */
 }

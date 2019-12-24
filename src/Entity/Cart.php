@@ -21,7 +21,7 @@ class Cart
      * @ORM\Column(type="integer")
      */
     /**
-     * @Assert\GreaterThan(1)
+     * @Assert\GreaterThan(0)
      */
     private $quantity;
 
@@ -55,6 +55,13 @@ class Cart
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getQuantity(): ?int

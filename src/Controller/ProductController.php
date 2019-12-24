@@ -55,8 +55,11 @@ class ProductController extends AbstractController
         $cart = new Cart();
         $form = $this->createForm(CartType::class, $cart);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
+            if($this->getUser() == null){
+                return $this->redirectToRoute('back_login');
+            }
             $cart  = $form->getData();
             $user = $security->getUser();
             $entitym = $cartRepository->insert($cart , $user->getId() , $product[0]['id']);

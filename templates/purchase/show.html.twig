@@ -3,32 +3,46 @@
 {% block title %}Purchase{% endblock %}
 
 {% block body %}
-    <h1>Purchase</h1>
+    <div id="body-content" class="layout-boxed">
+        <div id="main-content">
+            <div class="main-content">
+                <main class="site-content col-xs-9 col-md-9 col-sm-9" style="margin-left: 160px" itemscope="itemscope" itemprop="mainContentOfPage">
+                    <style>
+                        th , td {
+                            text-align:center !important;
+                        }
+                        .btn:hover{
+                            background-color:#12c71e;
+                        }
+                        .btn:after{
+                            background-color:#10947c;
+                        }
+                    </style>
+                    <table class="tbl-cart table">
+                        <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <td>{{ purchase.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total_amount</th>
+                                <td>$234234234</td>
+                            </tr>
+                            <tr>
+                                <th>Delivery_date</th>
+                                <td>{{ purchase.deliveryDate ? purchase.deliveryDate|date('Y-m-d') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Created_at</th>
+                                <td>{{ purchase.createdAt ? purchase.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ purchase.id }}</td>
-            </tr>
-            <tr>
-                <th>Total_amount</th>
-                <td>$234234234</td>
-            </tr>
-            <tr>
-                <th>Delivery_date</th>
-                <td>{{ purchase.deliveryDate ? purchase.deliveryDate|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Created_at</th>
-                <td>{{ purchase.createdAt ? purchase.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
+                        </tbody>
+                    </table>
 
-        </tbody>
-    </table>
-
-    <a href="{{ path('purchase_index') }}">back to list</a>
-
-    <a href="{{ path('purchase_edit', {'id': purchase.id}) }}">edit</a>
-
+                    <a href="{{ path('purchase_index') }}">back to list</a>
+                </main>
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -7,7 +7,17 @@
         <div id="main-content">
             <div class="main-content">
                 <main class="site-content col-xs-9 col-md-9 col-sm-9" style="margin-left: 160px" itemscope="itemscope" itemprop="mainContentOfPage">
-
+                    <style>
+                        th , td {
+                            text-align:center !important;
+                        }
+                        .btn:hover{
+                            background-color:#12c71e;
+                        }
+                        .btn:after{
+                            background-color:#10947c;
+                        }
+                    </style>
                     <table class="tbl-cart table">
                         <tbody>
                             <tr>
@@ -37,7 +47,7 @@
                         </tbody>
                     </table>
 
-                    <a class="add-to-cart btn btn-1" href="{{ path('cart_index') }}">back to list</a>
+                    <a class="add-to-cart btn btn-1" href="{{ path('cart_index') }}">back to Cart</a>
 
                     <div style="float:right; ">
                         {{ include('cart/_delete_form.html.twig') }}
