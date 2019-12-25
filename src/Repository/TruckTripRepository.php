@@ -58,8 +58,8 @@ class TruckTripRepository extends ServiceEntityRepository
             $stmt->bindValue('driver', $truckt->getDriver()->getId());
             $stmt->bindValue('driver_assistant', $truckt->getDriverAssistant()->getId());
             $stmt->bindValue('truck_route', $truckt->getTruckRoute()->getId());
-            $stmt->bindValue('date', $truckt->getDate(),'date');
-            $stmt->bindValue('start_time', $truckt->getStartTime(),'time');
+            $stmt->bindValue('date', $truckt->getDate(),'datetime');
+            $stmt->bindValue('start_time', $truckt->getStartTime(),'datetime');
             
             
             $stmt->execute();
@@ -79,7 +79,7 @@ class TruckTripRepository extends ServiceEntityRepository
             $stmt->bindValue('driver_assistant', $truckt->getDriverAssistant()->getId());
             $stmt->bindValue('truck_route', $truckt->getTruckRoute()->getId());
             //$stmt->bindValue('date', $truckt->getDate(),'date');
-            $stmt->bindValue('start_time', $truckt->getStartTime(),'time');
+            $stmt->bindValue('start_time', $truckt->getStartTime(),'datetime');
             $stmt->bindValue('id', $truckt->getId());
             
             

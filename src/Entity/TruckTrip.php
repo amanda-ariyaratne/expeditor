@@ -38,11 +38,7 @@ class TruckTrip
      */
     public $truck_route;
 
-    /**
-     * @ORM\Column(type="date")
-     */
-    private $date;
-
+    
     /**
      * @ORM\Column(type="time", nullable=true)
      */
