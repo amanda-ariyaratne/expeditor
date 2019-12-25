@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Driver;
+use App\Entity\StoreManager;
 use App\Form\DriverType;
 use App\Repository\DriverRepository;
 use App\Repository\StoreRepository;
@@ -11,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedHttpException;
+
 
 /**
  * @Route("/driver")
@@ -19,11 +22,25 @@ class DriverController extends AbstractController
 {
     /**
      * @Route("/", name="driver_index", methods={"GET"})
+     * IsGranted('ROLE_STORE_MANAGER')
      */
     public function index(DriverRepository $driverRepository): Response
     {
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER']);
+        
+        if ($this->isGranted('ROLE_STORE_MANAGER')){
+            $user = $this->getUser()->getId();
+            $store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore()->getId();
+
+            $drivers = $driverRepository->getAllByStore($store);
+        }
+        else if($this->isGranted('ROLE_CHAIN_MANAGER'))
+        {
+            $drivers = $driverRepository->getAll();
+        }
+        
         return $this->render('driver/index.html.twig', [
-            'drivers' => $driverRepository->getAll(),
+            'drivers' => $drivers,
         ]);
     }
 
@@ -32,9 +49,11 @@ class DriverController extends AbstractController
      */
     public function new(Request $request, DriverRepository $driverRepositary, StoreRepository $storeRepositary): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER');
+
         $driver = new Driver();
         $form = $this->createForm(DriverType::class, $driver);
-        $form->handleRequest($request);
+        $form->handleRequest($request);    
 
         if ($form->isSubmitted() && $form->isValid()) 
         {     
@@ -61,8 +80,11 @@ class DriverController extends AbstractController
     /**
      * @Route("/{id}/edit", name="driver_edit", methods={"GET","POST"})
      */
+    
     public function edit(Request $request, Driver $driver, DriverRepository $driverRepositary, StoreRepository $storeRepositary): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER');
+        
         $form = $this->createForm(DriverType::class, $driver);
         $form->handleRequest($request);
 
@@ -83,6 +105,7 @@ class DriverController extends AbstractController
      */
     public function delete(Request $request, $id, DriverRepository $driverRepository): Response
     {   
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER');
         $deleted = false;
         if ($this->isCsrfTokenValid('driver-token', $request->request->get('_token'))) {
             

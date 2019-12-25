@@ -94,7 +94,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             return new RedirectResponse($targetPath);
         }
 
-        if($this->getUser()->getRoles[0]=="ROLE_CUSTOMER"){
+        if($token->getUser()->getRoles()[0]=="ROLE_CUSTOMER"){
             return new RedirectResponse($this->urlGenerator->generate('productList'));
         }
         return new RedirectResponse($this->urlGenerator->generate('app_dashboard'));

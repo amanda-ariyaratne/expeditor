@@ -39,6 +39,10 @@
                 <a href="{{ path('driver_assistant_new') }}" class="plus-icon pull-left">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
+                {% if is_granted('ROLE_STORE_MANAGER') %}
+                    <h4 class="card-title text-uppercase mb-20 pull-right">{{ assistants[0].store.name }}</h6>
+                {% endif %}
+
                 <div class="table-responsive mt-40">
                     <table id="myTable" class="display nowrap table table-hover table-bordered">
                         <thead>
@@ -46,7 +50,9 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>NIC</th>
-                                <th>Store</th>
+                                {% if is_granted('ROLE_CHAIN_MANAGER') %}
+                                    <th>Store</th>
+                                {% endif %}
                                 <th>Worked Hours</th>
                                 <th>Joined Date</th>
                                 <th>Action</th>
@@ -63,10 +69,12 @@
 
                                     <td>{{ assistant.NIC }}</td>
 
-                                    {% if assistant.store %}
-                                        <td>{{ assistant.store.name }}</td>
-                                    {% else %}
-                                        <td><span class="label label-warning">Unassigned</span></td>
+                                    {% if is_granted('ROLE_CHAIN_MANAGER') %}
+                                        {% if assistant.store %}
+                                            <td>{{ assistant.store.name }}</td>
+                                        {% else %}
+                                            <td><span class="label label-warning">Unassigned</span></td>
+                                        {% endif %}
                                     {% endif %}
 
                                     {% set hours = assistant.workedHours // 60 %}

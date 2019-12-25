@@ -46,6 +46,20 @@ class DriverAssistantRepository extends ServiceEntityRepository
         return $this->getEntityArray($result);
     }
 
+    public function getAllByStore($store_id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$store_id){
+            $sql = "CALL getDriverAssistants(:store_id)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store_id',$store_id);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+
+        return $this->getEntityArray($result);
+    }
+
     public function insert(DriverAssistant $da)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -105,16 +119,27 @@ class DriverAssistantRepository extends ServiceEntityRepository
     {
         // dd($params);
         $da = new DriverAssistant();
-        $da->setId($params['id']);
-        $da->setFirstName($params['first_name']);
-        $da->setLastName($params['last_name']);
-        $da->setNIC($params['NIC']);
+        $da->setId($params['da_id']);
+        $da->setFirstName($params['da_first_name']);
+        $da->setLastName($params['da_last_name']);
+        $da->setNIC($params['da_NIC']);
+        
+        $storeArray = [
+            'id' => $params['store_id'],
+            'name' => $params['store_name'],
+            'street' => $params['store_street'],
+            'city' => $params['store_city'],
+            'created_at' => $params['store_created_at'],
+            'updated_at' => $params['store_updated_at'],
+            'deleted_at' => $params['store_deleted_at']
+        ];
         $store = $this->getEntityManager() 
                     ->getRepository(Store::class)
-                    ->getById($params['store_id']);         
+                    ->getEntity($storeArray);
+
         $da->setStore($store);
-        $da->setCreatedAt(new \DateTime($params['created_at']));
-        $da->setUpdatedAt(new \DateTime($params['updated_at']));
+        $da->setCreatedAt(new \DateTime($params['da_created_at']));
+        $da->setUpdatedAt(new \DateTime($params['da_updated_at']));
         $da->setWorkedHours($params['worked_hours']);
 
         return $da;

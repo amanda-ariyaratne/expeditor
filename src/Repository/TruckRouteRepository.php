@@ -48,28 +48,27 @@ class TruckRouteRepository extends ServiceEntityRepository
         return $this->getEntityArray($results);
     }
 
-    public function getAllByStore($store){
+    public function getAll(){
         $conn = $this->getEntityManager()->getConnection();
-        $results = $conn->transactional(function($conn) use(&$store){
-            $sql = "SELECT * FROM truck_route WHERE store_id=:store AND deleted_at IS NULL";
+        $results = $conn->transactional(function($conn){
+            $sql = "CALL getTruckRoutes(0);";
             $stmt = $conn->prepare($sql);
-            $stmt->bindValue('store', $store);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });   
+        return $this->getEntityArray($results);
+    }
+
+    public function getAllByStore($store_id){
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn) use(&$store_id){
+            $sql = "CALL getTruckRoutes(:store_id);";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store_id', $store_id);
             $stmt->execute();
             return $stmt->fetchAll();
         });         
         return $this->getEntityArray($results);
-    }
-
-    public function getAllAsArray($store){
-        $conn = $this->getEntityManager()->getConnection();
-        $results = $conn->transactional(function($conn) use(&$store){
-            $sql = "SELECT * FROM truck_route WHERE deleted_at IS NULL AND store_id:store";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue('store', $store);
-            $stmt->execute();
-            return $stmt->fetchAll();
-        });         
-        return $results;
     }
 
     public function insert($truck_route)
@@ -123,15 +122,15 @@ class TruckRouteRepository extends ServiceEntityRepository
   
     private function getEntity($params){
         $truck_route = new TruckRoute();
-        $truck_route->setId($params['id']);
-        $truck_route->setName($params['name']);
-        $truck_route->setMap($params['map']);
-        $truck_route->setMaxTimeAllocation($params['max_time_allocation']);
+        $truck_route->setId($params['truck_route_id']);
+        $truck_route->setName($params['truck_route_name']);
+        $truck_route->setMap($params['truck_route_map']);
+        $truck_route->setMaxTimeAllocation($params['truck_route_max_time_allocation']);
         $storeArray = [
             'id' => $params['store_id'],
             'name' => $params['store_name'],
-            'street' => $params['street'],
-            'city' => $params['city'],
+            'street' => $params['store_street'],
+            'city' => $params['store_city'],
             'created_at' => $params['store_created_at'],
             'updated_at' => $params['store_updated_at'],
             'deleted_at' => $params['store_deleted_at']
@@ -139,7 +138,10 @@ class TruckRouteRepository extends ServiceEntityRepository
         $store = $this->getEntityManager() 
                     ->getRepository(Store::class)
                     ->getEntity($storeArray);
+
         $truck_route->setStore($store);
+        $truck_route->setCreatedAt(new \DateTime($params['truck_route_created_at']));
+        $truck_route->setUpdatedAt(new \DateTime($params['truck_route_updated_at']));
         return $truck_route;
     }
 

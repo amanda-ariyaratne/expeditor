@@ -22,11 +22,21 @@ class TruckRouteController extends AbstractController
      */
     public function index(TruckRouteRepository $truckRouteRepository): Response
     {
-        $user = $this->getUser()->getId();
-        $store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore()->getId();
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER']);
 
+        $doctrine = $this->getDoctrine();
+
+        if ($this->isGranted('ROLE_STORE_MANAGER')){
+            $user = $this->getUser()->getId();
+            $store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore()->getId();
+            $truckRoutes = $truckRouteRepository->getAllByStore($store);
+        }
+        else if($this->isGranted('ROLE_CHAIN_MANAGER')){
+            $truckRoutes = $truckRouteRepository->getAll();
+        }
+        
         return $this->render('truck_route/index.html.twig', [
-            'truck_routes' => $truckRouteRepository->getByStore($store),
+            'truck_routes' => $truckRoutes
         ]);
     }
 
@@ -35,6 +45,8 @@ class TruckRouteController extends AbstractController
      */
     public function new(Request $request, TruckRouteRepository $truckRouteRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER');
+
         $user = $this->getUser()->getId();
         $store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore();
 
@@ -72,6 +84,8 @@ class TruckRouteController extends AbstractController
      */
     public function edit(Request $request, TruckRoute $truck_route, TruckRouteRepository $truckRouteRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER');
+
         $user = $this->getUser()->getId();
         $store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore();
 
@@ -96,6 +110,8 @@ class TruckRouteController extends AbstractController
      */
     public function delete(Request $request, $id, TruckRouteRepository $truckRouteRepository): Response
     {   
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER');
+
         $deleted = false;
         if ($this->isCsrfTokenValid('truck-route-token', $request->request->get('_token'))) {
             

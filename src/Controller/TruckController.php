@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Truck;
+use App\Entity\StoreManager;
 use App\Form\TruckType;
 use App\Repository\TruckRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,9 +22,18 @@ class TruckController extends AbstractController
      */
     public function index(TruckRepository $truckRepository): Response
     {
-        $trucks = $this->getDoctrine() 
-                        ->getRepository(Truck::class)
-                        ->getAll();
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER']);
+
+        $doctrine = $this->getDoctrine();
+
+        if ($this->isGranted('ROLE_STORE_MANAGER')){
+            $user = $this->getUser()->getId();
+            $store = $doctrine->getRepository(StoreManager::class)->find($user)->getStore()->getId();
+            $trucks = $doctrine->getRepository(Truck::class)->getAllByStore($store);
+        }
+        else if($this->isGranted('ROLE_CHAIN_MANAGER')){
+            $trucks = $doctrine->getRepository(Truck::class)->getAll();
+        }
 
         return $this->render('truck/index.html.twig', [
             'trucks' => $trucks
@@ -35,6 +45,8 @@ class TruckController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER');
+
         $truck = new Truck();
 
         $form = $this->createForm(TruckType::class, $truck);
@@ -68,6 +80,8 @@ class TruckController extends AbstractController
      */
     public function edit(Request $request, $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER');
+
         $truck = $this->getDoctrine() 
                         ->getRepository(Truck::class)
                         ->getById($id);
@@ -95,6 +109,8 @@ class TruckController extends AbstractController
      */
     public function delete(Request $request, $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER');
+
         if ($this->isCsrfTokenValid('truck', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $truck = $entityManager->getRepository(Truck::class)->deleteById($id);

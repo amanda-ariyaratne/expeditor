@@ -39,6 +39,10 @@
                 <a href="{{ path('truck_new') }}" class="plus-icon pull-left">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
+                {% if is_granted('ROLE_STORE_MANAGER') %}
+                    <h4 class="card-title text-uppercase mb-20 pull-right">{{ trucks[0].store.name }}</h6>
+                {% endif %}
+
                 <div class="table-responsive mt-40">
                     <table id="myTable" class="display nowrap table table-hover table-bordered">
                         <thead>
@@ -46,7 +50,9 @@
                                 <th>#</th>
                                 <th>Registration Number</th>
                                 <th>Insurance Number</th>
-                                <th>Store</th>
+                                {% if is_granted('ROLE_CHAIN_MANAGER') %}
+                                    <th>Store</th>
+                                {% endif %}
                                 <th>Used Hours</th>
                                 <th>Date Added</th>
                                 <th>Action</th>
@@ -60,10 +66,12 @@
                                     {% set i = i + 1 %}
                                     <td class="text-dark font-semibold">{{ truck.registrationNo }}</td>
                                     <td>{{ truck.insuranceNo }}</td>
-                                    {% if truck.store %}
-                                        <td>{{ truck.store.name }}</td>
-                                    {% else %}
-                                        <td><span class="label label-warning">Unassigned</span></td>
+                                    {% if is_granted('ROLE_CHAIN_MANAGER') %}
+                                        {% if truck.store %}
+                                            <td>{{ truck.store.name }}</td>
+                                        {% else %}
+                                            <td><span class="label label-warning">Unassigned</span></td>
+                                        {% endif %}
                                     {% endif %}
                                     {% set hours = truck.workedHours // 60 %}
                                     {% set minutes = truck.workedHours % 60 %}

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\DriverAssistant;
 use App\Form\DriverAssistantType;
 use App\Repository\DriverAssistantRepository;
+use App\Entity\StoreManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,10 +24,23 @@ class DriverAssistantController extends AbstractController
      */
     public function index(DriverAssistantRepository $driverAssistantRepository): Response
     {
-        $assistants = $this->getDoctrine() 
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER']);
+        
+        $doctrine = $this->getDoctrine();
+        
+        if ($this->isGranted('ROLE_STORE_MANAGER')){
+            $user = $this->getUser()->getId();
+            $store = $doctrine->getRepository(StoreManager::class)->find($user)->getStore()->getId();
+            $assistants = $this->getDoctrine() 
+                        ->getRepository(DriverAssistant::class)
+                        ->getAllByStore($store);
+        }
+        else if($this->isGranted('ROLE_CHAIN_MANAGER')){
+            $assistants = $this->getDoctrine() 
                         ->getRepository(DriverAssistant::class)
                         ->getAll();
-                        // dd($assistants);
+        }
+
         return $this->render('driver_assistant/index.html.twig', [
             'assistants' => $assistants
         ]);
@@ -37,6 +51,8 @@ class DriverAssistantController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER');
+
         $driverAssistant = new DriverAssistant();
 
         $form = $this->createForm(DriverAssistantType::class, $driverAssistant);
@@ -71,6 +87,8 @@ class DriverAssistantController extends AbstractController
      */
     public function edit(Request $request, $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER');
+
         $driverAssistant = $this->getDoctrine() 
                              ->getRepository(DriverAssistant::class)
                              ->getById($id);
@@ -98,6 +116,8 @@ class DriverAssistantController extends AbstractController
      */
     public function delete(Request $request, $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER');
+
         if ($this->isCsrfTokenValid('driver_assistant', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $driverAssistant = $entityManager->getRepository(DriverAssistant::class)->deleteById($id);

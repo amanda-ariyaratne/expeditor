@@ -33,10 +33,14 @@
         <div class="card ">
             <div class="card-body">
                 <h4 class="card-title text-uppercase mb-20 pull-left"> Drivers</h4>
-                <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
+                
                 <a href="{{ path('driver_new') }}" class="plus-icon pull-left">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
+                {% if is_granted('ROLE_STORE_MANAGER') %}
+                    <h4 class="card-title text-uppercase mb-20 pull-right">{{ drivers[0].store.name }}</h6>
+                {% endif %}
+
                 <div class="table-responsive mt-40">
                     <table id="myTable" class="display nowrap table table-hover table-bordered">
                         <thead>
@@ -45,7 +49,9 @@
                                 <th>Name</th>
                                 <th>NIC</th>
                                 <th>License_no</th>
-                                <th>Store</th>
+                                {% if is_granted('ROLE_CHAIN_MANAGER') %}
+                                    <th>Store</th>
+                                {% endif %}
                                 <th>Worked Hours</th>
                                 <th>Created_at</th>
                                 <th>actions</th>
@@ -60,12 +66,13 @@
                                     <td class="text-dark font-semibold">{{ driver.firstName }} {{ driver.lastName }}</td>
                                     <td>{{ driver.NIC }}</td>
                                     <td>{{ driver.licenseNo }}</td>
-                                    
-                                    {% if (driver.store) %}
-                                        <td>{{ driver.store.name }}</td>
-                                    {% else %}
-                                        <td><span class="label label-warning">Unassigned</span></td>
-                                        {# <td class="text-dark font-semibold">-Not assigned yet-</td> #}
+                                    {% if is_granted('ROLE_CHAIN_MANAGER') %}                                
+                                        {% if (driver.store) %}
+                                            <td>{{ driver.store.name }}</td>
+                                        {% else %}
+                                            <td><span class="label label-warning">Unassigned</span></td>
+                                            {# <td class="text-dark font-semibold">-Not assigned yet-</td> #}
+                                        {% endif %}
                                     {% endif %}
 
                                     {% set hours = driver.workedHours // 60 %}
