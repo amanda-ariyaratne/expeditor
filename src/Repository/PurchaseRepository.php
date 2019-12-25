@@ -19,6 +19,19 @@ class PurchaseRepository extends ServiceEntityRepository
         parent::__construct($registry, Purchase::class);
     }
 
+    public function getQuarterlySalesReport($year)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn) use(&$year) {
+            $sql = "CALL get_quarterly_sales_report(:year); ;";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('year', $year);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $results;
+    }
+
     // /**
     //  * @return Purchase[] Returns an array of Purchase objects
     //  */

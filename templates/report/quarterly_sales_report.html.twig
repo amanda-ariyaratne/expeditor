@@ -41,16 +41,29 @@
                 <h4 class="card-title text-uppercase mb-20 pull-left"> Quarterly Sales</h4>
                 <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
                 
-                {{ form_start(form) }}
-                    {{ form_row(form.year) }}    {# <select id="meetup_sport" ... #}
-                    {{ form_row(form.store) }} {# <select id="meetup_position" ... #}
-                    {{ form_row(form.truck_route) }}
+                {{ form_start(form, {'attr': {'class': 'form no-background'} }) }}
+                    <div class="form-group has-success m-t-15 m-b-10 row">
+                        <div class="col-7">
+                        </div>
+                        {{ form_label(form.year, 'Year', { 'label_attr': {'class': 'form-control-label col-1 col-form-label text-dark weight-500'} }) }}
+                        <div class="col-2">
+                            {{ form_widget(form.year, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+                        </div>
+                        <div class="col-2">
+                            {{ form_widget(form.submit, {'attr': {'class': 'btn btn-rounded  waves-effect waves-light btn-outline-primary font-12'}}) }}
+                        </div>
+                    </div>
+                        {# <select id="meetup_sport" ... #}
+                    {# {{ form_row(form.store) }} <select id="meetup_position" ... #}
+                    {# {{ form_row(form.truck_route) }} #}
                     {# ... #}
                 {{ form_end(form) }}
                 <div class="table-responsive mt-40">
                     <table id="myTable" class="display nowrap table table-hover table-bordered">
                         <thead>
                             <tr>
+                                <th>#</th>
+                                <th>Product</th>
                                 <th>Quater-1</th>
                                 <th>Quater-2</th>
                                 <th>Quater-3</th>
@@ -58,12 +71,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                            {%set i = 1 %}
+                            {% for r in records %}
+                                <tr>
+                                    <td>{{~i~}}</td>
+                                    {% set i = i + 1 %}
+                                    <td class="text-dark font-semibold">{{ r.product_name }}</td>
+                                    <td>{{ r.q1|number_format(2, ' . ', ', ') }}</td>
+                                    <td>{{ r.q2|number_format(2, ' . ', ', ') }}</td>
+                                    <td>{{ r.q3|number_format(2, ' . ', ', ') }}</td>
+                                    <td>{{ r.q4|number_format(2, ' . ', ', ') }}</td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                         
                     </table>
@@ -112,7 +131,7 @@
             }
         });
         });
-        </script>
+    </script>
 
 {% endblock scripts %}
 
