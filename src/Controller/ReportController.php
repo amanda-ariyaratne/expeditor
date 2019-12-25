@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Purchase;
+use App\Entity\Product;
 
 /**
  * @Route("/report")
@@ -72,6 +73,18 @@ class ReportController extends AbstractController
         
         return $this->render('report/quarterly_sales_report_by_store.html.twig', [
             'form' => $form->createView(),
+            'records' => $records
+        ]);
+    }
+
+    /**
+     * @Route("/popular/products", name="report_popular_products", methods={"GET"})
+     */
+    public function getPopularProducts(): Response
+    {
+        $records = $this->getDoctrine()->getRepository(Product::class)->getMostPopularProducts();
+        
+        return $this->render('report/popular_products.html.twig', [
             'records' => $records
         ]);
     }

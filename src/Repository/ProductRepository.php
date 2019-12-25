@@ -19,6 +19,18 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
+    public function getMostPopularProducts()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn) {
+            $sql = "SELECT * FROM products_with_most_orders_report;";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $results;
+    }
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */
