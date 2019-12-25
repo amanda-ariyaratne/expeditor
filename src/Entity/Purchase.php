@@ -28,7 +28,7 @@ class Purchase
      * @ORM\Column(type="date")
      */
     /**
-     * @Assert\GreaterThan("+7 today")
+     * @Assert\GreaterThan("now +7 day")
      */
     private $delivery_date;
 

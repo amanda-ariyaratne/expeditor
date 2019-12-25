@@ -9,13 +9,13 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Doctrine\ORM\EntityRepository;
-
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-
-use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\Form\CallbackTransformer;
 use App\Form\AddressType;
 
 
@@ -42,6 +42,18 @@ class PurchaseType extends AbstractType
                 ]
             ])
         ;
+
+        $builder->get('delivery_date')->addModelTransformer(new CallbackTransformer(
+            function ($value) {
+                if(!$value) {
+                    return new \DateTime('now +8 day');
+                }
+                return $value;
+            },
+            function ($value) {
+                return $value;
+            }
+        ));
     }
 
     public function configureOptions(OptionsResolver $resolver)

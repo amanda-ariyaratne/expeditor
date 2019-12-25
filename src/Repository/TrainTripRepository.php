@@ -50,4 +50,51 @@ class TrainTripRepository extends ServiceEntityRepository
         $train_trip->setDeletedAt(new \DateTime($array['deleted_at']));
         return $train_trip;
     }
+
+    public function assignToTrainTrip($purchase_id){
+        //get purchase and products to calculate product total_size
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM purchase_status_address_purchaseproduct_product WHERE id =:id;";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('id', $purchase_id);
+        $stmt->execute();
+        $purchases =  $stmt->fetchAll();
+
+        $total_size = 0;
+        foreach($purchases as $p){
+            $total_size += $p["quantity"] * $p["size"];
+        }
+
+        //get train trip
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM train_trip WHERE `date` > :created AND allowed_capacity>=:total_size AND deleted_at IS NULL ORDER BY `date` DESC LIMIT 1;";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('created', $purchases[0]["created"]);
+        $stmt->bindValue('total_size', $total_size);
+        $stmt->execute();
+        $available_train_trip =  $stmt->fetch();
+
+        
+        if(count($available_train_trip) != 0){
+            //update purchase with train trip id
+            $conn = $this->getEntityManager()->getConnection();
+            $sql = "UPDATE purchase SET train_trip_id =:train_trip_id WHERE id = :id ;";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('train_trip_id', $available_train_trip["id"]);
+            $stmt->bindValue('id', $purchase_id);
+            $stmt->execute();
+
+            //update train trip allowed_capacity
+            $conn = $this->getEntityManager()->getConnection();
+            $sql = "UPDATE train_trip SET allowed_capacity =:new_capacity WHERE id = :id ;";
+            $stmt = $conn->prepare($sql);
+            $new_capacity = $available_train_trip["allowed_capacity"] - $total_size;
+            $stmt->bindValue('new_capacity', $new_capacity);
+            $stmt->bindValue('id', $available_train_trip["id"]);
+            $stmt->execute();
+
+            return true;
+        }
+        return false;
+    }
 }
