@@ -1,43 +1,153 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}TruckRoute index{% endblock %}
+{% block title %}Expeditor - Truck Routes List{% endblock %}
 
-{% block body %}
-    <h1>TruckRoute index</h1>
+{% block stylesheets %}
+    <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
+    <style type="text/css">
+        table {
+            {# width: 50%; #}
+            {# table-layout: fixed; #}
+        }
+        td {
+            text-align:center
+        }
+        .plus-icon {
+            background: #025a83;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            display: inline-block;
+            color: #fff!important;
+            border-radius: 100px;
+        }
+        .plus-icon:hover {
+            background: #002661;
+            color: #fff;
+        }
+    </style>
+{% endblock %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Delivery_charge</th>
-                <th>Created_at</th>
-                <th>Updated_at</th>
-                <th>Deleted_at</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for truck_route in truck_routes %}
-            <tr>
-                <td>{{ truck_route.id }}</td>
-                <td>{{ truck_route.name }}</td>
-                <td>{{ truck_route.deliveryCharge }}</td>
-                <td>{{ truck_route.createdAt ? truck_route.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ truck_route.updatedAt ? truck_route.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ truck_route.deletedAt ? truck_route.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('truck_route_show', {'id': truck_route.id}) }}">show</a>
-                    <a href="{{ path('truck_route_edit', {'id': truck_route.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+{% block content %}
+<div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+        <div class="card ">
+            <div class="card-body">
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Truck Routes</h4>
+                <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
+                <a href="{{ path('truck_route_new') }}" class="plus-icon pull-left">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+                <div class="table-responsive mt-40">
+                    <table id="myTable" class="display nowrap table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Created Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%set i = 1 %}
+                            {% for truck_route in truck_routes %}
+                                <tr>
+                                    <td>{{~i~}}</td>
+                                    {% set i = i + 1 %}
+                                    <td style="text-align:left; max-width:400px; white-space: normal;"><a href="{{ truck_route.map }}" target="_blank">{{ truck_route.name }}</a></td>
+                                    <td>{{ truck_route.createdAt|date("d/m/Y") }}</td>
+                                    <td>
+                                        <a href="{{path('truck_route_edit', { 'id': truck_route.id}) }}" class="pencil-icon">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </a>
+                                        <a href="#" class="delete-icon" data-id="{{ truck_route.id }}" >
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}
 
-    <a href="{{ path('truck_route_new') }}">Create new</a>
+
+{% block scripts %}
+
+    <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
+    <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.flash.min.js') }}"></script> 
+    <script src="{{ asset('back/js/jszip.min.js') }}"></script> 
+    <script src="{{ asset('back/js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('back/js/vfs_fonts.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.html5.min.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('back/js/data-table.js') }}"></script>
+
+
+    <script>
+
+        $( document ).ready(function() {
+
+
+            $(".delete-icon").on("click", function (e) {
+
+                e.preventDefault();
+                var id = $(this).data("id");
+
+                $.confirm({
+                    title: 'Delete Confirmation!',
+                    content: 'Are you sure you want to delete this record?',
+                    type: 'red',
+                    typeAnimated: true,
+                    buttons: {
+                        confirm: {
+                            text: 'Confirm',
+                            btnClass: 'btn-red',
+                            action: function(){
+                                url = "{{path('truck_route_delete', { 'id': 0}) }}";
+                                url = url.replace("0",id);
+                                token = "{{ csrf_token('truck-route-token') }}"
+                                $.ajax({
+                                    url: url,
+                                    type: 'DELETE',
+                                    data: {
+                                        _token: token
+                                    },
+                                    success: function(result) {
+                                        $.confirm({
+                                            title: 'Deleted',
+                                            content: 'The record was successfully deleted',
+                                            type: 'green',
+                                            typeAnimated: true,
+                                            buttons: {
+                                                close: function () {
+                                                    location.reload();
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        },
+                        close: function () {
+                        }
+                    }
+                });
+            });
+
+
+        });
+
+    </script>
+
 {% endblock %}

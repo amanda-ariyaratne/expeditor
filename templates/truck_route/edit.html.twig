@@ -1,13 +1,91 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit TruckRoute{% endblock %}
+{% block title %}Update Truck Route{% endblock %}
 
-{% block body %}
-    <h1>Edit TruckRoute</h1>
+{% block stylesheets %}
+  <link href="{{ asset('back/css/bootstrap4.2.1.min.css') }}" rel="stylesheet">
+  <!-- page css -->
+  <link href="{{ asset('back/css/login-register-lock.css') }}" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="{{ asset('back/css/master-stylesheet.css') }}" rel="stylesheet">
+  <link href="{{ asset('back/css/style2.css') }}"   rel="stylesheet">
 
-    {{ include('truck_route/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('truck_route_index') }}">back to list</a>
-
-    {{ include('truck_route/_delete_form.html.twig') }}
+  <style type="text/css">
+        .plus-icon {
+            background: #025a83;
+            width: 30px;
+            height: 44px;
+            line-height: 44px;
+            text-align: center;
+            display: inline-block;
+            color: #fff!important;
+            border-radius: 200px;
+        }
+        .plus-icon:hover {
+            background: #002661;
+            color: #fff;
+        }
+    </style>
 {% endblock %}
+
+{% block scripts %}
+
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <script src="{{ asset('back/js/jquery3.2.0.min.js') }}"></script>
+
+  <!-- Bootstrap tether Core JavaScript -->
+  <script src="{{ asset('back/js/popper.min.js') }}"></script>
+  <script src="{{ asset('back/js/bootstrap4.2.1.min.js') }}"></script>
+
+  <!--Custom JavaScript -->
+  <script>
+  $(function() {
+  $(".preloader").fadeOut();
+  });
+  $(function() {
+  $('[data-toggle="tooltip"]').tooltip()
+  });
+
+  // ============================================================== 
+  // Login and Recover Password 
+  // ============================================================== 
+  $('#to-recover').on("click", function() {
+  $("#loginform").slideUp();
+  $("#recoverform").fadeIn();
+  });
+  </script>
+
+{% endblock %}
+
+{% block content %}
+
+
+  <div class="container-fluid">
+    <div class="page-titles row">
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-12">
+        </div>
+        
+        <div class="col-lg-6 col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-uppercase mb-20">
+                UPDATE TRUCK ROUTE
+              </h4>
+              
+              <h6 class="card-subtitle m-b-5"></h6>               
+            
+              {{ include('truck_route/_form.html.twig') }}
+              
+            </div>            
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-12">
+        </div>        
+    </div>
+  </div>
+
+{% endblock content %}

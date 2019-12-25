@@ -25,7 +25,7 @@ class DriverRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM driver WHERE id = :id AND deleted_at IS NULL LIMIT 1";
+            $sql = "SELECT * FROM driver WHERE id = :id AND deleted_at IS NULL LIMIT 1";            
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
@@ -139,9 +139,12 @@ class DriverRepository extends ServiceEntityRepository
         $driver->setLastName($params['last_name']);
         $driver->setNIC($params['NIC']);
         $driver->setLicenseNo($params['license_no']);
+        // dd($params['store_id']);
         $store = $this->getEntityManager() 
                     ->getRepository(Store::class)
                     ->getById($params['store_id']);
+        
+        
         $driver->setStore($store);
         $driver->setCreatedAt(new \DateTime($params['created_at']));
         $driver->setUpdatedAt(new \DateTime($params['updated_at']));

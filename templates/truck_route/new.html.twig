@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create Truck{% endblock %}
+{% block title %}New Truck Route{% endblock %}
 
 {% block stylesheets %}
   <link href="{{ asset('back/css/bootstrap4.2.1.min.css') }}" rel="stylesheet">
@@ -9,6 +9,23 @@
   <!-- Custom CSS -->
   <link href="{{ asset('back/css/master-stylesheet.css') }}" rel="stylesheet">
   <link href="{{ asset('back/css/style2.css') }}"   rel="stylesheet">
+
+  <style type="text/css">
+        .plus-icon {
+            background: #025a83;
+            width: 30px;
+            height: 44px;
+            line-height: 44px;
+            text-align: center;
+            display: inline-block;
+            color: #fff!important;
+            border-radius: 200px;
+        }
+        .plus-icon:hover {
+            background: #002661;
+            color: #fff;
+        }
+    </style>
 {% endblock %}
 
 {% block scripts %}
@@ -42,30 +59,33 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row" style="margin-top: 5%; margin-bottom: 8.7%;">
-        <div class="col-lg-3 col-md-12">
-            
-        </div>
-        <div class="col-lg-6 col-md-12">
-            <div class="card ">
-                <div class="card-body">
-                    <h4 class="card-title text-uppercase mb-20">
-                        NEW TRUCK ROUTE
-                    </h4>
-                    <h6 class="card-subtitle m-b-5">
-                        
-                    </h6>
-                    {{ include( 'truck_route/_form.html.twig' ) }}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-12">
-        </div>
+
+
+  <div class="container-fluid">
+    <div class="page-titles row">
     </div>
-</div>
+    <div class="row">
+        <div class="col-lg-3 col-md-12">
+        </div>
+        
+        <div class="col-lg-6 col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title text-uppercase mb-20">
+                NEW TRUCK ROUTE
+              </h4>
+              
+              <h6 class="card-subtitle m-b-5"></h6>               
+            
+              {{ include('truck_route/_form.html.twig') }}
+              
+            </div>            
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-12">
+        </div>        
+    </div>
+  </div>
 
 {% endblock content %}
-
-
-        

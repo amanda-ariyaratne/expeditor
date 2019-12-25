@@ -109,7 +109,7 @@ class StoreRepository extends ServiceEntityRepository
         return $result;
     }
   
-    private function getEntity($params){
+    public function getEntity($params){
         $store = new Store();
         $store->setId($params['id']);
         $store->setName($params['name']);
@@ -117,7 +117,9 @@ class StoreRepository extends ServiceEntityRepository
         $store->setCity($params['city']);
         $store->setCreatedAt(new \DateTime($params['created_at']));
         $store->setUpdatedAt(new \DateTime($params['updated_at']));
+        $store->setDeletedAt(new \DateTime($params['deleted_at']));
         return $store;
+
     }
 
     private function getEntityArray($array)
@@ -128,5 +130,5 @@ class StoreRepository extends ServiceEntityRepository
         }
         return $entityArray;    
     }
-
 }
+
