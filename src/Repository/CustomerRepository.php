@@ -88,32 +88,22 @@ class CustomerRepository extends ServiceEntityRepository
     }
 
 
-    // /**
-    //  * @return Customer[] Returns an array of Customer objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Customer
+
+    public function getAll(): ?Array
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM customer WHERE deleted_at IS NULL";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $customers =  $stmt->fetchAll();
+
+        $customer_arr = array();
+        foreach($customers as $c){
+            array_push($customer_arr , $this->getEntity($c));
+        }
+        return $customer_arr;
     }
-    */
+
+
 }

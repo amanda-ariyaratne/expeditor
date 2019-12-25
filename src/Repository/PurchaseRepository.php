@@ -61,6 +61,15 @@ class PurchaseRepository extends ServiceEntityRepository
         return $stmt->fetchAll();
     }
 
+    public function getDetailsByCustomerID($id): ?Array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM `purchase_status_address_purchaseproduct_product` WHERE customer_id = :id ;";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('id', $id);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 
     public function insert(Purchase $purchase)
     {
