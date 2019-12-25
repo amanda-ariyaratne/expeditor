@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}TruckTrip{% endblock %}
+{% block title %}Truck Trip{% endblock %}
 
 {% block body %}
-    <h1>TruckTrip</h1>
+    <h1>Truck Trip</h1>
 
     <table class="table">
         <tbody>
@@ -19,14 +19,9 @@
                 <th>Start_time</th>
                 <td>{{ truck_trip.startTime ? truck_trip.startTime|date('H:i:s') : '' }}</td>
             </tr>
-            <tr>
-                <th>End_time</th>
-                <td>{{ truck_trip.endTime ? truck_trip.endTime|date('H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Max_time_allocation</th>
-                <td>{{ truck_trip.maxTimeAllocation }}</td>
-            </tr>
+            
+            
+            
             <tr>
                 <th>Created_at</th>
                 <td>{{ truck_trip.createdAt ? truck_trip.createdAt|date('Y-m-d H:i:s') : '' }}</td>

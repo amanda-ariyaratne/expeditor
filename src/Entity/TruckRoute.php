@@ -28,6 +28,10 @@ class TruckRoute
      * @ORM\JoinColumn(nullable=false)
      */
     private $store;
+    /**
+     * @ORM\Column(type="decimal", precision=4, scale=2)
+     */
+    private $max_time_allocation;
 
     /**
      * @ORM\Column(type="decimal", precision=12, scale=2)
@@ -63,6 +67,12 @@ class TruckRoute
     {
         return $this->id;
     }
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
 
     public function getName(): ?string
     {
@@ -84,6 +94,17 @@ class TruckRoute
     public function setStore(?Store $store): self
     {
         $this->store = $store;
+
+        return $this;
+    }
+    public function getMaxTimeAllocation(): ?string
+    {
+        return $this->max_time_allocation;
+    }
+
+    public function setMaxTimeAllocation(string $max_time_allocation): self
+    {
+        $this->max_time_allocation = $max_time_allocation;
 
         return $this;
     }

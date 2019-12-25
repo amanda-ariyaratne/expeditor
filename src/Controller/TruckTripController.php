@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\TruckTrip;
+use App\Entity\Truck;
 use App\Form\TruckTripType;
 use App\Repository\TruckTripRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/truck/trip")
+ * @Route("/truck-trip")
  */
 class TruckTripController extends AbstractController
 {
@@ -25,8 +26,8 @@ class TruckTripController extends AbstractController
         $truckts = $this->getDoctrine() 
                         ->getRepository(TruckTrip::class)
                         ->getAll();
-        return $this->render('truck-trip/index.html.twig', [
-            'truck_trips' => $truckts
+        return $this->render('truck_trip/index.html.twig', [
+            'truck_trip' => $truckts
         ]);
     }
     /**
@@ -44,7 +45,7 @@ class TruckTripController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getRepository(TruckTrip::class)->insert($truckt);
 
-            return $this->redirectToRoute('truck_index');
+            return $this->redirectToRoute('truck_trip_index');
         }
 
         return $this->render('truck_trip/new.html.twig', [
@@ -66,7 +67,7 @@ class TruckTripController extends AbstractController
     /**
      * @Route("/{id}/edit", name="truck_trip_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, TruckTrip $truckTrip): Response
+    public function edit(Request $request, $id): Response
     {
         $truckt = $this->getDoctrine() 
                         ->getRepository(TruckTrip::class)
@@ -93,11 +94,11 @@ class TruckTripController extends AbstractController
     /**
      * @Route("/{id}", name="truck_trip_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, TruckTrip $truckTrip): Response
+    public function delete(Request $request,  $id,TruckTrip $truckTrip): Response
     {
-        if ($this->isCsrfTokenValid('truck_trip', $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('truck-trip', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $truck = $entityManager->getRepository(TruckTrip::class)->deleteById($id);
+            $truck = $entityManager->getRepository(TruckTrip::class)->delete($id);
             return new JsonResponse([
                 'status' => 'true'
             ]);

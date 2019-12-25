@@ -19,9 +19,15 @@
     </div>
 
     <div class="form-group has-success m-t-15 m-b-10 row">
-        {{ form_label(form.driver_assistant, 'Driver Assistat', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'}, 'errors': [] }) }}
+        {{ form_label(form.driver_assistant, 'Driver Assistant', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'}, 'errors': [] }) }}
     <div class="col-8">
         {{ form_widget(form.driver_assistant, {'attr': {'class': 'form-control form-control-success text-success', 'id': 'inlineFormCustomSelect'}}) }}
+    </div>
+    </div>
+    <div class="form-group has-success m-t-15 m-b-10 row">
+        {{ form_label(form.truck_route, 'Truck Route', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'}, 'errors': [] }) }}
+    <div class="col-8">
+        {{ form_widget(form.truck_route, {'attr': {'class': 'form-control form-control-success text-success', 'id': 'inlineFormCustomSelect'}}) }}
     </div>
     </div>
     <div class="form-group has-success m-t-15 m-b-10 row">
@@ -36,19 +42,9 @@
         {{ form_widget(form.start_time, {'attr': {'class': 'form-control form-control-success text-success', 'id': 'inlineFormCustomSelect'}}) }}
     </div>
     </div>
-    <div class="form-group has-success m-t-15 m-b-10 row">
-        {{ form_label(form.end_time, 'End Time', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'}, 'errors': [] }) }}
-    <div class="col-8">
-        {{ form_widget(form.end_time, {'attr': {'class': 'form-control form-control-success text-success', 'id': 'inlineFormCustomSelect'}}) }}
+    
     </div>
-    </div>
-    <div class="form-group has-success m-t-15 m-b-10 row">
-        {{ form_label(form.max_time_allocation, 'Max Time Allocation', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'}, 'errors': [] }) }}
-    <div class="col-8">
-        {{ form_widget(form.max_time_allocation, {'attr': {'class': 'form-control form-control-success text-success', 'id': 'inlineFormCustomSelect'}}) }}
-    </div>
-    </div>
-
+    
     <div class="form-group has-success m-t-15 m-b-10 row">
     <div class="col-10"></div>
     <div class="col-2">

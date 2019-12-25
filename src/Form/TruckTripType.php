@@ -14,6 +14,8 @@ use App\Entity\DriverAssistant;
 use App\Entity\TruckRoute;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 
@@ -22,10 +24,11 @@ class TruckTripType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date')
-            ->add('start_time')
-            ->add('end_time')
-            ->add('max_time_allocation')
+            ->add('date',DateType::class)
+
+            ->add('start_time',TimeType::class)
+            
+            
             
             ->add('truck', EntityType::class, [
                 'class' => Truck::class,
@@ -33,7 +36,7 @@ class TruckTripType extends AbstractType
                     return $er->createQueryBuilder('s')
                         ->where('s.deleted_at is NULL');
                 },
-                'choice_label' => 'name',
+                'choice_label' => 'id',
                 'choice_value' => 'id',
                 'placeholder' => ''
             ])
@@ -43,7 +46,7 @@ class TruckTripType extends AbstractType
                     return $er->createQueryBuilder('s')
                         ->where('s.deleted_at is NULL');
                 },
-                'choice_label' => 'name',
+                'choice_label' => 'id',
                 'choice_value' => 'id',
                 'placeholder' => ''
             ])
@@ -53,7 +56,7 @@ class TruckTripType extends AbstractType
                     return $er->createQueryBuilder('s')
                         ->where('s.deleted_at is NULL');
                 },
-                'choice_label' => 'name',
+                'choice_label' => 'id',
                 'choice_value' => 'id',
                 'placeholder' => ''
             ])
@@ -63,7 +66,7 @@ class TruckTripType extends AbstractType
                     return $er->createQueryBuilder('s')
                         ->where('s.deleted_at is NULL');
                 },
-                'choice_label' => 'name',
+                'choice_label' => 'id',
                 'choice_value' => 'id',
                 'placeholder' => ''
             ])

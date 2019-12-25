@@ -52,16 +52,16 @@ class TruckTripRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $lastInsertId = $conn->transactional(function($conn) use(&$truckt) {
-            $sql = "INSERT INTO truck_trip (truck_id,driver_id,driver_assistant_id,truck_route_id,date,start_time,end_time,max_time_allocation) VALUES (:truck,:driver,:driver_assistant,:truck_route,:date,:start_time,:end_time,:max_time_allocation);";
+            $sql = "INSERT INTO truck_trip (truck_id,driver_id,driver_assistant_id,truck_route_id,date,start_time) VALUES (:truck,:driver,:driver_assistant,:truck_route,:date,:start_time);";
             $stmt = $conn->prepare($sql);
-            $stmt->bindValue('truck', $truckt->getTruck());
+            $stmt->bindValue('truck', $truckt->getTruck()->getId());
             $stmt->bindValue('driver', $truckt->getDriver()->getId());
             $stmt->bindValue('driver_assistant', $truckt->getDriverAssistant()->getId());
             $stmt->bindValue('truck_route', $truckt->getTruckRoute()->getId());
-            $stmt->bindValue('date', $truckt->getDate());
-            $stmt->bindValue('start_time', $truckt->getStartTime());
-            $stmt->bindValue('end_time', $truckt->getEndTime());
-            $stmt->bindValue('max_time_allocation', $truckt->getMaxTimeAllocation());
+            $stmt->bindValue('date', $truckt->getDate(),'date');
+            $stmt->bindValue('start_time', $truckt->getStartTime(),'time');
+            
+            
             $stmt->execute();
             return $conn->lastInsertId();
         });
@@ -72,33 +72,37 @@ class TruckTripRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $status = $conn->transactional(function($conn) use(&$truckt) {
-            $sql = "UPDATE truck_trip SET (truck_id:truck,driver_id:driver,driver_assistant_id:driver_assistant,truck_route_id:truck_route,date:date,start_time:start_time,end_time:end_time,max_time_allocation:max_time_allocation) WHERE id=:id AND deleted_at IS NULL";
+            $sql = "UPDATE truck_trip SET truck_id=:truck, driver_id=:driver,driver_assistant_id=:driver_assistant, truck_route_id=:truck_route, start_time=:start_time WHERE id=:id AND deleted_at IS NULL";
             $stmt = $conn->prepare($sql);
-            $stmt->bindValue('truck', $truckt->getTruck());
+            $stmt->bindValue('truck', $truckt->getTruck()->getId());
             $stmt->bindValue('driver', $truckt->getDriver()->getId());
             $stmt->bindValue('driver_assistant', $truckt->getDriverAssistant()->getId());
             $stmt->bindValue('truck_route', $truckt->getTruckRoute()->getId());
-            $stmt->bindValue('date', $truckt->getDate());
-            $stmt->bindValue('start_time', $truckt->getStartTime());
-            $stmt->bindValue('end_time', $truckt->getEndTime());
-            $stmt->bindValue('max_time_allocation', $truckt->getMaxTimeAllocation());
+            //$stmt->bindValue('date', $truckt->getDate(),'date');
+            $stmt->bindValue('start_time', $truckt->getStartTime(),'time');
+            $stmt->bindValue('id', $truckt->getId());
+            
+            
             $stmt->execute();
             return true;
         });
         return $status;
     }
 
-    public function deleteById($id)
-    {
+    public function delete($id)
+    {   
+        $date = new \DateTime();
+        $date = $date->format('Y-m-d H:i:s');
         $conn = $this->getEntityManager()->getConnection();
-        $status = $conn->transactional(function($conn) use(&$id) {
-            $sql = "UPDATE truck_trip SET deleted_at = now() WHERE id = :id";
+        $result = $conn->transactional(function($conn) use(&$id, &$date) {
+            $sql = "UPDATE truck_trip SET deleted_at=:present WHERE id = :id";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
-            $stmt->execute();
-            return true;
-        });
-        return $status;
+            $stmt->bindValue('present', $date);
+            $stmt->execute(); 
+            return true;  
+        });     
+        return $result;
     }
 
     private function getEntityArray($array)
@@ -129,11 +133,11 @@ class TruckTripRepository extends ServiceEntityRepository
         $truckr = $this->getEntityManager() 
                     ->getRepository(TruckRoute::class)
                     ->getById($array['truck_route_id']);
-        $truckt->setDriverAssistant($truckr);
-        $truckt->setDate($array['date']);
-        $truckt->setStartTime($array['start_time']);
-        $truckt->setEndTime($array['end_time']);
-        $truckt->setMaxTimeAllocation($array['max_time_allocation']);
+        $truckt->setTruckRoute($truckr);
+        $truckt->setDate(new \DateTime($array['date']));
+        $truckt->setStartTime(new \DateTime($array['start_time']));
+        
+        
         
         $truckt->setCreatedAt(new \DateTime($array['created_at']));
         $truckt->setUpdatedAt(new \DateTime($array['updated_at']));
