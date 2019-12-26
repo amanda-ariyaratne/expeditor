@@ -6,7 +6,7 @@ use App\Entity\TruckRoute;
 use App\Entity\Store;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use App\Entity\Store;
+
 use App\Entity\StoreManager;
 
 /**
@@ -46,7 +46,7 @@ class TruckRouteRepository extends ServiceEntityRepository
         return $truck_route;
     }
 
-    public function getById($store)
+    public function getByStore($store)
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$store) {

@@ -29,44 +29,7 @@ class TruckTripType extends AbstractType
     {
         $builder
             ->add('date',DateTimeType::class)
-
-            ->add('start_time',DateTimeType::class);
-            $formModifier = function (FormInterface $form, DateTimeInterface $time = null) {
-                $truckRoutes = null === $time ? [] : $this->entityManager->getRepository(TruckRoute::class)->findD($time);
-                $form->add('truck_route', EntityType::class, [
-                    'class' => 'App\Entity\TruckRoute',
-                    'placeholder' => '',
-                    'choice_label' => 'name',
-                    'choice_value' => 'id',
-                    'choices' => $truckRoutes,
-                ]);
-            };
-            $builder->addEventListener(
-                FormEvents::PRE_SET_DATA,
-                function (FormEvent $event) use ($formModifier) {
-                    $data = $event->getData();
-                    $formModifier($event->getForm(), array_key_exists('start_time', $data) ? $data['start_time'] : null);
-                }
-            );
-            $builder->get('start_time')->addEventListener(
-                FormEvents::POST_SUBMIT,
-                function (FormEvent $event) use ($formModifier) {
-                    $time = $event->getForm()->getData();
-                    $formModifier($event->getForm()->getParent(), $time);
-                }
-            );
-        }
-    
-            ->add('driver', EntityType::class, [
-                        'class' => Driver::class,
-                        'query_builder' => function (EntityRepository $er) {
-                            return  $er->findD('start_time');
-                                
-                        },
-                        'choice_label' => 'id',
-                        'choice_value' => 'id',
-                        'placeholder' => ''
-                    ])
+            
             ->add('driver_assistant', EntityType::class, [
                 'class' => DriverAssistant::class,
                 'query_builder' => function (EntityRepository $er) {
@@ -88,7 +51,10 @@ class TruckTripType extends AbstractType
                 'placeholder' => ''
             ])
             
-            
+
+
+
+            ->add('start_time',DateTimeType::class)
             ->add('truck_route', EntityType::class, [
                 'class' => TruckRoute::class,
                 'query_builder' => function (EntityRepository $er) {
@@ -98,10 +64,47 @@ class TruckTripType extends AbstractType
                 'choice_label' => 'id',
                 'choice_value' => 'id',
                 'placeholder' => ''
-            ])
-            ->add('submit', SubmitType::class)
-        ;
-    }
+            ]);
+            $formModifier = function (FormInterface $form, DateTimeInterface $time = null,TruckRoute $truckRoute=null) {
+                $drivers = null === $time ? [] : $this->entityManager->getRepository(Driver::class)->findD($time,$truckRoute);
+                $form->add('driver', EntityType::class, [
+                    'class' => Driver::class,
+                    'choices'=>$drivers,
+                    'choice_label' => 'id',
+                    'choice_value' => 'id',
+                    'placeholder' => ''
+                
+                ]);
+            };
+            $builder->addEventListener(
+                FormEvents::PRE_SET_DATA,
+                function (FormEvent $event) use ($formModifier) {
+                    $data = $event->getData();
+                    $formModifier($event->getForm(), array_key_exists('start_time', $data) ? $data['start_time'] : null);
+                    $formModifier($event->getForm(), array_key_exists('truck_route', $data) ? $data['truck_route'] : null);
+
+                }
+            );
+            $builder->get('start_time')->addEventListener(
+                FormEvents::POST_SUBMIT,
+                function (FormEvent $event) use ($formModifier) {
+                    $time = $event->getForm()->getData();
+                    $formModifier($event->getForm()->getParent(), $time);
+                }
+            );
+            $builder->get('truck_route')->addEventListener(
+                FormEvents::POST_SUBMIT,
+                function (FormEvent $event) use ($formModifier) {
+                    $truckRoute = $event->getForm()->getData();
+                    $formModifier($event->getForm()->getParent(), $truckRoute);
+                }
+            );
+        }
+    
+            
+           
+    
+    
 
     public function configureOptions(OptionsResolver $resolver)
     {

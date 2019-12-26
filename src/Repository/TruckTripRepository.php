@@ -34,6 +34,17 @@ class TruckTripRepository extends ServiceEntityRepository
         });
         return $this->getEntityArray($result);
     }
+    public function findD($time,$truckr)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) {
+            $sql = "SELECT * FROM truck_trip WHERE deleted_at IS NULL;";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $this->getEntityArray($result);
+    }
 
     public function getById($id)
     {
@@ -52,15 +63,14 @@ class TruckTripRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $lastInsertId = $conn->transactional(function($conn) use(&$truckt) {
-            $sql = "INSERT INTO truck_trip (truck_id,driver_id,driver_assistant_id,truck_route_id,date,start_time) VALUES (:truck,:driver,:driver_assistant,:truck_route,:date,:start_time);";
+            $sql = "INSERT INTO truck_trip (truck_id,driver_id,driver_assistant_id,truck_route_id,start_time) VALUES (:truck,:driver,:driver_assistant,:truck_route,:start_time);";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('truck', $truckt->getTruck()->getId());
             $stmt->bindValue('driver', $truckt->getDriver()->getId());
             $stmt->bindValue('driver_assistant', $truckt->getDriverAssistant()->getId());
             $stmt->bindValue('truck_route', $truckt->getTruckRoute()->getId());
-            $stmt->bindValue('date', $truckt->getDate(),'datetime');
-            $stmt->bindValue('start_time', $truckt->getStartTime(),'datetime');
             
+            $stmt->bindValue('start_time', $truckt->getStartTime(),'datetime');
             
             $stmt->execute();
             return $conn->lastInsertId();
