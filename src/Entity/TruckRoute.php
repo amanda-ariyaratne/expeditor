@@ -39,6 +39,11 @@ class TruckRoute
     private $map;
 
     /**
+     * @ORM\Column(type="integer")
+     */
+    private $max_time_allocation;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $created_at;
@@ -126,6 +131,18 @@ class TruckRoute
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getMaxTimeAllocation(): ?string
+    {
+        return $this->max_time_allocation;
+    }
+
+    public function setMaxTimeAllocation(string $max_time_allocation): self
+    {
+        $this->max_time_allocation = $max_time_allocation;
 
         return $this;
     }

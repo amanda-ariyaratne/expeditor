@@ -25,8 +25,21 @@ class TruckRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) {
-            $sql = "SELECT * FROM truck_store ;";
+            $sql = "CALL getTrucks(0);";
             $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $this->getEntityArray($result);
+    }
+
+    public function getAllByStore($store_id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$store_id) {
+            $sql = "CALL getTrucks(:store_id);";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store_id',$store_id);
             $stmt->execute();
             return $stmt->fetchAll();
         });
@@ -37,7 +50,7 @@ class TruckRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM truck_store WHERE id = :id ;";
+            $sql = "CALL getTrucks(:id);";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
@@ -99,30 +112,30 @@ class TruckRepository extends ServiceEntityRepository
         return $entityArray;
     }
 
-    private function getEntity($array)
+    private function getEntity($params)
     {
         $truck = new Truck();
-        $truck->setId($array['id']);
-        $truck->setInsuranceNo($array['insurance_no']);
-        $truck->setRegistrationNo($array['registration_no']);
-        if ($array['store_id']) {
-            $storeArray = [
-                'id' => $array['store_id'],
-                'name' => $array['name'],
-                'street' => $array['street'],
-                'city' => $array['city'],
-                'created_at' => $array['store_created_at'],
-                'updated_at' => $array['store_updated_at'],
-                'deleted_at' => $array['store_deleted_at']
-            ];
-            $store = $this->getEntityManager() 
-                        ->getRepository(Store::class)
-                        ->getEntity($storeArray);
-            $truck->setStore($store);
-        }
-        $truck->setCreatedAt(new \DateTime($array['truck_created_at']));
-        $truck->setUpdatedAt(new \DateTime($array['truck_updated_at']));
-        $truck->setDeletedAt(new \DateTime($array['truck_deleted_at']));
+        $truck->setId($params['truck_id']);
+        $truck->setInsuranceNo($params['truck_insurance_no']);
+        $truck->setRegistrationNo($params['truck_registration_no']);
+        
+        $storeArray = [
+            'id' => $params['store_id'],
+            'name' => $params['store_name'],
+            'street' => $params['store_street'],
+            'city' => $params['store_city'],
+            'created_at' => $params['store_created_at'],
+            'updated_at' => $params['store_updated_at'],
+            'deleted_at' => $params['store_deleted_at']
+        ];
+        $store = $this->getEntityManager() 
+                    ->getRepository(Store::class)
+                    ->getEntity($storeArray);
+
+        $truck->setWorkedHours($params['worked_hours']);
+        $truck->setStore($store);     
+        $truck->setCreatedAt(new \DateTime($params['truck_created_at']));
+        $truck->setUpdatedAt(new \DateTime($params['truck_updated_at']));
         return $truck;
     }
 
