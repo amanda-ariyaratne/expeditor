@@ -9,7 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use App\Entity\Store;
 use App\Entity\Purchase;
+use App\Entity\Customer;
 use App\Entity\Product;
 
 /**
@@ -76,6 +78,40 @@ class ReportController extends AbstractController
             'percentage1' => $percentage1,
             'percentage2' => $percentage2,
             'percentage3' => $percentage3
+        ]);
+    }
+
+
+    /**
+     * @Route("/customerOrder/{id}")
+     */
+    public function getCustomerOrderReport($id , Request $request): Response
+    {
+        //customer details
+        $customers = $this->getDoctrine()->getRepository(Customer::class)->getAll();
+
+        //purchase details
+        $purchases = $this->getDoctrine()->getRepository(Purchase::class)->getDetailsByCustomerID($id);
+        $id_arr = array();
+        foreach($purchases as $p){
+            if(!in_array($p["id"] , $id_arr)){
+                array_push($id_arr , $p["id"]);
+            }
+        }
+        $purchase_arr  = array();
+        foreach($id_arr as $id){
+            $purchase = array();
+            foreach($purchases as $p){
+                if($id == $p["id"]){
+                    array_push($purchase, $p);
+                }
+            }
+            array_push($purchase_arr , $purchase);
+        }
+
+        return $this->render('report/customer_order_report.html.twig', [
+            'purchases' => $purchase_arr,
+            'customers' =>  $customers,
         ]);
     }
 }

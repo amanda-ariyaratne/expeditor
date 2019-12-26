@@ -31,6 +31,18 @@ class StoreRepository extends ServiceEntityRepository
         });
         return $this->getEntity($result);
     }  
+    public function getByName($name)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$name) {
+            $sql = "SELECT * FROM store WHERE name = :name AND deleted_at IS NULL LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('name', $name);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntity($result);
+    }  
   
     public function getAll(){
         $conn = $this->getEntityManager()->getConnection();
@@ -52,6 +64,19 @@ class StoreRepository extends ServiceEntityRepository
             return $stmt->fetchAll();
         });         
         return $results;
+    }
+
+    function getStoreOfTrainTrip($train_trip_id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$train_trip_id) {
+            $sql = "SELECT store_id as id, name, city, street, store_created_at AS created_at, store_updated_at AS updated_at, store_deleted_at AS deleted_at FROM train_trip_store_details WHERE train_trip_id = :id;";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $train_trip_id);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $this->getEntityArray($result);
     }
 
     public function update($store)

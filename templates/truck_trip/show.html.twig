@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Truck Trip{% endblock %}
+
+{% block body %}
+    <h1>Truck Trip</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ truck_trip.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ truck_trip.date ? truck_trip.date|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Start_time</th>
+                <td>{{ truck_trip.startTime ? truck_trip.startTime|date('H:i:s') : '' }}</td>
+            </tr>
+            
+            
+            
+            <tr>
+                <th>Created_at</th>
+                <td>{{ truck_trip.createdAt ? truck_trip.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Updated_at</th>
+                <td>{{ truck_trip.updatedAt ? truck_trip.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Deleted_at</th>
+                <td>{{ truck_trip.deletedAt ? truck_trip.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('truck_trip_index') }}">back to list</a>
+
+    <a href="{{ path('truck_trip_edit', {'id': truck_trip.id}) }}">edit</a>
+
+    {{ include('truck_trip/_delete_form.html.twig') }}
+{% endblock %}

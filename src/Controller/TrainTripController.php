@@ -9,23 +9,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * @Route("/train/trip")
  */
 class TrainTripController extends AbstractController
 {
-    /**
-     * @Route("/", name="train_trip_index", methods={"GET"})
-     */
-    public function index(TrainTripRepository $trainTripRepository): Response
-    {
-        return $this->render('train_trip/index.html.twig', [
-            'train_trips' => $trainTripRepository->findAll(),
-        ]);
-    }
-
-    /**
+    
+/**
      * @Route("/new", name="train_trip_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -35,10 +27,7 @@ class TrainTripController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($trainTrip);
-            $entityManager->flush();
-
+            $this->getDoctrine()->getRepository(TrainTrip::class)->insert($trainTrip);
             return $this->redirectToRoute('train_trip_index');
         }
 
@@ -49,21 +38,21 @@ class TrainTripController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="train_trip_show", methods={"GET"})
+     * @Route("/", name="train_trip_index", methods={"GET"})
      */
-    public function show(TrainTrip $trainTrip): Response
+    public function index(TrainTripRepository $truckRouteRepository): Response
     {
-        return $this->render('train_trip/show.html.twig', [
-            'train_trip' => $trainTrip,
+        return $this->render('train_trip/index.html.twig', [
+            'train_trips' => $truckRouteRepository->getAll(),
         ]);
-    }
+    }    
 
     /**
      * @Route("/{id}/edit", name="train_trip_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, TrainTrip $trainTrip): Response
+    public function edit(Request $request, TrainTrip $truckRoute): Response
     {
-        $form = $this->createForm(TrainTripType::class, $trainTrip);
+        $form = $this->createForm(TrainTripType::class, $truckRoute);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -73,7 +62,7 @@ class TrainTripController extends AbstractController
         }
 
         return $this->render('train_trip/edit.html.twig', [
-            'train_trip' => $trainTrip,
+            'train_trip' => $truckRoute,
             'form' => $form->createView(),
         ]);
     }
@@ -81,14 +70,16 @@ class TrainTripController extends AbstractController
     /**
      * @Route("/{id}", name="train_trip_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, TrainTrip $trainTrip): Response
+    public function delete(Request $request, TrainTrip $truckRoute): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$trainTrip->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('train_trip', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($trainTrip);
+            $entityManager->remove($truckRoute);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('train_trip_index');
     }
 }
+
+

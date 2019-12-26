@@ -21,12 +21,7 @@ class TrainTrip
     /**
      * @ORM\Column(type="decimal", precision=14, scale=4)
      */
-    private $allowed_capacity;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $start_time;
+    public $allowed_capacity;    
 
     /**
      * @ORM\Column(type="datetime")
@@ -45,8 +40,19 @@ class TrainTrip
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Store", inversedBy="train_trip")
+     * @ORM\JoinColumn(name="store_id",referencedColumnName="id")
      */
     private $store;
+
+    /**
+     * @ORM\Column(type="time")
+     */
+    private $start_time;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $date;
 
     public function __construct()
     {
@@ -58,6 +64,13 @@ class TrainTrip
         return $this->id;
     }
 
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getAllowedCapacity(): ?string
     {
         return $this->allowed_capacity;
@@ -66,18 +79,6 @@ class TrainTrip
     public function setAllowedCapacity(string $allowed_capacity): self
     {
         $this->allowed_capacity = $allowed_capacity;
-
-        return $this;
-    }
-
-    public function getStartTime(): ?\DateTimeInterface
-    {
-        return $this->start_time;
-    }
-
-    public function setStartTime(\DateTimeInterface $start_time): self
-    {
-        $this->start_time = $start_time;
 
         return $this;
     }
@@ -140,6 +141,30 @@ class TrainTrip
         if ($this->store->contains($store)) {
             $this->store->removeElement($store);
         }
+
+        return $this;
+    }
+
+    public function getStartTime(): ?\DateTimeInterface
+    {
+        return $this->start_time;
+    }
+
+    public function setStartTime(\DateTimeInterface $start_time): self
+    {
+        $this->start_time = $start_time;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

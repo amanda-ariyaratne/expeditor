@@ -19,32 +19,19 @@ class PurchaseProductRepository extends ServiceEntityRepository
         parent::__construct($registry, PurchaseProduct::class);
     }
 
-    // /**
-    //  * @return PurchaseProduct[] Returns an array of PurchaseProduct objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function insert($carts , $purchase_id)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        foreach($carts as $cart){
+            $conn = $this->getEntityManager()->getConnection();
+            $sql = "INSERT INTO purchase_product (purchase_id,  product_id,  quantity) VALUES (:purchase_id, :product_id, :quantity);";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('purchase_id', $purchase_id);
+            $stmt->bindValue('product_id', $cart["product_id"]);
+            $stmt->bindValue('quantity', $cart["quantity"]);
+            $stmt->execute();
+        }
+        return true;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?PurchaseProduct
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+
 }

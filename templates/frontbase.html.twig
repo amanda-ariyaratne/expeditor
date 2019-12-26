@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+
+        <link rel="shortcut icon" href="{{ asset('front/images/icon-main.png') }}" type="image/png" />
+
+        <link rel="stylesheet" href=" {{ asset('front/css/bootstrap.min.css  ') }}">
+        <link rel="stylesheet" href=" {{ asset('front/css/style.css') }}">
+        <link rel="stylesheet" href=" {{ asset('front/css/icons.min.css  ') }}">
+        <link rel="stylesheet" href=" {{ asset('front/css/fonts.css') }}">
+
+        <link rel="stylesheet" href=" {{ asset('front/css/bootstrap.4x.css') }}">
+        <link rel="stylesheet" href=" {{ asset('front/css/order.css') }}">
+        <link rel="stylesheet" href=" {{ asset('front/css/bc.style.scss.css') }}">
+        <link rel="stylesheet" href=" {{ asset('front/css/arenafont.css') }}">
+        <link rel="stylesheet" href=" {{ asset('front/css/bc_wl_cp_style.scss.css') }}">
+        <link rel="stylesheet" href=" {{ asset('front/fontawesome-free-5.8.1-web/css/all.css') }}">
+        <link href="//cdn.shopify.com/s/files/1/0102/1155/7435/t/10/assets/jquery.plugin.css?0" rel="stylesheet" type="text/css" media="all" />
+        <link rel="stylesheet" href=" {{ asset('front/css/style.css') }}">
+
+        <style type="text/css">
+    .header-container.bg-imagee{
+      background-image:url({{ asset('front/images/b1.jpg') }} );
+  
+  }
+
+    .header-container.bg-image{
+      animation: animateee 16s ease-in-out infinite;
+    }
+
+    .change-bg-unseen{
+      background: rgba(230,255,230,0.5);
+    }
+
+    .change-bg-seen{
+      background: rgba(255,240,255,0.5);
+    }
+
+    @keyframes animateee{
+      0%,100%{
+        background-image: url( {{ asset('front/images/b1.jpg') }} );
+      }
+      20%{
+        background-image: url({{ asset('front/images/b2.jpg') }});
+      }
+      40%{
+        background-image: url({{ asset('front/images/b3.jpg') }});
+      }
+      60%{
+        background-image: url({{ asset('front/images/b4.jpg') }});
+      }
+      80%{
+        background-image: url({{ asset('front/images/b5.jpg') }});
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+    
+    .badge-counter{
+            
+      padding: 2px 4px;
+      border-radius: 50%;
+      background-color: red;
+      color: white;
+      font-size: 12px;
+      display: inline-block;
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: baseline;
+      font-family: Roboto,sans-serif;
+    }
+    .noti {  
+      text-decoration: none;
+      padding: 15px 26px;
+      position: relative;
+      font-size: 45px;
+      display: inline-block;
+      color:#1294c7;
+    }
+
+    .a {
+      color:#1294c7;
+    }
+
+    input[type="text"], input[type="password"] {
+      padding-left: 7px;
+      padding-right: 7px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+    .footer-heading{
+      font-size: 18px;
+    }
+    .subscibe-content .form-subscribe .btn{
+      background-color: #1294c7;
+    }
+    .subscibe-content .form-subscribe .btn:hover{
+      background-color: #12c71e;
+    }
+    .footer-information .fb-content i {
+      color: #1294c7;
+    }
+    .footer-information .fb-content i:hover {
+      color: #12c71e;
+    }
+    .footer-logo ul li i{
+      color: #1294c7;
+    }   
+    .header-container .searchbox .search-icon {
+      background-color: #1294c7;
+    }
+    .header-container .searchbox .search-icon:hover{
+      background-color: #12c71e;
+    }
+    .quantity-show{
+      width:50px;
+    }
+
+    .btn:hover{
+        background-color:#12c71e;
+    }
+                    
+  </style>
+
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+
+
+        <header class="header-content" data-stick="true" data-stickymobile="false">
+
+            <div class="header-container layout-boxed bg-image">
+
+    
+              <div class="top-bar-textbox d-none d-lg-block" style="background-color: white; border-bottom: none;">
+                <div class="textbox-container">
+
+                  <div class="container">
+
+                    
+                      <ul class="top-bar-list" style="">
+                        
+                          <li><a href="" title="About us" >About us</a></li>
+
+                          <li><a href="{{path('purchase_index')}}" title="Customer Request" >All Orders</a></li>
+
+                          <li><a href="" title="Contact us" >Contact us</a></li>
+                        
+                      </ul>
+                    
+
+                    
+                      <div id="google_translate_element"></div>
+                     
+                  </div>
+
+                </div>
+              </div>
+    
+
+            <div class="top-bar d-none d-lg-block">
+              <div class="container">
+                  <div class="row">
+
+                    
+                      <div class="top-bar-left col-lg-3">
+                        <ul class="list-inline">
+                            <li class="customer-account  waiting">
+                              {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <a href="/customer/{{app.user.id }}" title="Account"><i class="demo-icon icon-user"></i>{{ app.user.firstname }} {{ app.user.lastname }} </a>
+                              {% else %}
+                                <a href="{{path('back_login')}}" title="Login"><i class="demo-icon icon-user"></i>Login</a>
+                              {% endif %}
+                                  
+                            </li>
+                        </ul>
+                      </div>
+                    
+                    <div class="top-bar-left col-lg-3"></div>
+
+                    <div class="top-bar-right col-lg-3"></div>
+
+                    <div class="top-bar-right col-lg-3">
+                      <ul class="list-inline">
+                          <li class="customer-register  waiting">
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                              <a href="{{ path('app_logout') }}" title="Logout">
+                                <i class="demo-icon icon-pencil-2"></i>Logout
+                              </a>
+                            {% else %}
+                              <a href="{{path('customer_register')}}" title="Register">
+                                <i class="demo-icon icon-pencil-2"></i>Register
+                              </a>
+                            {% endif %} 
+                          </li>
+                      </ul>
+                    </div>
+
+
+                  </div>
+              </div>
+            </div>
+
+            <div class="header-main">
+              <div class="container">
+
+                <div class="table-row">
+                  <div class="row">
+
+
+                    <div class="header-logo col-lg-2 col-md-12">
+                      
+                      
+                      <a href="{{path('productList')}}" title="Expeditor" class="logo-site  waiting">
+                        <img class=" lazyloaded" data-srcset="{{ asset('front/images/logo.png') }}, {{ asset('front/images/logo.png') }}" alt="" style="width: 300px; border-radius: 0%; height: 80px; background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(255,255,255,1));" srcset="{{ asset('front/images/logo.png') }}, {{ asset('front/images/logo.png') }}">
+                      </a>
+                    </div>
+
+                    <div class="header-right col-lg-10 col-md-12">
+                      <div class="col-md-2"></div>
+                      <div class="col-md-5">
+                        <div class="searchbox">
+
+                          <form id="search" class="navbar-form search" action="/search" method="get">
+                            <input type="hidden" name="type" value="product" />
+                            <input id="bc-product-search" type="text" name="q" class="form-control"  placeholder="Search" autocomplete="off" />
+
+                            <button type="submit" class="search-icon">
+                              <span class=" waiting">
+
+                                
+                                <i class="demo-icon icon-search"></i>
+
+                                
+
+                              </span>
+                            </button>
+                          </form>
+
+                          <div id="result-ajax-search">
+                            <ul class="search-results"></ul>
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="col-md-1">
+
+                        <a href="#" class="noti" id="noti_Button"  title="notification">
+                            <span>
+                              <i class="fas fa-bell noti-icon-style" style="background: rgba(255,255,255,0.5); color:black; font-size:30px;padding:5px 7px; border-radius:3px; position:absolute; top:0px; "></i>
+                            </span>
+                            {# <span class="badge-counter" style="position: absolute; top: 20px; left: 60px;">
+                               4
+                            </span> #}
+                        </a>
+                        
+                      </div>
+
+                      <div class="col-md-1"></div>
+
+                      <div class="col-md-1" style="height:36px;">
+
+                          <a href="{{path('cart_index')}}" title="Your cart">
+                            <span>
+                              <i class="demo-icon icon-handy-cart" style="background: rgba(255,255,255,0.5); color:black; font-size:27px; padding:5px 7px; border-radius:3px; position:absolute; top:0px;"></i>
+                            </span>
+                            {# <span class="badge-counter" style="position: absolute; top: 20px;right: 18px;">
+                              5
+                            </span> #}
+                          </a>
+
+
+                        
+                    </div>
+                    <div class="col-md-1"></div>
+
+                      
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            
+              
+
+              <div class="header-navigation nav-boxed d-none d-lg-block">
+                <div class="horizontal-menu dropdown-fix">
+                  <div class="sidemenu-holder">
+
+                    <nav class="navbar navbar-expand-lg">
+                      <div class="collapse navbar-collapse">
+                        <ul class="menu-list">
+
+                          
+                          
+                              <li class="dropdown">
+                                <a href="{{path('productList')}}" class="dropdown-link">
+                                    <span>All products</span>
+                                </a>
+                                <span class="expand"></span>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Clothes</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Bags</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Shoes</span>
+                                      </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="{{path('productList')}}" class="dropdown-link">
+                                    <span>Clothes</span>
+                                </a>
+                                <span class="expand"></span>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Men</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Women</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Kids</span>
+                                      </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="{{path('productList')}}" class="dropdown-link">
+                                    <span>Funiture</span>
+                                </a>
+                                <span class="expand"></span>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Chair</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Tables</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Cupboard</span>
+                                      </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="{{path('productList')}}" class="dropdown-link">
+                                    <span>Kitchen equipment</span>
+                                </a>
+                                <span class="expand"></span>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Knife</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Cups</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Plates</span>
+                                      </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="{{path('productList')}}" class="dropdown-link">
+                                    <span>Shoes</span>
+                                </a>
+                                <span class="expand"></span>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Men</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Women</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Kids</span>
+                                      </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="{{path('productList')}}" class="dropdown-link">
+                                    <span>Beauty and Health</span>
+                                </a>
+                                <span class="expand"></span>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Makeup sets</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Brushes</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Slippers</span>
+                                      </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="{{path('productList')}}" class="dropdown-link">
+                                    <span>Bags</span>
+                                </a>
+                                <span class="expand"></span>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Men</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Women</span>
+                                      </a>
+                                    </li>
+                                    <li>
+                                      <a tabindex="-1" href="{{path('productList')}}">
+                                        <span>Kids</span>
+                                      </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                              
+                              
+
+
+                        </ul>
+                      </div>
+                    </nav>
+
+                  </div>
+                </div>
+              </div>
+
+            
+
+            <div class="mobile-layout-bar d-lg-none">
+          <ul class="m-block-icons list-inline">
+            
+            <li class="navbar navbar-responsive-menu">
+              <div class="responsive-menu">
+                Menu
+                <span class="bar">ddddd</span>
+                <span class="bar">jjjjj</span>
+                <span class="bar">fffff</span>
+              </div>
+            </li>
+            
+            
+            <li class="m-customer-account">
+              <a href="" title="Account" class=" waiting">
+                
+                  <i class="demo-icon icon-user"></i>
+                
+              </a>
+            </li>
+            
+          </ul>
+        </div>
+        </div>
+        </header>
+
+
+
+
+
+        {% block body %}{% endblock %}
+
+
+
+
+
+        <footer id="footer-content">
+            <div id="shopify-section-footer" class="shopify-section">
+                <div class="footer-container layout-boxed">
+                    <div class="widget-social">
+                        <div class="container">
+                  
+                            <h4>Let’s Connect:</h4>
+                              <ul class="widget-social-icons list-inline">
+
+                                <li>
+                                  <a target="_blank" rel="noopener" href="https://www.facebook.com/shopify/" title="Facebook">
+                                    
+                                      <i class="demo-icon icon-facebook"></i>
+                                    
+                                  </a>
+                                </li>
+                              
+                              
+                              
+
+                                <li>
+                                  <a target="_blank" rel="noopener" href="https://www.twitter.com/shopify/" title="Twitter">
+                                    
+                                      <i class="demo-icon icon-twitter"></i>
+                                    
+                                  </a>
+                                </li>
+
+                              
+                                <li>
+                                  <a target="_blank" rel="noopener" href="https://www.instagram.com/shopify/" title="Instagram">
+                                    
+                                      <i class="demo-icon icon-instagram"></i>
+                                    
+                                  </a>
+                                </li>
+                              
+                              
+
+                              
+                                <li>
+                                  <a target="_blank" rel="noopener" href="https://www.pinterest.com/shopify/" title="Pinterest">
+                                    
+                                      <i class="demo-icon icon-pinterest-circled"></i>
+                                    
+                                  </a>
+                                </li>
+                              
+                              
+
+                              
+                                <li>
+                                  <a target="_blank" rel="noopener" href="" title="Google">
+                                    
+                                      <i class="demo-icon icon-google"></i>
+                                    
+                                  </a>
+                                </li>
+                              
+                            </ul>
+                        </div>
+                    </div>
+            
+
+            
+                  <div class="footer-widget">
+                    <div class="footer-inner container">
+                      <div class="table-row">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-12 col-sm-12 col-12 d-none d-md-block">
+                                  <div class="footer-block footer-logo">
+                                    <h6 class="footer-heading">Who We Are</h6>
+                                    
+                                    <ul>
+                                        <li class="f-logo">
+                                          <a href="/" title="Handy Store" class="logo-site lazyload waiting">
+                                            <img  class="lazyload" data-srcset="images/handylogo_225x.png"
+                                                  
+                                                 alt="Expeditor"
+                                                 style="max-width: 225px;" />
+                                          </a>
+                                        </li>
+                                      
+                                    
+                                      
+                                        <li> 
+                                            <i class="demo-icon icon-phone"></i>
+
+                                          
+                                          <span>(+800) 123 456 7890</span>
+                                        </li>
+                                      
+                                      
+                                      
+                                        <li> <!-- class=" lazyload waiting -->"
+                                          
+                                          <i class="demo-icon icon-mail"></i>
+
+                                          
+                                          <span>example@example.com</span>
+                                        </li>
+                                      
+                                      
+                                      
+                                        <li><!-- <class=" lazyload waiting"> -->                              
+                                            <i class="demo-icon icon-location"></i>
+
+                                          
+                                          <span>102580 Santa Monica BLVD Los Angeles</span>
+                                        </li>
+                                      
+                                    </ul>
+
+                                  </div>
+                                </div>
+
+                              
+
+
+                                
+                                <div class="col-lg-2 col-md-6 col-sm-12 col-12">
+                                  <div class="footer-block footer-menu">
+
+                                    
+                                    <h6 class="footer-heading">Quick Links</h6>
+
+                                    <ul class="f-list">
+                                      
+                                      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                        <li><a href="" ><span>Account</span></a></li>
+                                      {% else %}
+                                        <li><a href="{{path('back_login')}}" ><span>Login</span></a></li>
+                                      {% endif %}
+                                      
+                                      <li><a href=""><span>Register</span></a></li>
+                                      
+                                      <li><a href=""><span>About Us</span></a></li>
+                                      
+                                      <li><a href=""><span>Contact us</span></a></li>
+                                      
+                                      <li><a href="{{path('purchase_index')}}"><span>Orders</span></a></li>
+                                      
+                                    </ul>
+
+                                  </div>
+                                </div>      
+                                
+
+                              <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+                                  <div class="footer-block footer-information">
+
+                                    
+                                    
+                                    <h6 class="footer-heading">Information</h6>
+
+                                    
+                                    
+                                    
+                                    <div class="fb-content">
+                                       
+                                        <i class="demo-icon icon-phone"></i>
+                                      
+                                      <a href="">
+                                        <span class="text-1">Online Consultation</span>
+                                        <span class="text-2">Call: + 0123 456 789</span>
+                                      </a>
+                                    </div>
+                                    
+
+                                    
+                                    
+
+                                    
+                                    <div class="fb-content">
+                                       
+                                        <i class="demo-icon icon-lifebuoy"></i>
+                                      
+                                      <a href="">
+                                        <span class="text-1">Customer Support</span>
+                                        <span class="text-2">Check our documentation</span>
+                                      </a>
+                                    </div>
+                                    
+
+                                    <div class="fb-content">
+                                       
+                                        <i class="demo-icon icon-question-circle-o"></i>
+                                      
+                                      <a href="">
+                                        <span class="text-1">F.A.Q.</span>
+                                        <span class="text-2">Check our F.A.Q.</span>
+                                      </a>
+                                    </div>
+                                    
+
+                                    
+                                
+                                    <div class="fb-content">
+                                       
+                                        <i class="demo-icon icon-thumbs-up"></i>
+                                      
+                                      <a href="">
+                                        <span class="text-1">Big Community</span>
+                                        <span class="text-2">We have 245 positive reviews</span>
+                                      </a>
+                                    </div>
+                                    
+
+                                    
+
+                                  </div>
+                                </div>
+
+                              
+
+                          
+
+                            
+                              
+                                
+                                <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                                  <div class="footer-block footer-subscribe">
+
+                                    
+                                    <h6 class="footer-heading">Subscribe to our Newsletter</h6>
+
+                                    <div class="content">
+
+                                      
+                                      <div class="subscibe-content">
+                                        
+                                        <p>Subscribe to our newsletters. Be in touch with latest news, special offers, etc.</p>
+                                        
+
+                                        <form action="//bitcode.us10.list-manage.com/subscribe/post?u=55ec8b9611a3d9c0ad6f3fc62&amp;id=1cbb85b057" method="post" class="form-inline form-subscribe" name="mc-embedded-subscribe-form" target="_blank" rel="noopener">
+                                          <input class="form-control" type="email" required placeholder="Email" name="EMAIL" id="email-input" />
+                                          <button type="submit" title="Subscibe" class="btn btn-subscribe">Subscibe</button>
+                                        </form>
+                                      </div>
+                                      
+
+                                    </div>
+
+                                  </div>
+                                </div>
+
+                            
+
+                              
+
+                        </div>
+                      </div>
+                    </div>            
+                    
+                  </div>
+
+                </div>
+
+            </div>
+        </footer>
+
+
+        {% block javascripts %}{% endblock %}
+
+    </body>
+</html>

@@ -30,33 +30,22 @@ class TruckTrip
      * @ORM\ManyToOne(targetEntity="App\Entity\DriverAssistant")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $driver_assistant;
+    public $driver_assistant;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\TruckRoute")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $truck_route;
+    public $truck_route;
 
-    /**
-     * @ORM\Column(type="date")
-     */
-    private $date;
-
+    
     /**
      * @ORM\Column(type="time", nullable=true)
      */
-    private $start_time;
+    public $start_time;
 
-    /**
-     * @ORM\Column(type="time", nullable=true)
-     */
-    private $end_time;
-
-    /**
-     * @ORM\Column(type="decimal", precision=4, scale=2)
-     */
-    private $max_time_allocation;
+    
+    
 
     /**
      * @ORM\Column(type="datetime")
@@ -76,6 +65,12 @@ class TruckTrip
     public function getId(): ?int
     {
         return $this->id;
+    }
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getTruck(): ?Truck
@@ -150,29 +145,7 @@ class TruckTrip
         return $this;
     }
 
-    public function getEndTime(): ?\DateTimeInterface
-    {
-        return $this->end_time;
-    }
-
-    public function setEndTime(?\DateTimeInterface $end_time): self
-    {
-        $this->end_time = $end_time;
-
-        return $this;
-    }
-
-    public function getMaxTimeAllocation(): ?string
-    {
-        return $this->max_time_allocation;
-    }
-
-    public function setMaxTimeAllocation(string $max_time_allocation): self
-    {
-        $this->max_time_allocation = $max_time_allocation;
-
-        return $this;
-    }
+    
 
     public function getCreatedAt(): ?\DateTimeInterface
     {

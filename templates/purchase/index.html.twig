@@ -1,0 +1,57 @@
+{% extends 'frontbase.html.twig' %}
+
+{% block title %}Purchase index{% endblock %}
+
+{% block body %}
+    <div id="body-content" class="layout-boxed">
+        <div id="main-content">
+            <div class="main-content">
+                <main class="site-content col-xs-9 col-md-9 col-sm-9" style="margin-left: 160px" itemscope="itemscope" itemprop="mainContentOfPage">
+                   
+                   {% if purchases is  empty %}
+                    <table class="tbl-cart table" cellpadding="10" cellspacing="1">
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="font-size:30px; text-align:center;">You have not placed any orders</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% else %}
+
+                    <center>
+                        <h2 id="paymentsummery" style="width: 430px ;padding: 20px 120px; border: 15px solid; background-color: #c1939e; border-style: solid; border-color: white;font-size: 1.2857em;line-height: 1.3em;font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,sans-serif;background-image: linear-gradient(#12c71e,#1294c7);">
+                            All ORDERS
+                        </h2>
+                    </center>
+                    <table class="tbl-cart table" cellpadding="10" cellspacing="1">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;">Order ID</th>
+                                <th>Delivery_date</th>
+                                <th>Created_at</th>
+                                <th style="text-align:center;">actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for purchase in purchases %}
+                            <tr>
+                                <td style="text-align:center;">{{ purchase.id }}</td>
+                                <td>{{ purchase.delivery_date ? purchase.delivery_date|date('Y-m-d') : '' }}</td>
+                                <td>{{ purchase.created_at ? purchase.created_at|date('Y-m-d H:i:s') : '' }}</td>
+                                <td style="text-align:center">
+                                    <a href="/purchase/purchase/{{purchase.id}}" class="add-to-cart btn btn-1" >View Order</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="7">no records found</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+                </main>
+            </div>
+        </div>
+    </div>
+{% endblock %}
