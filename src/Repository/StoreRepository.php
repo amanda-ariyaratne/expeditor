@@ -31,6 +31,18 @@ class StoreRepository extends ServiceEntityRepository
         });
         return $this->getEntity($result);
     }  
+    public function getByName($name)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$name) {
+            $sql = "SELECT * FROM store WHERE name = :name AND deleted_at IS NULL LIMIT 1";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('name', $name);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntity($result);
+    }  
   
     public function getAll(){
         $conn = $this->getEntityManager()->getConnection();

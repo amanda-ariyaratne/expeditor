@@ -10,6 +10,7 @@ use App\Entity\Store;
 use App\Entity\TruckRoute;
 use App\Entity\Cart;
 use App\Entity\PurchaseProduct;
+use App\Entity\TrainTrip;
 
 use App\Form\PurchaseType;
 use App\Repository\PurchaseRepository;
@@ -101,6 +102,9 @@ class PurchaseController extends AbstractController
 
             //remove from cart
             $entityMDel = $this->getDoctrine()->getRepository(Cart::class)->deleteAllByCustomerId($purchase->getCustomer()->getUser()->getId());
+
+            //add to a train trip
+            $entityTT = $this->getDoctrine()->getRepository(TrainTrip::class)->assignToTrainTrip($lastInsertId);
 
             return $this->redirectToRoute('purchase_index');
         }

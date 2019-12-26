@@ -75,6 +75,33 @@ class DriverRepository extends ServiceEntityRepository
             $stmt->execute();
         });        
     }
+    public function _findD()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn){
+            $sql = "  select * from driver where not exists(select  driver_id from trucktrip_driver_driverassist_truck where driver.id=trucktrip_driver_driverassist_truck.driver_id order by (end_time-(SELECT end_time from trucktrip_driver_driverassist_truck where driver_id=1 order by end_time desc limit 1 ) )DESC limit 2 )";
+            //select * from driver where not exists (select sum(max_time_allocation),driver_id from  trucktrip_driver_driverassist_truck where date between '2010:02:02' and '2020-01-01' and driver.id=trucktrip_driver_driverassist_truck.driver_id group by driver_id HAVING SUM(max_time_allocation) >300);'
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });         
+        return $this->getEntityArray($results);
+    }
+    public function _delete($id)
+    {   
+        $date = new \DateTime();
+        $date = $date->format('Y-m-d H:i:s');
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id, &$date) {
+            $sql = "UPDATE driver SET deleted_at=:present WHERE id = :id";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->bindValue('present', $date);
+            $stmt->execute(); 
+            return true;  
+        });     
+        return $result;
+    }
 
     public function delete($id)
     {
