@@ -41,6 +41,10 @@
                 <a href="{{ path('truck_route_new') }}" class="plus-icon pull-left">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
+                {% if is_granted('ROLE_STORE_MANAGER') %}
+                    <h4 class="card-title text-uppercase mb-20 pull-right">{{ truck_routes[0].store.name }}</h6>
+                {% endif %}
+
                 <div class="table-responsive mt-40">
                     <table id="myTable" class="display nowrap table table-hover table-bordered">
                         <thead>
@@ -48,17 +52,29 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Created Date</th>
+                                <th>Max Time Allocation</th>
+                                {% if is_granted('ROLE_CHAIN_MANAGER') %}
+                                    <th>Store</th>
+                                {% endif %}
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {%set i = 1 %}
+                            {% set i = 1 %}
                             {% for truck_route in truck_routes %}
                                 <tr>
                                     <td>{{~i~}}</td>
                                     {% set i = i + 1 %}
                                     <td style="text-align:left; max-width:400px; white-space: normal;"><a href="{{ truck_route.map }}" target="_blank">{{ truck_route.name }}</a></td>
                                     <td>{{ truck_route.createdAt|date("d/m/Y") }}</td>
+                                    <td>{{ truck_route.maxTimeAllocation }}</td>
+                                    {% if is_granted('ROLE_CHAIN_MANAGER') %}                                
+                                        {% if truck_route.store %}
+                                            <td>{{ truck_route.store.name }}</td>
+                                        {% else %}
+                                            <td><span class="label label-warning">Unassigned</span></td>
+                                        {% endif %}
+                                    {% endif %}
                                     <td>
                                         <a href="{{path('truck_route_edit', { 'id': truck_route.id}) }}" class="pencil-icon">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -66,7 +82,7 @@
                                         <a href="#" class="delete-icon" data-id="{{ truck_route.id }}" >
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
-                                    </td>
+                                    </td>                                    
                                 </tr>
                             {% endfor %}
                             

@@ -20,40 +20,29 @@ class DriverRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Driver::class);
     }
-
-    public function getById($id)
-    {
-        $conn = $this->getEntityManager()->getConnection();
-        $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM driver WHERE id = :id AND deleted_at IS NULL LIMIT 1";            
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue('id', $id);
-            $stmt->execute();
-            return $stmt->fetch();
-        });
-        return $this->getEntity($result);
-    }  
   
     public function getAll(){
         $conn = $this->getEntityManager()->getConnection();
         $results = $conn->transactional(function($conn){
-            $sql = "SELECT * FROM driver WHERE deleted_at IS NULL";
+            $sql = "CALL getDrivers(0)";
             $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });         
+        // dd($results);
+        return $this->getEntityArray($results);
+    }
+
+    public function getAllByStore($store_id){
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn) use(&$store_id){
+            $sql = "CALL getDrivers(:store_id)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store_id', $store_id);
             $stmt->execute();
             return $stmt->fetchAll();
         });         
         return $this->getEntityArray($results);
-    }
-
-    public function getAllAsArray(){
-        $conn = $this->getEntityManager()->getConnection();
-        $results = $conn->transactional(function($conn){
-            $sql = "SELECT * FROM driver WHERE deleted_at IS NULL";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
-            return $stmt->fetchAll();
-        });         
-        return $results;
     }
 
     public function insert(Driver $driver)
@@ -134,20 +123,30 @@ class DriverRepository extends ServiceEntityRepository
   
     private function getEntity($params){
         $driver = new Driver();
-        $driver->setId($params['id']);
-        $driver->setFirstName($params['first_name']);
-        $driver->setLastName($params['last_name']);
-        $driver->setNIC($params['NIC']);
-        $driver->setLicenseNo($params['license_no']);
-        // dd($params['store_id']);
+        // dd($params);
+        $driver->setId($params['driver_id']);
+        $driver->setFirstName($params['driver_first_name']);
+        $driver->setLastName($params['driver_last_name']);
+        $driver->setNIC($params['driver_NIC']);
+        $driver->setLicenseNo($params['driver_license_no']);
+        
+        $storeArray = [
+            'id' => $params['store_id'],
+            'name' => $params['store_name'],
+            'street' => $params['store_street'],
+            'city' => $params['store_city'],
+            'created_at' => $params['store_created_at'],
+            'updated_at' => $params['store_updated_at'],
+            'deleted_at' => $params['store_deleted_at']
+        ];
         $store = $this->getEntityManager() 
                     ->getRepository(Store::class)
-                    ->getById($params['store_id']);
-        
-        
+                    ->getEntity($storeArray);
+
         $driver->setStore($store);
-        $driver->setCreatedAt(new \DateTime($params['created_at']));
-        $driver->setUpdatedAt(new \DateTime($params['updated_at']));
+        $driver->setCreatedAt(new \DateTime($params['driver_created_at']));
+        $driver->setUpdatedAt(new \DateTime($params['driver_updated_at']));
+        $driver->setWorkedHours($params['worked_hours']);
 
         return $driver;
     }
