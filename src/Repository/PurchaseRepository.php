@@ -122,7 +122,50 @@ class PurchaseRepository extends ServiceEntityRepository
 
     }
 
+  public function getQuarterlySalesByProductReport($year)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn) use(&$year) {
+            $sql = "CALL get_quarterly_sales_report_by_year(:year); ;";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('year', $year);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $results;
+    }
 
+    public function getQuarterlySalesByStoreReport($year)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn) use(&$year) {
+            $sql = "CALL get_quarterly_sales_report_by_store(:year); ;";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('year', $year);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $results;
+    }
+
+    public function getQuarterlySalesByRouteReport($year)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn) use(&$year) {
+            $sql = "CALL get_quarterly_sales_report_by_route(:year); ;";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('year', $year);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $results;
+    }
+
+    // /**
+    //  * @return Purchase[] Returns an array of Purchase objects
+    //  */
+    /*
+    public function findByExampleField($value)
 
     
 }

@@ -15,6 +15,7 @@ use App\Entity\Store;
 use App\Entity\TruckRoute;
 
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
@@ -34,56 +35,24 @@ class QuarterlySalesReportType extends AbstractType
                     '2020' => 2020,
                     '2019' => 2019,
                     '2018' => 2018,
-                ],
+                ]
             ])
-            ->add('store', EntityType::class, [
-                'class' => Store::class,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('s')
-                        ->where('s.deleted_at is NULL');
-                },
-                'choice_label' => 'name',
-                'choice_value' => 'id',
-                'placeholder' => ''
+            ->add('categorize_by', ChoiceType::Class, [
+                'choices' => [
+                    'product' => 'product',
+                    'store' => 'store',
+                    'truck route' => 'truck_route'
+                ]
             ])
         ;
 
-        $formModifier = function (FormInterface $form, Store $store = null) {
-
-            $truckRoutes = null === $store ? [] : $this->entityManager->getRepository(TruckRoute::class)->getByStore($store);
-
-            $form->add('truck_route', EntityType::class, [
-                'class' => 'App\Entity\TruckRoute',
-                'placeholder' => '',
-                'choice_label' => 'name',
-                'choice_value' => 'id',
-                'choices' => $truckRoutes,
-            ]);
-        };
-
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function (FormEvent $event) use ($formModifier) {
-
-                $data = $event->getData();
-
-                $formModifier($event->getForm(), array_key_exists('store', $data) ? $data['store'] : null);
-            }
-        );
-
-        $builder->get('store')->addEventListener(
-            FormEvents::POST_SUBMIT,
-            function (FormEvent $event) use ($formModifier) {
-                $store = $event->getForm()->getData();
-                $formModifier($event->getForm()->getParent(), $store);
-            }
-        );
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'entityManager' => null,
+            'required' => false
         ]);
     }
 }

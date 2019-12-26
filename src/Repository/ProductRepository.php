@@ -19,7 +19,6 @@ class ProductRepository extends ServiceEntityRepository
         parent::__construct($registry, Product::class);
     }
 
-
     public function getById($id)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -75,6 +74,19 @@ class ProductRepository extends ServiceEntityRepository
         $stmt->bindValue('id', $id);
         $stmt->execute();
         return true;
+    }
+
+    
+    public function getMostPopularProducts()
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn) {
+            $sql = "SELECT * FROM products_with_most_orders_report;";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $results;
     }
 
     public function getAllProducts(): ?Array
