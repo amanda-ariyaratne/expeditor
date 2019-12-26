@@ -35,6 +35,62 @@
 
 <div class="container-fluid">
 <div class="row">
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex pa-0 no-block">
+                    <div class="pr-30">
+                        <input data-plugin="knob" data-width="100" data-height="100" data-min="-100" data-fgColor="#0990cd" data-displayPrevious=true value="{{percentage1}}" />
+                    </div>
+                    <div class="align-slef-center mt-10">
+                        <h5 class="font-weight-semibold mb-5"><strong class="block mb-10">{{records[0].name}}</strong> 
+                        <span class="text-success">{{records[0].cnt}}</span> <span class="text-success small font-normal">
+                        orders</span></h5>
+                        <span class="badge badge-mark border-success mr-1"></span>
+                        <span class="text-muted">{{percentage1}}% of all orders</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex pa-0 no-block">
+                    <div class="pr-30">
+                        <input data-plugin="knob" data-width="100" data-height="100" data-min="-100" data-fgColor="#0990cd" data-displayPrevious=true value="{{percentage2}}" />
+                    </div>
+                    <div class="align-slef-center mt-10">
+                        <h5 class="font-weight-semibold mb-5"><strong class="block mb-10">{{records[1].name}}</strong> 
+                        <span class="text-success">{{records[1].cnt}}</span> <span class="text-success small font-normal">
+                        orders</span></h5>
+                        <span class="badge badge-mark border-success mr-1"></span>
+                        <span class="text-muted">{{percentage2}}% of all orders</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex pa-0 no-block">
+                    <div class="pr-30">
+                        <input data-plugin="knob" data-width="100" data-height="100" data-min="-100" data-fgColor="#0990cd" data-displayPrevious=true value="{{percentage3}}" />
+                    </div>
+                    <div class="align-slef-center mt-10">
+                        <h5 class="font-weight-semibold mb-5"><strong class="block mb-10">{{records[2].name}}</strong> 
+                        <span class="text-success">{{records[2].cnt}}</span> <span class="text-success small font-normal">
+                        orders</span></h5>
+                        <span class="badge badge-mark border-success mr-1"></span>
+                        <span class="text-muted">{{percentage2}}% of all orders</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
     <div class="col-lg-12 col-md-12">
         <div class="card ">
             <div class="card-body">

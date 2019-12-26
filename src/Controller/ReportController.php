@@ -83,9 +83,16 @@ class ReportController extends AbstractController
     public function getPopularProducts(): Response
     {
         $records = $this->getDoctrine()->getRepository(Product::class)->getMostPopularProducts();
-        
+        $totalOrders = array_sum(array_column($records, 'cnt'));
+        $percentage1 = number_format(($records[0]['cnt']/$totalOrders)*100, 2, '.', '');
+        $percentage2 = number_format(($records[1]['cnt']/$totalOrders)*100, 2, '.', '');
+        $percentage3 = number_format(($records[2]['cnt']/$totalOrders)*100, 2, '.', '');
+        //dd($percentage1);
         return $this->render('report/popular_products.html.twig', [
-            'records' => $records
+            'records' => $records,
+            'percentage1' => $percentage1,
+            'percentage2' => $percentage2,
+            'percentage3' => $percentage3
         ]);
     }
 }
