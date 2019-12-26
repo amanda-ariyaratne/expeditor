@@ -49,20 +49,24 @@
                             {{ form_widget(form.year, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
                         </div>
                         <div class="col-2">
-                            {{ form_widget(form.submit, {'attr': {'class': 'btn btn-rounded  waves-effect waves-light btn-outline-primary font-12'}}) }}
+                            {{ form_widget(form.categorize_by, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
                         </div>
+                        
                     </div>
-                        {# <select id="meetup_sport" ... #}
-                    {# {{ form_row(form.store) }} <select id="meetup_position" ... #}
-                    {# {{ form_row(form.truck_route) }} #}
-                    {# ... #}
                 {{ form_end(form) }}
                 <div class="table-responsive mt-40">
                     <table id="myTable" class="display nowrap table table-hover table-bordered">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Product</th>
+                                {% if (cat == 'p') %}
+                                    <th>Product</th>
+                                {% elseif (cat == 's') %}
+                                    <th>Store</th>
+                                {% else %}
+                                    <th>Store</th>
+                                    <th>Route</th>
+                                {% endif %}
                                 <th>Quater-1</th>
                                 <th>Quater-2</th>
                                 <th>Quater-3</th>
@@ -75,7 +79,14 @@
                                 <tr>
                                     <td>{{~i~}}</td>
                                     {% set i = i + 1 %}
-                                    <td class="text-dark font-semibold">{{ r.product_name }}</td>
+                                    {% if (cat == 'p') %}
+                                        <td class="text-dark font-semibold">{{ r.product_name }}</td>
+                                    {% elseif (cat == 's') %}
+                                        <td class="text-dark font-semibold">{{ r.store_name }}</td>
+                                    {% else %}
+                                        <td class="text-dark font-semibold">{{ r.store_name }}</td>
+                                        <td class="text-dark font-semibold">{{ r.truck_route_name }}</td>
+                                    {% endif %}
                                     <td>{{ r.q1|number_format(2, ' . ', ', ') }}</td>
                                     <td>{{ r.q2|number_format(2, ' . ', ', ') }}</td>
                                     <td>{{ r.q3|number_format(2, ' . ', ', ') }}</td>
@@ -104,8 +115,19 @@
     <script src="{{ asset('back/js/vfs_fonts.js') }}"></script> 
     <script src="{{ asset('back/js/buttons.html5.min.js') }}"></script> 
     <script src="{{ asset('back/js/buttons.print.min.js') }}"></script>
-
     
+
+    <script>
+        var $category = $('#quarterly_sales_report_categorize_by');
+        var $year = $('#quarterly_sales_report_year');
+        // When sport gets selected ...
+        $category.change(function() {
+            this.form.submit();
+        });
+        $year.change(function() {
+            this.form.submit();
+        });
+    </script>
 
 {% endblock scripts %}
 

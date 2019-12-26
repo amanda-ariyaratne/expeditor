@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
-class QSbyStore extends AbstractType
+class QuarterlySalesReportType extends AbstractType
 {
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -37,18 +37,15 @@ class QSbyStore extends AbstractType
                     '2018' => 2018,
                 ]
             ])
-            ->add('store', EntityType::class, [
-                'class' => Store::class,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('s')
-                        ->where('s.deleted_at is NULL');
-                },
-                'choice_label' => 'name',
-                'choice_value' => 'id',
-                'placeholder' => 'store'
+            ->add('categorize_by', ChoiceType::Class, [
+                'choices' => [
+                    'product' => 'product',
+                    'store' => 'store',
+                    'truck route' => 'truck_route'
+                ]
             ])
-            ->add('submit', SubmitType::class)
         ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver)
