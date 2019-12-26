@@ -66,6 +66,13 @@ class TrainTrip
     }
 
 
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getAllowedCapacity(): ?string
     {
         return $this->allowed_capacity;

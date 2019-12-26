@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Expeditor - Customer Order Report{% endblock %}
+
+{% block javascripts %} 
+
+{% endblock %} 
+
+{% block stylesheets %}
+    <style type="text/css">
+        td ,th {
+            text-align:center
+        }
+        .dropbtn {
+            background-color: #d3e0fc;
+            color: Black;
+            padding: 10px 53px;
+            font-size: 16px;
+            border: none;
+            border: 2px solid #025a83;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 250px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {background-color: #ddd;}
+
+        .dropdown:hover .dropdown-content {display: block;}
+
+        .dropdown:hover .dropbtn {
+            background-color: #025a83;
+            color: white;    
+        }
+    </style>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+        <div class="card ">
+            <div class="card-body">
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Order report</h4>
+                <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
+                <div style="width:100%; float:left; margin: 20px 30px 50px 0px; " >
+                    <div class="dropdown">
+                        <button class="dropbtn">SELECT CUSTOMER</button>
+                            <div class="dropdown-content">
+                                {% for c in customers %}
+                                    <a tabindex="-1" href="/report/customerOrder/{{c.user.id}}">ID:{{c.user.id}} - {{c.user.firstName}} {{c.user.lastName}}</a>
+                                {% endfor %}
+                            </div>
+                    </div>
+                </div>
+                </br> 
+                </br> 
+                <div>
+                    {% for c in customers %}
+                        {% if purchases is not empty %}
+                            {% if c.user.id == purchases[0][0].customer_id %}
+                                <h5>Name : {{c.user.firstName}} {{c.user.lastName}}<h5>
+                                <h5>Email : {{c.user.email}}<h5>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    
+                </div>
+                <div class="table-responsive mt-40">
+                    {% if purchases is  empty %}
+                        <center>
+                            <h3 class=""> Not placed any orders yet</h3>
+                        </center>
+                    {% else %}
+                        <table id="myTable" class="display nowrap table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Total</th>
+                                    <th>Created at</th>
+                                    <th>Status</th>
+                                    <th>Address</th>
+                                    <th>Products</th>
+                                </tr>
+                            </thead>
+                            <tbody id="order-details">
+                            
+                                {% for p in purchases %}
+                                    <tr>
+                                        <td style="text-align:center;" >{{p[0].id}}</td>
+                                        <td>$ amount</td>
+                                        <td>{{ p[0].created ? p[0].created|date('Y-m-d H:i:s') : '' }}</td>
+                                        <td>{{p[0].status}}</td>
+                                        <td>{{p[0].house_no}}, {{p[0].street}}, {{p[0].city}}</td>
+                                        <td style="text-align:center;">
+                                            <table style="border: 1px solid transparent; width:100%">
+                                                <tbody style="border: 1px solid transparent">
+                                                    {% for product in p  %}
+                                                        <tr style="border: 1px solid transparent; text-align:center">
+                                                            <td style="border: 1px solid transparent;">{{product.product_name}}</td>
+                                                            <td style="border: 1px solid transparent">x {{product.quantity}}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

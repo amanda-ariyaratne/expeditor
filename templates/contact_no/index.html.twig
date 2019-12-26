@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ContactNo index{% endblock %}
+
+{% block body %}
+    <h1>ContactNo index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Number</th>
+                <th>Created_at</th>
+                <th>Updated_at</th>
+                <th>Deleted_at</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for contact_no in contact_nos %}
+            <tr>
+                <td>{{ contact_no.id }}</td>
+                <td>{{ contact_no.number }}</td>
+                <td>{{ contact_no.createdAt ? contact_no.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ contact_no.updatedAt ? contact_no.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ contact_no.deletedAt ? contact_no.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('contact_no_show', {'id': contact_no.id}) }}">show</a>
+                    <a href="{{ path('contact_no_edit', {'id': contact_no.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('contact_no_new') }}">Create new</a>
+{% endblock %}

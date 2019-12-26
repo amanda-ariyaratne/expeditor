@@ -57,6 +57,13 @@ class Address
         return $this->id;
     }
 
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getHouseNo(): ?string
     {
         return $this->house_no;

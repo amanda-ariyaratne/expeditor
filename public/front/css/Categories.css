@@ -1,0 +1,145 @@
+.categories-title{
+    font-style: normal;
+    /*font-family: -webkit-body;*/
+    font-size: x-large;
+}
+
+.categories {
+    border: 1px solid #2125298f;
+    padding: 19px 25px 25px;
+    border-radius: 2px 2px 2px 2px;
+    -moz-border-radius: 2px 2px 2px 2px;
+    -webkit-border-radius: 2px 2px 2px 2px;
+    margin-top: 30px;
+    margin-left: 175px;
+    width: 300px;
+    margin-bottom: 100px;
+}
+
+.subName{
+    font-size: large;
+}
+
+
+
+
+ul {
+    padding: 0;
+    list-style: none;
+    display: block;
+}
+
+.line {
+    border-bottom: 1px solid #e1e1e1;
+    padding: 0 0 4px;
+}
+
+
+ul > li > a {
+    color: #646565;
+    flex: 1;
+}
+
+ul > li > a:hover {
+    color: #c1939e;
+    text-decoration: none;
+}
+
+.list-icon img {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 4px;
+}
+
+.collapse.in{
+    display: block;
+}
+
+.widget_pt_catagories.children{
+    margin: 0;
+    width: 100%;
+}
+
+.widget ul{
+    list-style: none;
+    
+}
+
+.collapse{
+    
+}
+
+li> ul, li>ol {
+    
+}
+
+ul{
+    
+}
+
+.widget_pt_categories .pt-categories li .show-children {
+    float: right;
+    outline: none;
+    display: inline-block;
+    position: relative;
+    width: 18px;
+    height: 18px;
+    margin: 4px 0 0 8px;
+    border-style: solid;
+    border-width: 1px;
+    -webkit-transition: border-color 0.3s ease-in-out;
+    -moz-transition: border-color 0.3s ease-in-out;
+    -ms-transition: border-color 0.3s ease-in-out;
+    -o-transition: border-color 0.3s ease-in-out;
+    transition: border-color 0.3s ease-in-out;
+    background: #fff;
+}
+.widget_pt_categories .pt-categories li a, .widget_pt_categories .pt-categories li .count {
+    display: inline-block;
+    vertical-align: middle;
+}
+.sidebar a, .sidebar a:focus {
+    color: #646565;
+}
+
+::selection {
+    background: #e1e1e1;
+    color: #000;
+    text-shadow: none;
+}
+
+ul{
+border: 0;
+    font-family: inherit;
+    font-size: 100%;
+    font-style: inherit;
+    font-weight: inherit;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
+
+.widget_pt_categories .pt-categories li .show-children{
+    border-color: #e1e1e1;
+}
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.sidebar a:not(.button):hover {
+    color: #c2d44e;
+}
+
+[data-toggle="collapse"] .far:before {
+    content: "\f146";
+}
+
+[data-toggle="collapse"].collapsed .far:before {
+    content: "\f0fe";
+}
