@@ -22,33 +22,30 @@ class TrainTripController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $truckRoute = new TrainTrip();
-        $form = $this->createForm(TrainTripType::class, $truckRoute);
+        $trainTrip = new TrainTrip();
+        $form = $this->createForm(TrainTripType::class, $trainTrip);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($truckRoute);
-            $entityManager->flush();
-
+            $this->getDoctrine()->getRepository(TrainTrip::class)->insert($trainTrip);
             return $this->redirectToRoute('train_trip_index');
         }
 
         return $this->render('train_trip/new.html.twig', [
-            'truck_route' => $truckRoute,
+            'train_trip' => $trainTrip,
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Route("/", name="train_trip_index", methods={"GET"})
      */
     public function index(TrainTripRepository $truckRouteRepository): Response
     {
         return $this->render('train_trip/index.html.twig', [
-            'train_trip' => $truckRouteRepository->getAll(),
+            'train_trips' => $truckRouteRepository->getAll(),
         ]);
-    }
-    
+    }    
 
     /**
      * @Route("/{id}/edit", name="train_trip_edit", methods={"GET","POST"})

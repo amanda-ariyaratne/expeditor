@@ -33,44 +33,6 @@ class TruckRouteRepository extends ServiceEntityRepository
         });
         return $this->getEntity($result);
     }
-    private function getEntity($params){
-        $truck_route = new TruckRoute();
-        $truck_route->setId($params['id']);
-        $truck_route->setName($params['name']);
-        
-        $truck_route->setMaxTimeAllocation($params['max_time_allocation']);
-        
-        
-        
-        return $truck_route;
-    }
-
-    public function getById($id)
-    {
-        $conn = $this->getEntityManager()->getConnection();
-        $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM truck_route_store WHERE id = :id AND deleted_at IS NULL";            
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue('id', $id);
-            $stmt->bindValue('store', $store);
-            $stmt->execute();
-            return $stmt->fetch();
-        });
-        return $this->getEntity($result);
-    }   
-  
-    public function getByStore($store_id)
-    {
-        $conn = $this->getEntityManager()->getConnection();
-        $results = $conn->transactional(function($conn) use(&$store_id) {
-            $sql = "SELECT * FROM truck_route_store WHERE store_id=:store AND truck_route_deleted_at IS NULL";            
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue('store', $store_id);
-            $stmt->execute();
-            return $stmt->fetchAll();
-        });
-        return $this->getEntityArray($results);
-    }
 
     public function getAll(){
         $conn = $this->getEntityManager()->getConnection();
@@ -178,17 +140,4 @@ class TruckRouteRepository extends ServiceEntityRepository
         return $entityArray;    
     }
 
-
-    public function getTruckRouteById($id)
-    {
-        $conn = $this->getEntityManager()->getConnection();
-        $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "SELECT * FROM truck_route WHERE id = :id AND deleted_at IS NULL";            
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue('id', $id);
-            $stmt->execute();
-            return $stmt->fetch();
-        });
-        return $this->getEntity($result);
-    } 
 }

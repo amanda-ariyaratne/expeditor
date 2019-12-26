@@ -21,12 +21,7 @@ class TrainTrip
     /**
      * @ORM\Column(type="decimal", precision=14, scale=4)
      */
-    public $allowed_capacity;
-    
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    public $start_time;
+    public $allowed_capacity;    
 
     /**
      * @ORM\Column(type="datetime")
@@ -49,6 +44,16 @@ class TrainTrip
      */
     private $store;
 
+    /**
+     * @ORM\Column(type="time")
+     */
+    private $start_time;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $date;
+
     public function __construct()
     {
         $this->store = new ArrayCollection();
@@ -58,13 +63,6 @@ class TrainTrip
     {
         return $this->id;
     }
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
 
     public function setId(int $id): self
     {
@@ -81,19 +79,6 @@ class TrainTrip
     public function setAllowedCapacity(string $allowed_capacity): self
     {
         $this->allowed_capacity = $allowed_capacity;
-
-        return $this;
-    }
-    
-
-    public function getStartTime(): ?\DateTimeInterface
-    {
-        return $this->start_time;
-    }
-
-    public function setStartTime(\DateTimeInterface $start_time): self
-    {
-        $this->start_time = $start_time;
 
         return $this;
     }
@@ -156,6 +141,30 @@ class TrainTrip
         if ($this->store->contains($store)) {
             $this->store->removeElement($store);
         }
+
+        return $this;
+    }
+
+    public function getStartTime(): ?\DateTimeInterface
+    {
+        return $this->start_time;
+    }
+
+    public function setStartTime(\DateTimeInterface $start_time): self
+    {
+        $this->start_time = $start_time;
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): self
+    {
+        $this->date = $date;
 
         return $this;
     }

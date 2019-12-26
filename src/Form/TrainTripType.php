@@ -8,7 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -34,7 +34,9 @@ class TrainTripType extends AbstractType
         $builder
             ->add('allowed_capacity',NumberType::class)
             
-            ->add('start_time',DateTimeType::class)
+            ->add('start_time', TimeType::class)
+
+            ->add('date', DateType::class)
             
             ->add('store', EntityType::class, [
                 'class' => Store::class,
@@ -42,8 +44,7 @@ class TrainTripType extends AbstractType
                     return $er->createQueryBuilder('s')
                         ->where('s.deleted_at is NULL');
                 },
-                'choice_label' => 'name',
-            
+                'choice_label' => 'name',            
                 'multiple'=>true,
                 'expanded'=>true,
                 'mapped' => true

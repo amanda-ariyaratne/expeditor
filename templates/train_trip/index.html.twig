@@ -3,28 +3,10 @@
 {% block title %}TrainTrip{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
     <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
-    <style type="text/css">
-        td {
-            text-align:center
-        }
-        .plus-icon {
-            background: #025a83;
-            width: 22px;
-            height: 22px;
-            line-height: 22px;
-            text-align: center;
-            display: inline-block;
-            color: #fff!important;
-            border-radius: 100px;
-            margin-right: 35px;
-        }
-        .plus-icon:hover {
-            background: #002661;
-            color: #fff;
-        }
-    </style>
+    
 {% endblock %}
 
 {% block content %}
@@ -43,32 +25,32 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Allowed Capacity</th>
-                                
+                                <th>Allowed Capacity</th>                                
                                 <th>Start Time</th>
-                                <th>Store</th>
-                                
+                                <th>Departure Date</th>
+                                <th>Stores</th>                                
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             {%set i = 1 %}
-                            {% for train_trips in train_trip %}
+                            {% for train_trip in train_trips %}
                                 <tr>
                                     <td>{{~i~}}</td>
                                     {% set i = i + 1 %}
-                                    <td >{{ train_trips.allowed_capacity }}</td>
-                                    
-                                    <td>{{ train_trips.start_time|date('Y:m:d H:i:s') }}</td>
+                                    <td >{{ train_trip.allowed_capacity }}</td>                                    
+                                    <td>{{ train_trip.startTime|date('h:i A') }}</td>
+                                    <td>{{ train_trip.date|date("Y/m/d") }} </td>
+                                    <td style = "text-align:left">
+                                        {% for store in train_trip.store %}
+                                            {{ store.name }} {{ ',' }}
+                                        {% endfor %}
+                                    </td>
                                     <td>
-                                    
-
-                                    
-                                    <td>
-                                        <a href="{{path('train_trip_edit', { 'id': train_trips.id}) }}" class="pencil-icon">
+                                        <a href="{{path('train_trip_edit', { 'id': train_trip.id}) }}" class="pencil-icon">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
-                                        <a href="#" class="delete-icon" data-id="{{ train_trips.id }}" >
+                                        <a href="#" class="delete-icon" data-id="{{ train_trip.id }}" >
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
                                     </td>
@@ -87,7 +69,7 @@
 
 
 {% block scripts %}
-
+    {{ parent() }}
     <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
     <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 
     <script src="{{ asset('back/js/buttons.flash.min.js') }}"></script> 
