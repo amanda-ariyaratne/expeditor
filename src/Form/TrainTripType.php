@@ -1,20 +1,16 @@
 <?php
-
 namespace App\Form;
-
 use App\Entity\TrainTrip;
 use App\Entity\Store;
 use Symfony\Component\Form\AbstractType;
 use Doctrine\ORM\EntityManagerInterface;
-
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Doctrine\ORM\EntityRepository;
 use App\Repository\StoreRepository;
 use DateTime;
@@ -23,7 +19,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class TrainTripType extends AbstractType
 {
     private $entityManager;
-
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
@@ -34,7 +29,8 @@ class TrainTripType extends AbstractType
         $builder
             ->add('allowed_capacity',NumberType::class)
             
-            ->add('start_time',DateTimeType::class)
+            ->add('start_time', TimeType::class)
+            ->add('date', DateType::class)
             
             ->add('store', EntityType::class, [
                 'class' => Store::class,
@@ -42,8 +38,7 @@ class TrainTripType extends AbstractType
                     return $er->createQueryBuilder('s')
                         ->where('s.deleted_at is NULL');
                 },
-                'choice_label' => 'name',
-            
+                'choice_label' => 'name',            
                 'multiple'=>true,
                 'expanded'=>true,
                 'mapped' => true
@@ -51,7 +46,6 @@ class TrainTripType extends AbstractType
             ->add('submit', SubmitType::class)
         ;
     }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -61,6 +55,5 @@ class TrainTripType extends AbstractType
             'csrf_token_id'   => 'trainTrip-token',
         ]);
     }
-
     
 }
