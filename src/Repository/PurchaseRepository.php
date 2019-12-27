@@ -122,7 +122,7 @@ class PurchaseRepository extends ServiceEntityRepository
 
     }
 
-  public function getQuarterlySalesByProductReport($year)
+    public function getQuarterlySalesByProductReport($year)
     {
         $conn = $this->getEntityManager()->getConnection();
         $results = $conn->transactional(function($conn) use(&$year) {
@@ -160,12 +160,5 @@ class PurchaseRepository extends ServiceEntityRepository
         });
         return $results;
     }
-
-    // /**
-    //  * @return Purchase[] Returns an array of Purchase objects
-    //  */
-    /*
-    public function findByExampleField($value)
-
     
 }
