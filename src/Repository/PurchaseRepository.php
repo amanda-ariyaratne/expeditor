@@ -36,6 +36,15 @@ class PurchaseRepository extends ServiceEntityRepository
         $stmt->execute();
         return $stmt->fetchAll();
     }
+    public function getNAProducts(): ?Array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM purchase_train_trip WHERE train_trip_id IS NULL ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+            
+        return $stmt->fetchAll();
+    }
 
     public function getByCustomerId($id)
     {

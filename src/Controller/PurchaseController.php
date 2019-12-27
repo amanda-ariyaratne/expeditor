@@ -36,6 +36,26 @@ class PurchaseController extends AbstractController
             'purchases' => $purchaseRepository->getAllByCustomerID($user->getId()),
         ]);
     }
+    /**
+     * @Route("/notassigned" , name="not_assigned_productList")
+     */
+    public function productList(PurchaseRepository $purchaseRepository): Response 
+    {/*
+        $this->denyAccessUnlessGranted(['ROLE_CHAIN_MANAGER']);
+
+        
+
+        
+        if($this->isGranted('ROLE_CHAIN_MANAGER')){
+            */
+        $doctrine = $this->getDoctrine();
+        $purchases = $doctrine->getRepository(Purchase::class)->getNAProducts();
+        
+
+        return $this->render('purchase_assign/show_purchase.html.twig', [
+            'purchases' => $purchases
+        ]);
+    }
 
     /**
      * @Route("/purchase/{id}")
