@@ -33,6 +33,22 @@ class DriverAssistantRepository extends ServiceEntityRepository
         });
         return $this->getEntity($result);
     }
+    public function findDA($stime,$max_time,$_date,$store_id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn)use(&$store_id,&$_date,&$max_time,&$stime){
+            $sql = 'CALL get_driver_assistants_trips(:stime,:max_time,:_date,:store_id);';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store_id', $store_id);
+            $stmt->bindValue('_date', $_date,'date');
+            $stmt->bindValue('max_time', $max_time);
+            $stmt->bindValue('stime', $stime,'time');
+            
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });         
+        return $this->getEntityArrayforT($results);
+    }
 
     public function getAll()
     {
@@ -114,6 +130,14 @@ class DriverAssistantRepository extends ServiceEntityRepository
         }
         return $entityArray;
     }
+    private function getEntityArrayforT($array)
+    {
+        $entityArray = [];
+        foreach ($array as $element) {
+            array_push($entityArray, $this->getEntityforT($element));
+        }
+        return $entityArray;
+    }
 
     private function getEntity($params)
     {
@@ -141,6 +165,25 @@ class DriverAssistantRepository extends ServiceEntityRepository
         $da->setCreatedAt(new \DateTime($params['da_created_at']));
         $da->setUpdatedAt(new \DateTime($params['da_updated_at']));
         $da->setWorkedHours($params['worked_hours']);
+
+        return $da;
+    }
+    private function getEntityforT($params)
+    {
+        // dd($params);
+        $da = new DriverAssistant();
+        $da->setId($params['id']);
+        $da->setFirstName($params['first_name']);
+        $da->setLastName($params['last_name']);
+        $da->setNIC($params['NIC']);
+        
+        $store=$this->getEntityManager() 
+                    ->getRepository(Store::class)
+                    ->getById($params['store_id']);
+        $da->setStore($store);
+        $da->setCreatedAt(new \DateTime($params['created_at']));
+        $da->setUpdatedAt(new \DateTime($params['updated_at']));
+        
 
         return $da;
     }
