@@ -63,7 +63,7 @@
                                     <td>{{ trucktrip.driver.id }}</td>
                                     <td>{{ trucktrip.driver_assistant.id }}</td>
                                     <td>{{ trucktrip.truck_route.id }}</td>
-                                    <td>{{ trucktrip.start_time|date('H:i:s')}}</td>
+                                    <td>{{ trucktrip.start_time|time('H:i:s')}}</td>
                                     <td>{{ trucktrip.date|date('d/m/Y')}}</td>
                                     
                                     <td>{{ trucktrip.createdAt|date("d/m/Y") }}</td>
