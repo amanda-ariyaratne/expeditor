@@ -3,18 +3,25 @@
     <div class="my-custom-class-for-errors">
         {{ form_errors(form) }}
     </div>
-
-    <div class="form-group has-success m-t-15 m-b-10 row">
-        {{ form_label(form.allowed_capacity, 'Allowed Capacity', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
-        <div class="col-8">
-            {{ form_widget(form.allowed_capacity, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
-        </div>
-    </div>
     
     <div class="form-group has-success m-t-15 m-b-10 row">
         {{ form_label(form.start_time, 'Start Time', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
         <div class="col-8">
             {{ form_widget(form.start_time, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group has-success m-t-15 m-b-10 row">
+        {{ form_label(form.date, 'Departure Date', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+        <div class="col-8">
+            {{ form_widget(form.date, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+        </div>
+    </div>
+
+    <div class="form-group has-success m-t-15 m-b-10 row">
+        {{ form_label(form.allowed_capacity, 'Allowed Capacity', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
+        <div class="col-8">
+            {{ form_widget(form.allowed_capacity, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
         </div>
     </div>
     
