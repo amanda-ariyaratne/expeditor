@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\TruckTrip;
 use App\Entity\Truck;
 use App\Form\TruckTripType;
+use App\Form\TruckTrip2Type;
+use App\Form\TruckTrip1Type;
 use App\Repository\TruckTripRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +42,7 @@ class TruckTripController extends AbstractController
         $form = $this->createForm(TruckTripType::class, $truckt);
 
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -52,7 +55,80 @@ class TruckTripController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    /**
+     * @Route("/new2", name="truck_trip_new2", methods={"GET","POST"})
+     */
+    public function new2(Request $request): Response
+    {
+        $data=new TruckTrip();
+        $form = $this->createForm(TruckTrip1Type::class,$data);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // data is an array with "name", "email", and "message" keys
+            
+            //$form = $this->createForm(TruckTrip2Type::class, $data);
+            
+            dump($data);
+            $entityManager = $this->getDoctrine()->getRepository(TruckTrip::class)->insert($data);
+            dump($entityManager);
+            return $this->redirectToRoute('truck_trip_new3',['data'=>$entityManager]);
+            /*
+            $form = $this->createForm(TruckTrip2Type::class,$truckt);
+            
+            $form->handleRequest($request);
     
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getRepository(TruckTrip::class)->insert($truckt);
+                // data is an array with "name", "email", and "message" keys
+                //$data = $form->getData();
+                //$form = $this->createForm(TruckTrip2Type::class, $data);
+               
+                //return $this->redirectToRoute('truck_trip_index');
+                return $this->redirectToRoute('truck_trip_index');
+            }
+         */   
+    }
+    return $this->render('truck_trip/new2.html.twig', [
+        'form' => $form->createView(),
+        ]);
+    }
+    
+    /**
+     * @Route("/new3/{data}", name="truck_trip_new3", methods={"GET","POST"})
+     */
+    public function new3(Request $request,$data): Response
+    {
+        //$truckt=new TruckTrip();
+        $truckt=$this->getDoctrine() 
+        ->getRepository(TruckTrip::class)
+        -> findOneById($data);
+
+        dump($data);
+        
+            $form = $this->createForm(TruckTrip2Type::class,$truckt) ; 
+        
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // data is an array with "name", "email", and "message" keys
+            //$data = $form->getData();
+            //$form = $this->createForm(TruckTrip2Type::class, $data);
+            $truckt = $form->getData();
+
+            $entityManager = $this->getDoctrine()->getRepository(TruckTrip::class)->update($truckt);
+
+            return $this->redirectToRoute('truck_trip_index');
+        
+
+            
+        }
+
+        return $this->render('truck_trip/new2.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 
     /**
      * @Route("/{id}", name="truck_trip_show", methods={"GET"})
@@ -73,7 +149,7 @@ class TruckTripController extends AbstractController
                         ->getRepository(TruckTrip::class)
                         ->getById($id);
 
-        $form = $this->createForm(TruckTripType::class, $truckt);
+        $form = $this->createForm(TruckTrip2Type::class, $truckt);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
