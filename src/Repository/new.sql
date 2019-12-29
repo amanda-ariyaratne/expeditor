@@ -1,65 +1,120 @@
+DELIMITER //
+CREATE PROCEDURE get_drivers_trips
+(
+    IN start_time TIME,IN max_allo_time INT,IN _date DATE,IN store_id INT
+)
 
-DELIMITER $$
-CREATE PROCEDURE
-get_drivers(IN trip_start_time DATETIME,IN end_time DATETIME)
+
 BEGIN
+DECLARE given_end_time DATETIME DEFAULT now();
+DECLARE given_start_time DATETIME DEFAULT now();
+SET given_start_time=TIMESTAMP(_date,start_time);
+SET given_end_time=DATE_ADD(given_start_time, INTERVAL max_allo_time MINUTE);
 
+select * from driver where driver.store_id=store_id and not exists
+(select 1 from
 
-(select * from driver where not exists
-((select driver_id from (select  trip_start_time,
-    (
-    CASE 
-        WHEN (TIMEDIFF(now(),end_time)>0 ) THEN driver_id
-        
-        WHEN (TIMEDIFF(trip_start_time,now())>0 ) THEN driver_id
-        ELSE -1
-    END) AS driver_id,
-    (
-    CASE 
-        WHEN (TIMEDIFF(now(),end_time)>0 ) THEN TIMEDIFF(now(),end_time)
-        
-        WHEN (TIMEDIFF(trip_start_time,now())>0 ) THEN TIMEDIFF(now(),trip_start_time)
-        ELSE '9999-12-31 00:00:00'
-    END) AS jtime
+((select driver_id from truck_trip_route_time inner join
+(select distinct trip_end_time from
+ (select driver_id,trip_end_time,
+  TIMESTAMPDIFF(SECOND,trip_end_time,given_start_time) as diff from truck_trip_route_time 
+  where TIMESTAMPDIFF(SECOND,trip_end_time,given_start_time)>0
     
- from trucktrip_driver_driverassist_truck_route) as yogya where jtime < 0 order by jtime desc limit 2)
+   )as one order by diff asc limit 2) as two on truck_trip_route_time.trip_end_time=two.trip_end_time)
+ 
 union
 
-(select driver_id from (select  trip_start_time,
-    (
-    CASE 
-        WHEN (TIMEDIFF(given_start_time,end_time)>0 ) THEN driver_id
-        
-        WHEN (TIMEDIFF(start_time,given_end_time)>0 ) THEN driver_id
-        ELSE -1
-    END) AS driver_id,
-    (
-    CASE 
-        WHEN (TIMEDIFF(now(),end_time)>0 ) THEN TIMEDIFF(now(),end_time)
-        
-        WHEN (TIMEDIFF(trip_start_time,now())>0 ) THEN TIMEDIFF(now(),trip_start_time)
-        ELSE '9999-12-31 00:00:00'
-    END) AS jtime
-    
- from trucktrip_driver_driverassist_truck_route) as yogyag where jtime > 0 order by jtime asc limit 2)
- UNION
- (select driver_id from (select  trip_start_time,
-    (
-    CASE 
-        WHEN (TIMEDIFF(end_time,given_start_time)>=0 and TIMEDIFF(given_end_time,start_time)>=0) THEN driver_id
-        
-        
-        ELSE -1
-    END) AS driver_id
-    
-    
- from trucktrip_driver_driverassist_truck_route) as yogyat )))
- INTERSECT
-(select * from driver where not exists
- (select sum(max_time_allocation),driver_id,date from  trucktrip_driver_driverassist_truck where date between '2010:02:02' and '2020-01-01' 
- and driver.id=trucktrip_driver_driverassist_truck.driver_id group by driver_id,date HAVING SUM(max_time_allocation) <40*60));
-END$$
-DELIMITER ;
 
 
+(select driver_id from truck_trip_route_time inner join
+(select distinct trip_start_time from
+ (select driver_id,trip_start_time,
+  TIMESTAMPDIFF(SECOND,given_end_time,trip_start_time) as diff from truck_trip_route_time 
+  where TIMESTAMPDIFF(SECOND,given_end_time,trip_start_time)>0
+    
+   )as one order by diff asc limit 2) as two on truck_trip_route_time.trip_start_time=two.trip_start_time)
  
+
+union
+
+
+ (select driver_id
+   from truck_trip_route_time 
+  where (TIMEDIFF(trip_end_time,given_start_time)>=0 and TIMEDIFF(given_end_time,trip_start_time)>=0)
+    
+   )
+ 
+
+union
+ 
+(select driver_id from
+ (select sum(max_time_allocation),driver_id,trip_date from  truck_trip_truck_route where timestamp(trip_date) between DATE_SUB(given_start_time, INTERVAL 7 DAY) and given_start_time 
+ group by driver_id,trip_date HAVING SUM(max_time_allocation) >40*60) as one)
+ )as zero 
+ where zero.driver_id=driver.id )
+ ;
+
+
+END //
+DELIMITER ;
+=====================================================================================================
+=====================================================================================================
+DELIMITER //
+CREATE PROCEDURE get_driver_assistants_trips
+(
+    IN start_time TIME,IN max_allo_time INT,IN _date DATE,IN store_id INT
+)
+
+
+BEGIN
+DECLARE given_end_time DATETIME DEFAULT now();
+DECLARE given_start_time DATETIME DEFAULT now();
+SET given_start_time=TIMESTAMP(_date,start_time);
+SET given_end_time=DATE_ADD(given_start_time, INTERVAL max_allo_time MINUTE);
+
+select * from driver_assistant where driver_assistant.store_id=store_id and not exists
+(select 1 from
+
+((select driver_assistant_id from truck_trip_route_time inner join
+(select distinct trip_end_time from
+ (select driver_assistant_id,trip_end_time,
+  TIMESTAMPDIFF(SECOND,trip_end_time,given_start_time) as diff from truck_trip_route_time 
+  where TIMESTAMPDIFF(SECOND,trip_end_time,given_start_time)>0
+    
+   )as one order by diff asc limit 1) as two on truck_trip_route_time.trip_end_time=two.trip_end_time)
+ 
+union
+
+
+
+(select driver_assistant_id from truck_trip_route_time inner join
+(select distinct trip_start_time from
+ (select driver_assistant_id,trip_start_time,
+  TIMESTAMPDIFF(SECOND,given_end_time,trip_start_time) as diff from truck_trip_route_time 
+  where TIMESTAMPDIFF(SECOND,given_end_time,trip_start_time)>0
+    
+   )as one order by diff asc limit 1) as two on truck_trip_route_time.trip_start_time=two.trip_start_time)
+ 
+
+union
+
+
+ (select driver_assistant_id
+   from truck_trip_route_time 
+  where (TIMEDIFF(trip_end_time,given_start_time)>=0 and TIMEDIFF(given_end_time,trip_start_time)>=0)
+    
+   )
+ 
+
+union
+ 
+(select driver_assistant_id from
+ (select sum(max_time_allocation),driver_assistant_id,trip_date from  truck_trip_truck_route where timestamp(trip_date) between DATE_SUB(given_start_time, INTERVAL 7 DAY) and given_start_time 
+ group by driver_assistant_id,trip_date HAVING SUM(max_time_allocation) >60*60) as one)
+ )as zero 
+ where zero.driver_assistant_id=driver_assistant.id )
+ ;
+
+
+END //
+DELIMITER ;

@@ -64,9 +64,9 @@ class QuarterlySalesReportType extends AbstractType
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) use ($formModifier) {
-
+                
                 $data = $event->getData();
-
+                dump($data);
                 $formModifier($event->getForm(), array_key_exists('store', $data) ? $data['store'] : null);
             }
         );
