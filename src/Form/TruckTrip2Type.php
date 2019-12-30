@@ -43,12 +43,15 @@ class TruckTrip2Type extends AbstractType
         
 
         ->add('date',DateType::class,[
+            'disabled' => true,
             'attr' => array('readonly' => true)
         ])
         ->add('start_time',TimeType::class,[
+            'disabled' => true,
             'attr' => array('readonly' => true)
         ])
         ->add('truck_route', EntityType::class, [
+            'disabled' => true,
             'class' => TruckRoute::class,
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('s')

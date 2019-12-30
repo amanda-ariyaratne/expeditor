@@ -118,3 +118,15 @@ union
 
 END //
 DELIMITER ;
+
+
+DELIMITER $$
+CREATE EVENT `Every_2_Minutes_Cleanup`
+  ON SCHEDULE EVERY 2 MINUTE STARTS '2019-12-31 00:00:00'
+  ON COMPLETION PRESERVE
+DO BEGIN
+   update truck_trip set deleted_at=now() 
+   where TIMESTAMPDIFF(MINUTE, created_at, now())>10 and (truck_id is null or driver_id is null or driver_assistant_id is null); 
+   
+END;$$
+DELIMITER ;
