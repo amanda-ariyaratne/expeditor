@@ -70,9 +70,9 @@ class TruckTripController extends AbstractController
             
             //$form = $this->createForm(TruckTrip2Type::class, $data);
             
-            dump($data);
+           
             $entityManager = $this->getDoctrine()->getRepository(TruckTrip::class)->insert($data);
-            dump($entityManager);
+            
             return $this->redirectToRoute('truck_trip_new3',['data'=>$entityManager]);
             /*
             $form = $this->createForm(TruckTrip2Type::class,$truckt);
@@ -103,9 +103,9 @@ class TruckTripController extends AbstractController
         //$truckt=new TruckTrip();
         $truckt=$this->getDoctrine() 
         ->getRepository(TruckTrip::class)
-        -> findOneById($data);
+        -> getById($data);
 
-        dump($data);
+        
         
             $form = $this->createForm(TruckTrip2Type::class,$truckt) ; 
         

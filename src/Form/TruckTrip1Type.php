@@ -40,23 +40,6 @@ class TruckTrip1Type extends AbstractType
         $builder
             
             
-            
-            
-            ->add('truck', EntityType::class, [
-                'class' => Truck::class,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('s')
-                        ->where('s.deleted_at is NULL');
-                },
-                'choice_label' => 'id',
-                'choice_value' => 'id',
-                'placeholder' => ''
-            ])
-            
-
-
-
-            
             ->add('date',DateType::class)
             ->add('start_time',TimeType::class)
             ->add('truck_route', EntityType::class, [

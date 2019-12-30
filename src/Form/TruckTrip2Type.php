@@ -37,19 +37,9 @@ class TruckTrip2Type extends AbstractType
         }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $drivers =   $this->entityManager->getRepository(Driver::class)->getAll();
+        //$drivers =   $this->entityManager->getRepository(Driver::class)->getAll();
         $builder
-        ->add('truck', EntityType::class, [
-            'class' => Truck::class,
-            'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('s')
-                    ->where('s.deleted_at is NULL');
-            },
-            'choice_label' => 'id',
-            'choice_value' => 'id',
-            'placeholder' => '',
-            'attr' => array('readonly' => true)
-        ])
+        
         
 
         ->add('date',DateType::class,[
@@ -86,8 +76,18 @@ class TruckTrip2Type extends AbstractType
                 
                 $drivers =   $this->entityManager->getRepository(Driver::class)->findD($time,$max_time,$date,$store_id);
                 $driverAs =   $this->entityManager->getRepository(DriverAssistant::class)->findDA($time,$max_time,$date,$store_id);
+                $trucks=$this->entityManager->getRepository(Truck::class)->getAllByStore($store_id);
                 //$drivers =   $this->entityManager->getRepository(Driver::class)->findD($time,$max_time,$date,$store_id);
-                $form->add('driver', EntityType::class, [
+                $form
+                ->add('truck', EntityType::class, [
+                    'class' => Truck::class,
+                    'choices'=>$trucks,
+                    'choice_label' => 'id',
+                    'choice_value' => 'id',
+                    'placeholder' => '',
+                    'attr' => array('readonly' => false)
+                ])
+                ->add('driver', EntityType::class, [
                     'class' => Driver::class,
                     'choices'=>$drivers,
                     'choice_label' => 'id',
@@ -107,7 +107,7 @@ class TruckTrip2Type extends AbstractType
                     'attr' => array('readonly' => false),
                     
                 ])
-                ->add('submit', SubmitType::class);
+                ;
                 
 
             };

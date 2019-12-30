@@ -36,7 +36,7 @@ class TruckTripRepository extends ServiceEntityRepository
     }
     
 
-    public function findOneById($id)
+    public function getById($id)
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
@@ -55,8 +55,13 @@ class TruckTripRepository extends ServiceEntityRepository
         $lastInsertId = $conn->transactional(function($conn) use(&$truckt) {
             $sql = "INSERT INTO truck_trip (truck_id,driver_id,driver_assistant_id,truck_route_id,start_time,date) VALUES (:truck,:driver,:driver_assistant,:truck_route,:start_time,:date);";
             $stmt = $conn->prepare($sql);
-            $stmt->bindValue('truck', $truckt->getTruck()->getId());
             if ($truckt->getDriver()!=null){
+            $stmt->bindValue('truck', $truckt->getTruck()->getId());
+            }
+            else{
+                $stmt->bindValue('truck',null);
+            }
+                if ($truckt->getDriver()!=null){
             $stmt->bindValue('driver', $truckt->getDriver()->getId());
             }
             else{
@@ -127,12 +132,17 @@ class TruckTripRepository extends ServiceEntityRepository
 
     private function getEntity($array)
     {
-        dump($array);
+        
         $truckt = new TruckTrip();
         $truckt->setId($array['id']);
+        if ($array['truck_id']!=null){
         $truck = $this->getEntityManager() 
                     ->getRepository(Truck::class)
                     ->getById($array['truck_id']);
+        }
+        else{
+            $truck=null;
+        }
         $truckt->setTruck($truck);
         if ($array['driver_id']!=null){
         $driver = $this->getEntityManager() 

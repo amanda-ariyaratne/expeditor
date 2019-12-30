@@ -68,6 +68,18 @@ class DriverRepository extends ServiceEntityRepository
             $stmt->execute();
         });        
     }
+    public function getById($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$id) {
+            $sql = "SELECT * from driver where id = :id AND deleted_at IS NULL;";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntityforT($result);
+    }
     public function findD($stime,$max_time,$_date,$store_id)
     {
         $conn = $this->getEntityManager()->getConnection();

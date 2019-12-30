@@ -25,13 +25,13 @@ class DriverAssistantRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "CALL getDriverAssistants(:id)";
+            $sql = "SELECT * from driver where id = :id AND deleted_at IS NULL;";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
             return $stmt->fetch();
         });
-        return $this->getEntity($result);
+        return $this->getEntityforT($result);
     }
     public function findDA($stime,$max_time,$_date,$store_id)
     {

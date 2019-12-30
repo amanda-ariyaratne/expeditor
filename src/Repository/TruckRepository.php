@@ -50,13 +50,13 @@ class TruckRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "CALL getTrucks(:id);";
+            $sql = "SELECT * from truck where id=:id and  deleted_at IS NULL; ;";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
             return $stmt->fetch();
         });
-        return $this->getEntity($result);
+        return $this->getEntityforT($result);
     }
 
     public function insert(Truck $truck)
@@ -136,6 +136,22 @@ class TruckRepository extends ServiceEntityRepository
         $truck->setStore($store);     
         $truck->setCreatedAt(new \DateTime($params['truck_created_at']));
         $truck->setUpdatedAt(new \DateTime($params['truck_updated_at']));
+        return $truck;
+    }
+    private function getEntityforT($params)
+    {
+        $truck = new Truck();
+        $truck->setId($params['id']);
+        $truck->setInsuranceNo($params['insurance_no']);
+        $truck->setRegistrationNo($params['registration_no']);
+        
+        
+        $store = $this->getEntityManager() 
+                    ->getRepository(Store::class)
+                    ->getById($params['store_id']);
+        $truck->setStore($store);    
+        $truck->setCreatedAt(new \DateTime($params['created_at']));
+        $truck->setUpdatedAt(new \DateTime($params['updated_at']));
         return $truck;
     }
 
