@@ -22,6 +22,7 @@ class TrainTripController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $trainTrip = new TrainTrip();
         $form = $this->createForm(TrainTripType::class, $trainTrip);
         $form->handleRequest($request);
@@ -42,8 +43,12 @@ class TrainTripController extends AbstractController
      */
     public function index(TrainTripRepository $truckRouteRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
+
+        $truckRoutes = $truckRouteRepository->getAll();
+
         return $this->render('train_trip/index.html.twig', [
-            'train_trips' => $truckRouteRepository->getAll(),
+            'train_trips' => $truckRoutes,
         ]);
     }    
 
@@ -52,6 +57,7 @@ class TrainTripController extends AbstractController
      */
     public function edit(Request $request, TrainTrip $truckRoute): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $form = $this->createForm(TrainTripType::class, $truckRoute);
         $form->handleRequest($request);
 
@@ -72,6 +78,8 @@ class TrainTripController extends AbstractController
      */
     public function delete(Request $request, TrainTrip $truckRoute): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
+        
         if ($this->isCsrfTokenValid('train_trip', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($truckRoute);

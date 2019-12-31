@@ -28,8 +28,8 @@ class DriverRepository extends ServiceEntityRepository
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
-        });         
-        // dd($results);
+        });      
+        
         return $this->getEntityArray($results);
     }
 

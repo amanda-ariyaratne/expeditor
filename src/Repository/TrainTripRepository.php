@@ -33,6 +33,19 @@ class TrainTripRepository extends ServiceEntityRepository
         return $this->getEntityArray($result);
     }
 
+    public function getAllByStore($store_id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$store_id) {
+            $sql = "SELECT * FROM train_trip WHERE deleted_at IS NULL AND store_id=:store_id;";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store_id', $store_id);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $this->getEntityArray($result);
+    }
+
     public function getById($id)
     {
         $conn = $this->getEntityManager()->getConnection();
