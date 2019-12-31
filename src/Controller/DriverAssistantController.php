@@ -27,7 +27,7 @@ class DriverAssistantController extends AbstractController
         $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER']);
         
         $doctrine = $this->getDoctrine();
-        
+
         if ($this->isGranted('ROLE_STORE_MANAGER')){
             $user = $this->getUser()->getId();
             $store = $doctrine->getRepository(StoreManager::class)->find($user)->getStore()->getId();
@@ -36,6 +36,7 @@ class DriverAssistantController extends AbstractController
                         ->getAllByStore($store);
         }
         else if($this->isGranted('ROLE_CHAIN_MANAGER')){
+            
             $assistants = $this->getDoctrine() 
                         ->getRepository(DriverAssistant::class)
                         ->getAll();

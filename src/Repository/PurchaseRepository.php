@@ -161,11 +161,4 @@ class PurchaseRepository extends ServiceEntityRepository
         return $results;
     }
 
-    // /**
-    //  * @return Purchase[] Returns an array of Purchase objects
-    //  */
-    /*
-    public function findByExampleField($value)
-
-    
 }
