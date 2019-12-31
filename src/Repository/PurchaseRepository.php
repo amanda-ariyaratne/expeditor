@@ -160,5 +160,5 @@ class PurchaseRepository extends ServiceEntityRepository
         });
         return $results;
     }
-    
+
 }

@@ -24,6 +24,8 @@ class ReportController extends AbstractController
      */
     public function getQuarterlySalesReport(Request $request, $year = null, $category = null): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
+
         if ($year == null) {
             $year = date('Y');
         }
@@ -67,6 +69,8 @@ class ReportController extends AbstractController
      */
     public function getPopularProducts(): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
+
         $records = $this->getDoctrine()->getRepository(Product::class)->getMostPopularProducts();
         $totalOrders = array_sum(array_column($records, 'cnt'));
         $percentage1 = number_format(($records[0]['cnt']/$totalOrders)*100, 2, '.', '');
@@ -87,6 +91,8 @@ class ReportController extends AbstractController
      */
     public function getCustomerOrderReport($id , Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
+
         //customer details
         $customers = $this->getDoctrine()->getRepository(Customer::class)->getAll();
 
