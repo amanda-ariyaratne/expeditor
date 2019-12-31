@@ -84,7 +84,7 @@ class DriverRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $results = $conn->transactional(function($conn)use(&$store_id,&$_date,&$max_time,&$stime){
-            $sql = 'CALL get_drivers(:stime,:max_time,:_date,:store_id);';
+            $sql = 'CALL get_drivers_trips(:stime,:max_time,:_date,:store_id);';
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('store_id', $store_id);
             $stmt->bindValue('_date', $_date,'date');

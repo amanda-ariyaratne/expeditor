@@ -79,7 +79,7 @@ class TruckTrip2Type extends AbstractType
                 
                 $drivers =   $this->entityManager->getRepository(Driver::class)->findD($time,$max_time,$date,$store_id);
                 $driverAs =   $this->entityManager->getRepository(DriverAssistant::class)->findDA($time,$max_time,$date,$store_id);
-                $trucks=$this->entityManager->getRepository(Truck::class)->getAllByStore($store_id);
+                $trucks=$this->entityManager->getRepository(Truck::class)->getByStoreAndTime($time,$max_time,$date,$store_id);
                 //$drivers =   $this->entityManager->getRepository(Driver::class)->findD($time,$max_time,$date,$store_id);
                 $form
                 ->add('truck', EntityType::class, [

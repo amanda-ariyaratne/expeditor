@@ -3,11 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\TruckTrip;
-use App\Entity\Truck;
+use App\Entity\Purchase;
 use App\Form\TruckTripType;
 use App\Form\TruckTrip2Type;
 use App\Form\TruckTrip1Type;
 use App\Repository\TruckTripRepository;
+use App\Repository\PurchaseRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -129,6 +130,35 @@ class TruckTripController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+    /**
+     * @Route("/{id}/assign-products" , name="assigned_purchase_for_truck", methods={"GET","POST"})
+     */
+    public function purchaseList(PurchaseRepository $purchaseRepository, Request $request,$id): Response 
+    {
+        /*
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER']);
+        
+        if($this->isGranted('ROLE_STORE_MANAGER')){
+            */
+            if ($request->isMethod('post')) {
+                $data=($request->request->get('purchase_id'));
+                $entityManager = $this->getDoctrine()->getRepository(Purchase::class)->updatePurchase($data,$id);  
+                return $this->redirectToRoute('truck_trip_index');
+            }
+            
+        //$request = Request::createFromGlobals();
+        
+
+        $doctrine = $this->getDoctrine();
+        $purchases = $doctrine->getRepository(Purchase::class)->getProductstoTruck($id);
+        
+
+        return $this->render('truck_trip/purchase_assign.html.twig', [
+            'purchases' => $purchases
+        ]);
+    }
+
+
 
     /**
      * @Route("/{id}", name="truck_trip_show", methods={"GET"})
@@ -166,7 +196,7 @@ class TruckTripController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-
+    
     /**
      * @Route("/{id}", name="truck_trip_delete", methods={"DELETE"})
      */

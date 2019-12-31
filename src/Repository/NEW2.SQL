@@ -115,6 +115,7 @@ select driver_id from (select  truck_trip_id,trip_end_time,TIMESTAMP(trip_date,t
     
     TIMESTAMP(`expeditor`.`truck_trip`.`date`,`expeditor`.`truck_trip`.`start_time` )+ INTERVAL `expeditor`.`truck_route`.`max_time_allocation` MINUTE AS `trip_end_time`,
     `expeditor`.`truck_trip`.`driver_id` AS `driver_id`,
+    `expeditor`.`truck_route`.`store_id` AS `store_id`,
     `expeditor`.`truck_trip`.`driver_assistant_id` AS `driver_assistant_id`,
     `expeditor`.`truck_trip`.`truck_id` AS `truck_id`,
     `expeditor`.`truck_trip`.`truck_route_id` AS `truck_route_id`,
@@ -128,7 +129,36 @@ FROM
         )
     )
 ORDER BY
-    `expeditor`.`truck_trip`.`id`
+    `expeditor`.`truck_trip`.`id`;
+
+id,delivery_date,truck_route_id,status_id,created_at
+    create view purchase_truck_trip as 
+    SELECT
+    `purchase_volume`.`purchase_id` AS `purchase_id`,
+    `purchase_volume`.`product_id` AS `product_id`,
+    `purchase_volume`.`volume` AS `volume`,
+    `expeditor`.`purchase`.`delivery_date` AS `delivery_date`,
+    `expeditor`.`purchase`.`truck_route_id` AS `truck_route_id`,
+    `expeditor`.`purchase`.`status_id` AS `status_id`,
+    `expeditor`.`purchase`.`store_id` AS `store_id`,
+    `expeditor`.`store`.`name` AS `store_name`,
+    `expeditor`.`purchase`.`truck_trip_id` AS `truck_trip_id`,
+    `expeditor`.`purchase`.`created_at` AS `created_at`
+FROM
+    (
+        (
+            `expeditor`.`purchase`
+        LEFT JOIN `expeditor`.`store` ON
+            (
+                `expeditor`.`purchase`.`store_id` = `expeditor`.`store`.`id`
+            )
+        )
+    LEFT JOIN `expeditor`.`purchase_volume` ON
+        (
+            `expeditor`.`purchase`.`id` = `purchase_volume`.`purchase_id`
+        )
+    )
+    
 
 
 

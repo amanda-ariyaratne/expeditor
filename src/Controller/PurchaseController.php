@@ -56,6 +56,23 @@ class PurchaseController extends AbstractController
             'purchases' => $purchases
         ]);
     }
+/**
+     * @Route("/notassigned-for-truck" , name="not_assigned_productList")
+     */
+    public function productListForTruck(PurchaseRepository $purchaseRepository): Response 
+    {/*
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER']);
+
+        if($this->isGranted('ROLE_STORE_MANAGER')){
+            */
+        $doctrine = $this->getDoctrine();
+        $purchases = $doctrine->getRepository(Purchase::class)->getNATProducts();
+        
+
+        return $this->render('purchase_assign/show_purchase_truck.html.twig', [
+            'purchases' => $purchases
+        ]);
+    }
 
     /**
      * @Route("/purchase/{id}")

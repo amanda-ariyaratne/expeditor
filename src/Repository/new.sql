@@ -18,7 +18,7 @@ select * from driver where driver.store_id=store_id and not exists
 (select distinct trip_end_time from
  (select driver_id,trip_end_time,
   TIMESTAMPDIFF(SECOND,trip_end_time,given_start_time) as diff from truck_trip_route_time 
-  where TIMESTAMPDIFF(SECOND,trip_end_time,given_start_time)>0
+  where TIMESTAMPDIFF(SECOND,trip_end_time,given_start_time)>0 and truck_trip_route_time.store_id=store_id 
     
    )as one order by diff asc limit 2) as two on truck_trip_route_time.trip_end_time=two.trip_end_time)
  
@@ -30,7 +30,7 @@ union
 (select distinct trip_start_time from
  (select driver_id,trip_start_time,
   TIMESTAMPDIFF(SECOND,given_end_time,trip_start_time) as diff from truck_trip_route_time 
-  where TIMESTAMPDIFF(SECOND,given_end_time,trip_start_time)>0
+  where TIMESTAMPDIFF(SECOND,given_end_time,trip_start_time)>0 and truck_trip_route_time.store_id=store_id 
     
    )as one order by diff asc limit 2) as two on truck_trip_route_time.trip_start_time=two.trip_start_time)
  
@@ -79,7 +79,7 @@ select * from driver_assistant where driver_assistant.store_id=store_id and not 
 (select distinct trip_end_time from
  (select driver_assistant_id,trip_end_time,
   TIMESTAMPDIFF(SECOND,trip_end_time,given_start_time) as diff from truck_trip_route_time 
-  where TIMESTAMPDIFF(SECOND,trip_end_time,given_start_time)>0
+  where TIMESTAMPDIFF(SECOND,trip_end_time,given_start_time)>0 and truck_trip_route_time.store_id=store_id 
     
    )as one order by diff asc limit 1) as two on truck_trip_route_time.trip_end_time=two.trip_end_time)
  
@@ -91,7 +91,7 @@ union
 (select distinct trip_start_time from
  (select driver_assistant_id,trip_start_time,
   TIMESTAMPDIFF(SECOND,given_end_time,trip_start_time) as diff from truck_trip_route_time 
-  where TIMESTAMPDIFF(SECOND,given_end_time,trip_start_time)>0
+  where TIMESTAMPDIFF(SECOND,given_end_time,trip_start_time)>0 and truck_trip_route_time.store_id=store_id 
     
    )as one order by diff asc limit 1) as two on truck_trip_route_time.trip_start_time=two.trip_start_time)
  
@@ -117,6 +117,33 @@ union
 
 
 END //
+===================================
+===================================
+DELIMITER //
+CREATE PROCEDURE get_truck_trips
+(
+    IN start_time TIME,IN max_allo_time INT,IN _date DATE,IN store_id INT
+)
+
+BEGIN
+DECLARE given_end_time DATETIME DEFAULT now();
+DECLARE given_start_time DATETIME DEFAULT now();
+SET given_start_time=TIMESTAMP(_date,start_time);
+SET given_end_time=DATE_ADD(given_start_time, INTERVAL max_allo_time MINUTE);
+
+select * from truck where truck.store_id=store_id and not exists
+(select 1 from
+ (select truck_id
+   from truck_trip_route_time 
+  where (TIMEDIFF(trip_end_time,given_start_time)>=0 and TIMEDIFF(given_end_time,trip_start_time)>=0)  
+   )
+ as zero 
+ where zero.truck_id=truck.id )
+ ;
+
+
+END //
+========================================
 DELIMITER ;
 
 

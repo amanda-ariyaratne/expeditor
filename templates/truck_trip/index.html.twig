@@ -69,6 +69,9 @@
                                     
                                     
                                     <td>
+                                    <a href="{{path('assigned_purchase_for_truck', { 'id': trucktrip.id}) }}" class="pencil-icon">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </a>
                                         <a href="{{path('truck_trip_edit', { 'id': trucktrip.id}) }}" class="pencil-icon">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
@@ -106,7 +109,6 @@
     <script>
 
         $( document ).ready(function() {
-
 
             $(".delete-icon").on("click", function (e) {
 

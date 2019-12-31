@@ -133,7 +133,7 @@ class TruckTripType extends AbstractType
                     $form = $event->getForm();
                     $truckRoute = $event->getData();
                     $drivers =   $this->entityManager->getRepository(Driver::class)->getAll();
-                    dump($form->getParent()->getData());
+                    
                     $form->getParent()->add('driver', EntityType::class, [
                         'class' => Driver::class,
                         'choices'=>$drivers,
