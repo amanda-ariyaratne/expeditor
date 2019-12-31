@@ -24,7 +24,9 @@ class TrainTripController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $trainTrip = new TrainTrip();
+        
         $form = $this->createForm(TrainTripType::class, $trainTrip);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -55,10 +57,11 @@ class TrainTripController extends AbstractController
     /**
      * @Route("/{id}/edit", name="train_trip_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, TrainTrip $truckRoute): Response
+    public function edit(Request $request, TrainTrip $trainTrip): Response
     {
         $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
-        $form = $this->createForm(TrainTripType::class, $truckRoute);
+
+        $form = $this->createForm(TrainTripType::class, $trainTrip);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -68,7 +71,7 @@ class TrainTripController extends AbstractController
         }
 
         return $this->render('train_trip/edit.html.twig', [
-            'train_trip' => $truckRoute,
+            'train_trip' => $trainTrip,
             'form' => $form->createView(),
         ]);
     }

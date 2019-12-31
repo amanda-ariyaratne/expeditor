@@ -3,17 +3,18 @@
 {% block title %}Edit Store Manager{% endblock %}
 
 {% block stylesheets %}
-  {{ parent() }}
+    {{ parent() }}
   <link href="{{ asset('back/css/bootstrap-material-datetimepicker.css') }}" rel="stylesheet">
-  <link href="{{ asset('back/css/jquery-clockpicker.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('back/css/jquery-clockpicker.min.css') }}" rel="stylesheet"> 
+
 {% endblock %}
 
 {% block scripts %}
 
-{{ parent() }}
+    {{ parent() }}
 
   {# date time picker  #}
-  
+
   <script src="{{ asset('back/js/moment.js') }}"></script> 
   <script src="{{ asset('back/js/bootstrap-datepicker.min.js') }}"></script> 
   <script src="{{ asset('back/js/bootstrap-timepicker.min.js') }}"></script> 

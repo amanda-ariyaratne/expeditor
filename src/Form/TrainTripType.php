@@ -34,9 +34,14 @@ class TrainTripType extends AbstractType
         $builder
             ->add('allowed_capacity',NumberType::class)
             
-            ->add('start_time', TextType::class)
+            ->add('start_time', TimeType::class, [
+                'widget' => 'single_text',
+                'placeholder' => 'Select'
+            ])
 
-            ->add('date', TextType::class)
+            ->add('date', DateType::class, [
+                'widget' => 'single_text'
+            ])
             
             ->add('store', EntityType::class, [
                 'class' => Store::class,
