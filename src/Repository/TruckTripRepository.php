@@ -34,6 +34,18 @@ class TruckTripRepository extends ServiceEntityRepository
         });
         return $this->getEntityArray($result);
     }
+    public function getByStore($store)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn)use(&$store) {
+            $sql = "SELECT * FROM truck_trip WHERE truck_id IS NOT NULL AND driver_id IS NOT NULL AND driver_assistant_id IS NOT NULL AND deleted_at IS NULL and store_id=:store_id;";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store_id', $store);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $this->getEntityArray($result);
+    }
     
 
     public function getById($id)
