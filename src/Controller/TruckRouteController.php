@@ -84,7 +84,7 @@ class TruckRouteController extends AbstractController
      */
     public function edit(Request $request, TruckRoute $truck_route, TruckRouteRepository $truckRouteRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER');
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER']);
 
         $user = $this->getUser()->getId();
         $store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore();
