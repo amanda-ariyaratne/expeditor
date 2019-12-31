@@ -87,7 +87,7 @@ class ChainManagerController extends AbstractController
         $chainManager = $this->getDoctrine() 
                              ->getRepository(ChainManager::class)
                              ->getById($id);
-        
+        dd($chainManager);
         $form = $this->createForm(ChainManagerType::class, $chainManager, [
             'validation_group' => 'edit',
         ]);
