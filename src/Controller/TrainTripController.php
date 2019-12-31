@@ -46,7 +46,7 @@ class TrainTripController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
 
         $truckRoutes = $truckRouteRepository->getAll();
-
+// dd($truckRoutes);
         return $this->render('train_trip/index.html.twig', [
             'train_trips' => $truckRoutes,
         ]);

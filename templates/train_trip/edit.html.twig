@@ -3,41 +3,25 @@
 {% block title %}Edit Store Manager{% endblock %}
 
 {% block stylesheets %}
-  <link href="{{ asset('back/css/bootstrap4.2.1.min.css') }}" rel="stylesheet">
-  <!-- page css -->
-  <link href="{{ asset('back/css/login-register-lock.css') }}" rel="stylesheet">
-  <!-- Custom CSS -->
-  <link href="{{ asset('back/css/master-stylesheet.css') }}" rel="stylesheet">
-  <link href="{{ asset('back/css/style2.css') }}"   rel="stylesheet">
+  {{ parent() }}
+  <link href="{{ asset('back/css/bootstrap-material-datetimepicker.css') }}" rel="stylesheet">
+  <link href="{{ asset('back/css/jquery-clockpicker.min.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block scripts %}
 
-  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-  <script src="{{ asset('back/js/jquery3.2.0.min.js') }}"></script>
+{{ parent() }}
 
-  <!-- Bootstrap tether Core JavaScript -->
-  <script src="{{ asset('back/js/popper.min.js') }}"></script>
-  <script src="{{ asset('back/js/bootstrap4.2.1.min.js') }}"></script>
-
-  <!--Custom JavaScript -->
-  <script>
-  $(function() {
-  $(".preloader").fadeOut();
-  });
-  $(function() {
-  $('[data-toggle="tooltip"]').tooltip()
-  });
-
-  // ============================================================== 
-  // Login and Recover Password 
-  // ============================================================== 
-  $('#to-recover').on("click", function() {
-  $("#loginform").slideUp();
-  $("#recoverform").fadeIn();
-  });
-  </script>
+  {# date time picker  #}
+  
+  <script src="{{ asset('back/js/moment.js') }}"></script> 
+  <script src="{{ asset('back/js/bootstrap-datepicker.min.js') }}"></script> 
+  <script src="{{ asset('back/js/bootstrap-timepicker.min.js') }}"></script> 
+  <script src="{{ asset('back/js/moment.js') }}"></script> 
+  
+  <script src="{{ asset('back/js/bootstrap-material-datetimepicker.js') }}"></script>
+  <script src="{{ asset('back/js/jquery-clockpicker.min.js') }}"></script> 
+  <script src="{{ asset('back/js/form-pickers.js') }}"></script>
 
 {% endblock %}
 

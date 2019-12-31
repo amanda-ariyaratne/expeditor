@@ -30,6 +30,7 @@ class TruckRepository extends ServiceEntityRepository
             $stmt->execute();
             return $stmt->fetchAll();
         });
+        
         return $this->getEntityArray($result);
     }
 
@@ -43,6 +44,7 @@ class TruckRepository extends ServiceEntityRepository
             $stmt->execute();
             return $stmt->fetchAll();
         });
+        
         return $this->getEntityArray($result);
     }
 
@@ -50,13 +52,13 @@ class TruckRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "CALL getTrucks(:id);";
+            $sql = "SELECT * from truck where id=:id and  deleted_at IS NULL; ;";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
             return $stmt->fetch();
         });
-        return $this->getEntity($result);
+        return $this->getEntityforIndex($result);
     }
 
     public function insert(Truck $truck)
@@ -112,8 +114,26 @@ class TruckRepository extends ServiceEntityRepository
         return $entityArray;
     }
 
+    private function getEntityforIndex($params)
+    {
+        $truck = new Truck();
+        $truck->setId($params['id']);
+        $truck->setInsuranceNo($params['insurance_no']);
+        $truck->setRegistrationNo($params['registration_no']);
+        
+        
+        $store = $this->getEntityManager() 
+                    ->getRepository(Store::class)
+                    ->getById($params['store_id']);
+        $truck->setStore($store);    
+        $truck->setCreatedAt(new \DateTime($params['created_at']));
+        $truck->setUpdatedAt(new \DateTime($params['updated_at']));
+        return $truck;
+    }
+
     private function getEntity($params)
     {
+        dd($params);
         $truck = new Truck();
         $truck->setId($params['truck_id']);
         $truck->setInsuranceNo($params['truck_insurance_no']);
@@ -138,33 +158,4 @@ class TruckRepository extends ServiceEntityRepository
         $truck->setUpdatedAt(new \DateTime($params['truck_updated_at']));
         return $truck;
     }
-
-    // /**
-    //  * @return Truck[] Returns an array of Truck objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Truck
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

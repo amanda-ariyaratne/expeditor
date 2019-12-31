@@ -32,6 +32,7 @@ class TruckTripRepository extends ServiceEntityRepository
             $stmt->execute();
             return $stmt->fetchAll();
         });
+
         return $this->getEntityArray($result);
     }
     public function findD($time,$truckr)
@@ -126,19 +127,35 @@ class TruckTripRepository extends ServiceEntityRepository
 
     private function getEntity($array)
     {
+        
         $truckt = new TruckTrip();
         $truckt->setId($array['id']);
+        if ($array['truck_id']!=null){
         $truck = $this->getEntityManager() 
                     ->getRepository(Truck::class)
                     ->getById($array['truck_id']);
+        }
+        else{
+            $truck=null;
+        }
         $truckt->setTruck($truck);
+        if ($array['driver_id']!=null){
         $driver = $this->getEntityManager() 
                     ->getRepository(Driver::class)
                     ->getById($array['driver_id']);
+        }
+        else{
+            $driver=null;
+        }
         $truckt->setDriver($driver);
+        if ($array['driver_assistant_id']!=null){
         $drivera = $this->getEntityManager() 
                     ->getRepository(DriverAssistant::class)
                     ->getById($array['driver_assistant_id']);
+        }
+        else{
+            $drivera=null;
+        }
         $truckt->setDriverAssistant($drivera);
         $truckr = $this->getEntityManager() 
                     ->getRepository(TruckRoute::class)

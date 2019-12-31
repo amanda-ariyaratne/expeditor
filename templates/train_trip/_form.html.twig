@@ -3,18 +3,24 @@
     <div class="my-custom-class-for-errors">
         {{ form_errors(form) }}
     </div>
-    
+
     <div class="form-group has-success m-t-15 m-b-10 row">
         {{ form_label(form.start_time, 'Start Time', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
-        <div class="col-8">
-            {{ form_widget(form.start_time, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+        <div class="col-8 input-group clockpicker">
+            {{ form_widget(form.start_time, {'attr': {'class': 'form-control'}}) }}
+            <div class="input-group-append"> <span class="input-group-text"><i class="fa fa-clock-o"></i></span> </div>
         </div>
     </div>
+
+    {# <div class="input-group clockpicker">
+    <input type="text" class="form-control" value="09:30">
+    <div class="input-group-append"> <span class="input-group-text"><i class="fa fa-clock-o"></i></span> </div>
+    </div> #}
 
     <div class="form-group has-success m-t-15 m-b-10 row">
         {{ form_label(form.date, 'Departure Date', { 'label_attr': {'class': 'form-control-label col-4 col-form-label text-dark weight-500'} }) }}
         <div class="col-8">
-            {{ form_widget(form.date, {'attr': {'class': 'form-control form-control-success text-success'}}) }}
+            {{ form_widget(form.date, {'attr': {'class': 'form-control mdate', 'data-dtp': 'dtp_MRiVK'}}) }}
         </div>
     </div>
 
