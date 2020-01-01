@@ -74,7 +74,7 @@ class TrainTripController extends AbstractController
     {   
         $deleted = false;
         $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
-        
+
         if ($this->isCsrfTokenValid('train_trip', $request->request->get('_token'))) {
             
             $deleted = $trainTripRepository->delete($id);

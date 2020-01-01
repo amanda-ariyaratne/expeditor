@@ -21,6 +21,7 @@ class StoreController extends AbstractController
      */
     public function index(StoreRepository $storeRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $stores = $storeRepository->getAll();
         return $this->render('store/index.html.twig', [
             'stores' => $stores,
@@ -32,6 +33,7 @@ class StoreController extends AbstractController
      */
     public function new(Request $request, StoreRepository $storeRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $store = new Store();
         $form = $this->createForm(StoreType::class, $store);
         $form->handleRequest($request);
@@ -63,6 +65,7 @@ class StoreController extends AbstractController
      */
     public function edit(Request $request, Store $store, StoreRepository $storeRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $form = $this->createForm(StoreType::class, $store);
         $form->handleRequest($request);
         // dd($store);
@@ -83,6 +86,7 @@ class StoreController extends AbstractController
      */
     public function delete(Request $request, $id, StoreRepository $storeRepository): Response
     {   
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $deleted = false;
         if ($this->isCsrfTokenValid('store-token', $request->request->get('_token'))) {
             
