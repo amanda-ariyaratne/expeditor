@@ -25,7 +25,7 @@ class ReportController extends AbstractController
     public function getQuarterlySalesReport(Request $request, $year = null, $category = null): Response
     {
         $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
-
+        
         if ($year == null) {
             $year = date('Y');
         }
@@ -36,11 +36,12 @@ class ReportController extends AbstractController
             'year' => $year,
             'categorize_by' => $category
         ];
+        
         $form = $this->createForm(QuarterlySalesReportType::class, $defaultData, [
-            'entityManager' => $this->getDoctrine()->getManager(),
+            'entityManager' => $this->getDoctrine()->getManager()
         ]);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             return $this->redirectToRoute('report_quarterly_sales', ['year' => $data['year'], 'category' => $data['categorize_by']]);
