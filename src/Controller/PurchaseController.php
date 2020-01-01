@@ -43,9 +43,6 @@ class PurchaseController extends AbstractController
     {/*
         $this->denyAccessUnlessGranted(['ROLE_CHAIN_MANAGER']);
 
-        
-
-        
         if($this->isGranted('ROLE_CHAIN_MANAGER')){
             */
         $doctrine = $this->getDoctrine();
