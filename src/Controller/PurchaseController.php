@@ -39,7 +39,7 @@ class PurchaseController extends AbstractController
         ]);
     }
     /**
-     * @Route("/notassigned" , name="not_assigned_productList")
+     * @Route("/notassigned" , name="not_assigned_train_productList")
      */
     public function productList(PurchaseRepository $purchaseRepository): Response 
     {
@@ -69,30 +69,24 @@ class PurchaseController extends AbstractController
     }
 
     /**
-     * @Route("/purchase/{id}")
+     * @Route("/purchase/{id} ")
      */
     public function viewOrder($id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
 
-        // $user = $this->getUser()->getId();
-        // $order_customer = $this->getDoctrine()->getRepository(Purchase::class)->find($id)->getCustomerId();
+        $user = $this->getUser()->getId();
+        $owner = $this->getDoctrine()->getRepository(Purchase::class)->find($id)->getCustomer()->getId();
 
-        // dd($order_customer);
+        if ($user == $owner){
 
-        $purchase = $this->getDoctrine()->getRepository(Purchase::class)->getDetailsByPurchaseID($id);
-        // $total = 0;
-        // foreach($purchase as $p){
-        //     if($p["quantity"] > $p["retail_limit"]){//wholesale
-        //         $total += $p["quantity"]*$p["wholesale_price"];
-        //     }
-        //     else{//retail
-        //         $total += $p["quantity"]*$p["retail_price"];
-        //     }
-        // }
-        return $this->render('purchase/purchase.html.twig', [
-            'purchase' => $purchase,
-        ]);
+            $purchase = $this->getDoctrine()->getRepository(Purchase::class)->getDetailsByPurchaseID($id);
+            
+            return $this->render('purchase/purchase.html.twig', [
+                'purchase' => $purchase,
+            ]); 
+        }  
+        return $this->redirectToRoute('purchase_index');
     }
 
     /**
@@ -155,7 +149,7 @@ class PurchaseController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="purchase_show", methods={"GET"})
+     * @Route("/{id}", name="purchase_show", methods={"GET"}, requirements={"id":"\d+"})
      */
     public function show(Purchase $purchase): Response
     {
