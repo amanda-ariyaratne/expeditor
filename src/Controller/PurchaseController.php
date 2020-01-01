@@ -37,13 +37,11 @@ class PurchaseController extends AbstractController
         ]);
     }
     /**
-     * @Route("/notassigned" , name="not_assigned_productList")
+     * @Route("/notassigned" , name="not_assigned_train_productList")
      */
     public function productList(PurchaseRepository $purchaseRepository): Response 
     {/*
         $this->denyAccessUnlessGranted(['ROLE_CHAIN_MANAGER']);
-
-        
 
         
         if($this->isGranted('ROLE_CHAIN_MANAGER')){
