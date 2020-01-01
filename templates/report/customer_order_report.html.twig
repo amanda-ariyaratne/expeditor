@@ -71,8 +71,9 @@
                     {% for c in customers %}
                         {% if purchases is not empty %}
                             {% if c.user.id == purchases[0][0].customer_id %}
-                                <h5>Name : {{c.user.firstName}} {{c.user.lastName}}<h5>
-                                <h5>Email : {{c.user.email}}<h5>
+                                <h5>ID &emsp; &emsp;: {{c.user.id}}<h5>
+                                <h5>Name &nbsp;: {{c.user.firstName}} {{c.user.lastName}}<h5>
+                                <h5>Email &ensp;: {{c.user.email}}<h5>
                             {% endif %}
                         {% endif %}
                     {% endfor %}
@@ -88,10 +89,13 @@
                             <thead>
                                 <tr>
                                     <th>Order ID</th>
-                                    <th>Total</th>
+                                    <th>Purchase Total</th>
                                     <th>Created at</th>
                                     <th>Status</th>
-                                    <th>Address</th>
+                                    <th>Delivery date</th>
+                                    <th>Delivery Address</th>
+                                    <th>Store</th>
+                                    <th>Truck route</th>
                                     <th>Products</th>
                                 </tr>
                             </thead>
@@ -100,17 +104,37 @@
                                 {% for p in purchases %}
                                     <tr>
                                         <td style="text-align:center;" >{{p[0].id}}</td>
-                                        <td>$ amount</td>
+                                        <td>$ {{p[0].tot_purchase_price}}</td>
                                         <td>{{ p[0].created ? p[0].created|date('Y-m-d H:i:s') : '' }}</td>
                                         <td>{{p[0].status}}</td>
+                                        <td>{{p[0].delivery_date}}</td>
                                         <td>{{p[0].house_no}}, {{p[0].street}}, {{p[0].city}}</td>
+                                        <td>ID:{{p[0].store_id}} - {{p[0].store_name}}</td>
+                                        <td>ID:{{p[0].truck_route_id}} - {{p[0].truck_route_name}}</td>
                                         <td style="text-align:center;">
                                             <table style="border: 1px solid transparent; width:100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Name</th>
+                                                        <th>Wholesale price</th>
+                                                        <th>Retail price</th>
+                                                        <th>Retail limit</th>
+                                                        <th>Quantity</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                </thead>
                                                 <tbody style="border: 1px solid transparent">
                                                     {% for product in p  %}
                                                         <tr style="border: 1px solid transparent; text-align:center">
+                                                            <td style="border: 1px solid transparent;">{{product.product_id}}</td>
                                                             <td style="border: 1px solid transparent;">{{product.product_name}}</td>
+                                                            <td style="border: 1px solid transparent;">$ {{product.wholesale_price}}</td>
+                                                            <td style="border: 1px solid transparent;">$ {{product.retail_price}}</td>
+                                                            <td style="border: 1px solid transparent;">{{product.retail_limit}}</td>
                                                             <td style="border: 1px solid transparent">x {{product.quantity}}</td>
+                                                            <td style="border: 1px solid transparent">$ {{product.tot_product_price}}</td>
+
                                                         </tr>
                                                     {% endfor %}
                                                 </tbody>

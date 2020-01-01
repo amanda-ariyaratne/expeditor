@@ -85,7 +85,7 @@ class ReportController extends AbstractController
     /**
      * @Route("/customerOrder/{id}")
      */
-    public function getCustomerOrderReport($id , Request $request): Response
+    public function getCustomerOrderReport($id=0 , Request $request): Response
     {
         //customer details
         $customers = $this->getDoctrine()->getRepository(Customer::class)->getAll();

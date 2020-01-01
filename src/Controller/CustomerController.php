@@ -43,7 +43,9 @@ class CustomerController extends AbstractController
     {
         $customer = new Customer();
         
-		$form = $this->createForm(CustomerType::class, $customer);
+		$form = $this->createForm(CustomerType::class, $customer , [
+            'validation_group' => 'new',
+        ]);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
