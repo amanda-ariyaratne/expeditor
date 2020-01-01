@@ -1,19 +1,15 @@
 <?php
-
 namespace App\Repository;
-
 use App\Entity\Driver;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use App\Entity\Store;
-
 /**
  * @method Driver|null find($id, $lockMode = null, $lockVersion = null)
  * @method Driver|null findOneBy(array $criteria, array $orderBy = null)
  * @method Driver[]    findAll()
  * @method Driver[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-
 class DriverRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -28,11 +24,10 @@ class DriverRepository extends ServiceEntityRepository
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll();
-        });         
-        // dd($results);
+        });      
+        
         return $this->getEntityArray($results);
     }
-
     public function getAllByStore($store_id){
         $conn = $this->getEntityManager()->getConnection();
         $results = $conn->transactional(function($conn) use(&$store_id){
@@ -44,7 +39,6 @@ class DriverRepository extends ServiceEntityRepository
         });         
         return $this->getEntityArray($results);
     }
-
     public function insert(Driver $driver)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -59,7 +53,6 @@ class DriverRepository extends ServiceEntityRepository
             $stmt->execute();
         });
     }
-
     public function update($driver)
     {   
         $conn = $this->getEntityManager()->getConnection();
@@ -75,17 +68,33 @@ class DriverRepository extends ServiceEntityRepository
             $stmt->execute();
         });        
     }
-    public function _findD()
+    public function getById($id)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $results = $conn->transactional(function($conn){
-            $sql = "  select * from driver where not exists(select  driver_id from trucktrip_driver_driverassist_truck where driver.id=trucktrip_driver_driverassist_truck.driver_id order by (end_time-(SELECT end_time from trucktrip_driver_driverassist_truck where driver_id=1 order by end_time desc limit 1 ) )DESC limit 2 )";
-            //select * from driver where not exists (select sum(max_time_allocation),driver_id from  trucktrip_driver_driverassist_truck where date between '2010:02:02' and '2020-01-01' and driver.id=trucktrip_driver_driverassist_truck.driver_id group by driver_id HAVING SUM(max_time_allocation) >300);'
+        $result = $conn->transactional(function($conn) use(&$id) {
+            $sql = "SELECT * from driver where id = :id AND deleted_at IS NULL;";
             $stmt = $conn->prepare($sql);
+            $stmt->bindValue('id', $id);
+            $stmt->execute();
+            return $stmt->fetch();
+        });
+        return $this->getEntityforT($result);
+    }
+    public function findD($stime,$max_time,$_date,$store_id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn)use(&$store_id,&$_date,&$max_time,&$stime){
+            $sql = 'CALL get_drivers_trips(:stime,:max_time,:_date,:store_id);';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store_id', $store_id);
+            $stmt->bindValue('_date', $_date,'date');
+            $stmt->bindValue('max_time', $max_time);
+            $stmt->bindValue('stime', $stime,'time');
+            
             $stmt->execute();
             return $stmt->fetchAll();
         });         
-        return $this->getEntityArray($results);
+        return $this->getEntityArrayforT($results);
     }
     public function _delete($id)
     {   
@@ -102,7 +111,6 @@ class DriverRepository extends ServiceEntityRepository
         });     
         return $result;
     }
-
     public function delete($id)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -142,20 +150,44 @@ class DriverRepository extends ServiceEntityRepository
         $store = $this->getEntityManager() 
                     ->getRepository(Store::class)
                     ->getEntity($storeArray);
-
         $driver->setStore($store);
         $driver->setCreatedAt(new \DateTime($params['driver_created_at']));
         $driver->setUpdatedAt(new \DateTime($params['driver_updated_at']));
         $driver->setWorkedHours($params['worked_hours']);
-
         return $driver;
     }
-
+    private function getEntityforT($params){
+        $driver = new Driver();
+        // dd($params);
+        $driver->setId($params['id']);
+        $driver->setFirstName($params['first_name']);
+        $driver->setLastName($params['last_name']);
+        $driver->setNIC($params['NIC']);
+        $driver->setLicenseNo($params['license_no']);
+        
+        
+        $store = $this->getEntityManager() 
+                    ->getRepository(Store::class)
+                    ->getById($params['store_id']);
+        $driver->setStore($store);
+        $driver->setCreatedAt(new \DateTime($params['created_at']));
+        $driver->setUpdatedAt(new \DateTime($params['updated_at']));
+        
+        return $driver;
+    }
     private function getEntityArray($array)
     {   
         $entityArray = [];
         foreach ($array as $element) {
             array_push($entityArray, $this->getEntity($element));
+        }
+        return $entityArray;    
+    }
+    private function getEntityArrayforT($array)
+    {   
+        $entityArray = [];
+        foreach ($array as $element) {
+            array_push($entityArray, $this->getEntityforT($element));
         }
         return $entityArray;    
     }

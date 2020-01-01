@@ -33,9 +33,9 @@
     <div class="col-lg-12 col-md-12">
         <div class="card ">
             <div class="card-body">
-                <h4 class="card-title text-uppercase mb-20 pull-left"> Trucks</h4>
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Truck TRIPS</h4>
                 <h6 class="card-subtitle pull-left mt-0 ml-10 font-13"></h6>
-                <a href="{{ path('truck_trip_new') }}" class="plus-icon pull-left">
+                <a href="{{ path('truck_trip_new2') }}" class="plus-icon pull-left">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>
                 <div class="table-responsive mt-40">
@@ -47,8 +47,9 @@
                                 <th>Driver</th>
                                 <th>Driver Assistant</th>
                                 <th>Truck Route</th>
-                                <th>Date</th>
                                 <th>Start Time</th>
+                                <th>Date</th>
+                                
                                 
                                 
                             </tr>
@@ -64,10 +65,13 @@
                                     <td>{{ trucktrip.driver_assistant.id }}</td>
                                     <td>{{ trucktrip.truck_route.id }}</td>
                                     <td>{{ trucktrip.start_time|date('H:i:s')}}</td>
+                                    <td>{{ trucktrip.date|date('d/m/Y')}}</td>
                                     
                                     
-                                    <td>{{ trucktrip.createdAt|date("d/m/Y") }}</td>
                                     <td>
+                                    <a href="{{path('assigned_purchase_for_truck', { 'id': trucktrip.id}) }}" class="pencil-icon">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </a>
                                         <a href="{{path('truck_trip_edit', { 'id': trucktrip.id}) }}" class="pencil-icon">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
@@ -105,7 +109,6 @@
     <script>
 
         $( document ).ready(function() {
-
 
             $(".delete-icon").on("click", function (e) {
 

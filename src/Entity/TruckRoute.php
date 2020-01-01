@@ -28,7 +28,7 @@ class TruckRoute
      * @ORM\JoinColumn(nullable=false)
      */
     private $store;
-
+  
     /**
      * @ORM\Column(type="string", length=512)
      */
@@ -58,7 +58,6 @@ class TruckRoute
     {
         return $this->id;
     }
-
     public function setId(int $id): self
     {
         $this->id = $id;
