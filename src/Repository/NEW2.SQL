@@ -159,7 +159,42 @@ FROM
         )
     )
     
+create or update view driver_route_truck_trip as 
+    SELECT
+    truck_trip.id as id,
+    truck_trip.truck_id as truck_id,
+    truck_trip.driver_id as driver_id,
+    truck_trip.driver_assistant_id as driver_assistant_id,
+    truck_trip.truck_route_id as truck_route_id,
+    truck_trip.date as _date,
+    truck_trip.start_time as start_time,
+    driver.first_name as driver_first_name,
+    driver.store_id as store_id,
+    driver.last_name as driver_last_name,
+    driver_assistant.first_name as driver_assistant_first_name,
+    driver_assistant.last_name as driver_assistant_last_name,
+    truck_route.name as truck_route_name
 
+FROM
+    (
+        (truck_trip
+            
+        LEFT JOIN driver ON 
+            (
+                driver.id=truck_trip.driver_id
+            )
+        )
+    LEFT JOIN driver_assistant ON
+        (
+            driver_assistant.id=truck_trip.driver_assistant_id
+        )
+    
+    LEFT JOIN truck_route ON
+        (
+            truck_route.id=truck_trip.truck_route_id
+        )
+    ) where truck_trip.deleted_at is null;
+    
 
 
 
