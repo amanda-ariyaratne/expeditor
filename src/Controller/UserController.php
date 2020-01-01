@@ -31,6 +31,7 @@ class UserController extends AbstractController
      */
     public function logout()
     {
+        $this->denyAccessUnlessGranted(['ROLE_USER', ]);
         throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }
 }
