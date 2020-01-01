@@ -47,7 +47,7 @@ class PurchaseController extends AbstractController
 
         
         if($this->isGranted('ROLE_CHAIN_MANAGER')){
-            */
+            
         $doctrine = $this->getDoctrine();
         $purchases = $doctrine->getRepository(Purchase::class)->getNAProducts();
         
@@ -56,6 +56,7 @@ class PurchaseController extends AbstractController
             'purchases' => $purchases
         ]);
     }
+}
 /**
      * @Route("/notassigned-for-truck" , name="not_assigned_productList")
      */

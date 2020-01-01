@@ -92,7 +92,7 @@ class PurchaseRepository extends ServiceEntityRepository
         $conn = $this->getEntityManager()->getConnection();
         $status = $conn->transactional(function($conn) use(&$id,&$data) {
             for($i = 0; $i < count($data); $i++){
-                $sql = "UPDATE purchase SET truck_trip_id=:truck_id WHERE id=:id AND deleted_at IS NULL";
+                $sql = "UPDATE purchase SET truck_trip_id=:truck_id,status_id=2 WHERE id=:id AND deleted_at IS NULL";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindValue('id', $data[$i]);
                 $stmt->bindValue('truck_id', $id);
