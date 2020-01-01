@@ -47,6 +47,22 @@ class TruckRepository extends ServiceEntityRepository
         
         return $this->getEntityArray($result);
     }
+    public function getByStoreAndTime($stime,$max_time,$_date,$store_id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$store_id,&$_date,&$stime,&$max_time) {
+            $sql = 'CALL get_truck_trips(:stime,:max_time,:_date,:store_id);';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store_id', $store_id);
+            $stmt->bindValue('_date', $_date,'date');
+            $stmt->bindValue('max_time', $max_time);
+            $stmt->bindValue('stime', $stime,'time');
+            
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $this->getEntityArrayforT($result);
+    }
 
     public function getById($id)
     {
@@ -110,6 +126,14 @@ class TruckRepository extends ServiceEntityRepository
         $entityArray = [];
         foreach ($array as $element) {
             array_push($entityArray, $this->getEntity($element));
+        }
+        return $entityArray;
+    }
+    private function getEntityArrayforT($array)
+    {
+        $entityArray = [];
+        foreach ($array as $element) {
+            array_push($entityArray, $this->getEntityforT($element));
         }
         return $entityArray;
     }

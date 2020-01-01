@@ -36,6 +36,33 @@ class PurchaseRepository extends ServiceEntityRepository
         $stmt->execute();
         return $stmt->fetchAll();
     }
+    public function getAllByStore($id): ?Array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM  WHERE customer_id = :id AND deleted_at IS NULL";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('id', $id);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+    public function getNAProducts(): ?Array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM purchase_train_trip WHERE train_trip_id IS NULL ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+            
+        return $stmt->fetchAll();
+    }
+    public function getNATProducts(): ?Array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT * FROM purchase_truck_trip WHERE truck_trip_id IS NULL ";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+            
+        return $stmt->fetchAll();
+    }
 
     public function getByCustomerId($id)
     {
@@ -60,7 +87,33 @@ class PurchaseRepository extends ServiceEntityRepository
         $stmt->execute();
         return $stmt->fetchAll();
     }
+    public function updatePurchase($data,$id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $status = $conn->transactional(function($conn) use(&$id,&$data) {
+            for($i = 0; $i < count($data); $i++){
+                $sql = "UPDATE purchase SET truck_trip_id=:truck_id WHERE id=:id AND deleted_at IS NULL";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindValue('id', $data[$i]);
+                $stmt->bindValue('truck_id', $id);
+                $stmt->execute();
+            }
+            return true;
+        });
+        return $status;
+    }
+    public function getProductstoTruck($id): ?Array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        
+        $sql = "SELECT * FROM purchase_truck_trip WHERE truck_trip_id is null and truck_route_id=(select truck_route_id from truck_trip_route_time where truck_trip_id=:id);  ";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('id', $id);
+        $stmt->execute();
+            
+        return $stmt->fetchAll();
 
+    }
     public function getDetailsByCustomerID($id): ?Array
     {
         $conn = $this->getEntityManager()->getConnection();
