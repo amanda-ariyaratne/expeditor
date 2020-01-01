@@ -72,7 +72,7 @@ class DriverController extends AbstractController
     
     public function edit(Request $request, Driver $driver, DriverRepository $driverRepositary, StoreRepository $storeRepositary): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER');
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER']);
         
         $form = $this->createForm(DriverType::class, $driver);
         $form->handleRequest($request);

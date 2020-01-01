@@ -88,12 +88,12 @@ class DriverAssistantController extends AbstractController
      */
     public function edit(Request $request, $id): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER');
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER']);
 
         $driverAssistant = $this->getDoctrine() 
                              ->getRepository(DriverAssistant::class)
                              ->getById($id);
-
+        
         $form = $this->createForm(DriverAssistantType::class, $driverAssistant);
         $form->handleRequest($request);
 
