@@ -37,6 +37,8 @@ class CartController extends AbstractController
      */
     public function index(CartRepository $cartRepository , ProductRepository $productRepository, Security $security): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+
         $user = $security->getUser();
         $cart = $cartRepository->getAllByCustomerID($user->getId());
         $cart_products = array();
@@ -71,6 +73,7 @@ class CartController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
         $cart = new Cart();
         $form = $this->createForm(CartType::class, $cart);
         $form->handleRequest($request);
@@ -93,7 +96,8 @@ class CartController extends AbstractController
      * @Route("/{id}", name="cart_show", methods={"GET"})
      */
     public function show(Cart $cart , ProductRepository $productRepository): Response
-    {   
+    {  
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER'); 
         $cart_product = array();
         $cart = $this->getDoctrine()->getRepository(Cart::class)->getById($cart->getId());
         $cart_product['cart']= $cart;
@@ -119,6 +123,7 @@ class CartController extends AbstractController
      */
     public function edit(Request $request, Cart $cart): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
         $form = $this->createForm(CartType::class, $cart);
         $form->handleRequest($request);
 
@@ -139,6 +144,8 @@ class CartController extends AbstractController
      */
     public function delete(Request $request, Cart $cart): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+        
         if ($this->isCsrfTokenValid('delete'.$cart->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $cart_deleted = $entityManager->getRepository(Cart::class)->deleteById($cart->getId());

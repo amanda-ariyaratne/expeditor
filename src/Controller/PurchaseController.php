@@ -31,9 +31,40 @@ class PurchaseController extends AbstractController
      */
     public function index(PurchaseRepository $purchaseRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+
         $user = $this->getUser();
         return $this->render('purchase/index.html.twig', [
             'purchases' => $purchaseRepository->getAllByCustomerID($user->getId()),
+        ]);
+    }
+    /**
+     * @Route("/notassigned" , name="not_assigned_productList")
+     */
+    public function productList(PurchaseRepository $purchaseRepository): Response 
+    {
+        $this->denyAccessUnlessGranted(['ROLE_CHAIN_MANAGER']);
+
+        $doctrine = $this->getDoctrine();
+        $purchases = $doctrine->getRepository(Purchase::class)->getNAProducts();
+        
+
+        return $this->render('purchase_assign/show_purchase.html.twig', [
+            'purchases' => $purchases
+        ]);
+    }
+/**
+     * @Route("/notassigned-for-truck" , name="not_assigned_productList")
+     */
+    public function productListForTruck(PurchaseRepository $purchaseRepository): Response 
+    {
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER']);
+
+        $doctrine = $this->getDoctrine();
+        $purchases = $doctrine->getRepository(Purchase::class)->getNATProducts();       
+
+        return $this->render('purchase_assign/show_purchase_truck.html.twig', [
+            'purchases' => $purchases
         ]);
     }
 
@@ -42,6 +73,13 @@ class PurchaseController extends AbstractController
      */
     public function viewOrder($id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+
+        // $user = $this->getUser()->getId();
+        // $order_customer = $this->getDoctrine()->getRepository(Purchase::class)->find($id)->getCustomerId();
+
+        // dd($order_customer);
+
         $purchase = $this->getDoctrine()->getRepository(Purchase::class)->getDetailsByPurchaseID($id);
         // $total = 0;
         // foreach($purchase as $p){
@@ -62,6 +100,7 @@ class PurchaseController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
         //address info
         $user = $this->getUser();
         $customer = $this->getDoctrine()->getRepository(Customer::class)->getCustomerByID($user->getId());

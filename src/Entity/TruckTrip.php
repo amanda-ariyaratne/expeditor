@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TruckTripRepository")
@@ -23,12 +24,13 @@ class TruckTrip
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Driver")
-     */
+     
+     * */
     private $driver;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\DriverAssistant")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn
      */
     public $driver_assistant;
 
@@ -43,6 +45,10 @@ class TruckTrip
      * @ORM\Column(type="time", nullable=true)
      */
     public $start_time;
+/**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $date;
 
     
     
