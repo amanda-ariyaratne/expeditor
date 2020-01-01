@@ -61,7 +61,7 @@ class TruckRepository extends ServiceEntityRepository
             $stmt->execute();
             return $stmt->fetchAll();
         });
-        return $this->getEntityArrayforT($result);
+        return $this->getEntityArrayforIndex($result);
     }
 
     public function getById($id)
@@ -129,11 +129,11 @@ class TruckRepository extends ServiceEntityRepository
         }
         return $entityArray;
     }
-    private function getEntityArrayforT($array)
+    private function getEntityArrayforIndex($array)
     {
         $entityArray = [];
         foreach ($array as $element) {
-            array_push($entityArray, $this->getEntityforT($element));
+            array_push($entityArray, $this->getEntityforIndex($element));
         }
         return $entityArray;
     }
