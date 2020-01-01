@@ -81,18 +81,17 @@ class PurchaseController extends AbstractController
         // dd($order_customer);
 
         $purchase = $this->getDoctrine()->getRepository(Purchase::class)->getDetailsByPurchaseID($id);
-        $total = 0;
-        foreach($purchase as $p){
-            if($p["quantity"] > $p["retail_limit"]){//wholesale
-                $total += $p["quantity"]*$p["wholesale_price"];
-            }
-            else{//retail
-                $total += $p["quantity"]*$p["retail_price"];
-            }
-        }
+        // $total = 0;
+        // foreach($purchase as $p){
+        //     if($p["quantity"] > $p["retail_limit"]){//wholesale
+        //         $total += $p["quantity"]*$p["wholesale_price"];
+        //     }
+        //     else{//retail
+        //         $total += $p["quantity"]*$p["retail_price"];
+        //     }
+        // }
         return $this->render('purchase/purchase.html.twig', [
             'purchase' => $purchase,
-            'total'=> $total,
         ]);
     }
 
@@ -111,7 +110,7 @@ class PurchaseController extends AbstractController
         $stores = $this->getDoctrine()->getRepository(Store::class)->getAll();
         $store_with_routes = array();
         foreach($stores as $store){
-            $truckRoute = $this->getDoctrine()->getRepository(TruckRoute::class)->getAll($store->getId());
+            $truckRoute = $this->getDoctrine()->getRepository(TruckRoute::class)->getAllByStore($store->getId());
             
             if(!empty( $truckRoute )){
                 $arr = array();

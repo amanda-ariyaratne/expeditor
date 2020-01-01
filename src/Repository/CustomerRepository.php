@@ -51,12 +51,12 @@ class CustomerRepository extends ServiceEntityRepository
         $conn = $this->getEntityManager()->getConnection();
         $lastInsertId = $conn->transactional(function($conn) use(&$c) {
             $user = $c->getUser();
-            $adrs = $c->getAddress();
+            $address = $c->getAddress();
 
-            $address = new Address();
-            $address->setHouseNo($adrs->first());
-            $address->setStreet($adrs->next());
-            $address->setCity($adrs->next());
+            // $address = new Address();
+            // $address->setHouseNo($adrs->first());
+            // $address->setStreet($adrs->next());
+            // $address->setCity($adrs->next());
 
             $user_id = $this->getEntityManager()->getRepository(User::class)->insert($user);
             $address_id = $this->getEntityManager()->getRepository(Address::class)->insert($address);
@@ -79,7 +79,7 @@ class CustomerRepository extends ServiceEntityRepository
         $user = $this->getEntityManager()->getRepository(User::class)->getById($params['user_id']);
         $customer->setUser($user);
         $address = $this->getEntityManager()->getRepository(Address::class)->getById($params['address_id']);
-        $customer->addAddress($address);
+        $customer->setAddress($address);
         $customer->setCreatedAt(new \DateTime($params['created_at']));
         $customer->setUpdatedAt(new \DateTime($params['updated_at']));
         $customer->setDeletedAt(new \DateTime($params['deleted_at']));

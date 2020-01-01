@@ -46,11 +46,7 @@ class Address
      */
     private $deleted_at;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Customer", inversedBy="address")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $customer;
+
 
     public function getId(): ?int
     {
@@ -136,15 +132,5 @@ class Address
         return $this;
     }
 
-    public function getCustomer(): ?Customer
-    {
-        return $this->customer;
-    }
 
-    public function setCustomer(?Customer $customer): self
-    {
-        $this->customer = $customer;
-
-        return $this;
-    }
 }

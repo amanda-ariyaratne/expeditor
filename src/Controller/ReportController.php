@@ -90,7 +90,7 @@ class ReportController extends AbstractController
     /**
      * @Route("/customerOrder/{id}")
      */
-    public function getCustomerOrderReport($id , Request $request): Response
+    public function getCustomerOrderReport($id=0 , Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
 
