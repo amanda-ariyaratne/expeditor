@@ -55,7 +55,7 @@ class TruckController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $entityManager = $this->getDoctrine()->getRepository(Truck::class)->insert($truck);
+            $this->getDoctrine()->getRepository(Truck::class)->insert($truck);
 
             return $this->redirectToRoute('truck_index');
         }

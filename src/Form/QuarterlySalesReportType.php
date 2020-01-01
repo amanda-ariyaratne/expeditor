@@ -15,6 +15,7 @@ use App\Entity\Store;
 use App\Entity\TruckRoute;
 
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
@@ -34,17 +35,14 @@ class QuarterlySalesReportType extends AbstractType
                     '2020' => 2020,
                     '2019' => 2019,
                     '2018' => 2018,
-                ],
+                ]
             ])
-            ->add('store', EntityType::class, [
-                'class' => Store::class,
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('s')
-                        ->where('s.deleted_at is NULL');
-                },
-                'choice_label' => 'name',
-                'choice_value' => 'id',
-                'placeholder' => ''
+            ->add('categorize_by', ChoiceType::Class, [
+                'choices' => [
+                    'product' => 'product',
+                    'store' => 'store',
+                    'truck route' => 'truck_route'
+                ]
             ])
         ;
 
@@ -84,6 +82,7 @@ class QuarterlySalesReportType extends AbstractType
     {
         $resolver->setDefaults([
             'entityManager' => null,
+            'required' => false
         ]);
     }
 }

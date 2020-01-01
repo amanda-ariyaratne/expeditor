@@ -19,8 +19,11 @@ class TrainTripController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $trainTrip = new TrainTrip();
+        
         $form = $this->createForm(TrainTripType::class, $trainTrip);
+        
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getRepository(TrainTrip::class)->insert($trainTrip);
@@ -31,20 +34,28 @@ class TrainTripController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
     /**
      * @Route("/", name="train_trip_index", methods={"GET"})
      */
     public function index(TrainTripRepository $truckRouteRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
+
+        $truckRoutes = $truckRouteRepository->getAll();
+
         return $this->render('train_trip/index.html.twig', [
-            'train_trips' => $truckRouteRepository->getAll(),
+            'train_trips' => $truckRoutes,
         ]);
     }    
+
     /**
      * @Route("/{id}/edit", name="train_trip_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, TrainTrip $trainTrip): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
+
         $form = $this->createForm(TrainTripType::class, $trainTrip);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -62,6 +73,8 @@ class TrainTripController extends AbstractController
     public function delete(Request $request, $id, TrainTripRepository $trainTripRepository): Response
     {   
         $deleted = false;
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
+        
         if ($this->isCsrfTokenValid('train_trip', $request->request->get('_token'))) {
             
             $deleted = $trainTripRepository->delete($id);

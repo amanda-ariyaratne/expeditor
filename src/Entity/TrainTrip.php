@@ -17,7 +17,7 @@ class TrainTrip
     /**
      * @ORM\Column(type="decimal", precision=14, scale=4)
      */
-    public $allowed_capacity;    
+    public $allowed_capacity;  
     /**
      * @ORM\Column(type="datetime")
      */
@@ -43,6 +43,7 @@ class TrainTrip
      * @ORM\Column(type="date")
      */
     private $date;
+  
     public function __construct()
     {
         $this->store = new ArrayCollection();

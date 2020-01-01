@@ -12,16 +12,31 @@ use App\Entity\Store;
  */
 class TrainTripRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, TrainTrip::class);
     }
+
     public function getAll()
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) {
             $sql = "SELECT * FROM train_trip WHERE deleted_at IS NULL;";
             $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });
+        return $this->getEntityArray($result);
+    }
+
+    public function getAllByStore($store_id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $result = $conn->transactional(function($conn) use(&$store_id) {
+            $sql = "SELECT * FROM train_trip WHERE deleted_at IS NULL AND store_id=:store_id;";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store_id', $store_id);
             $stmt->execute();
             return $stmt->fetchAll();
         });
@@ -44,7 +59,7 @@ class TrainTripRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $lastInsertId = $conn->transactional(function($conn) use(&$train_trip) {
-            
+           
             $sql = "INSERT INTO train_trip (allowed_capacity,start_time,date) VALUES (:allowed_capacity, :start_time, :_date);";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('allowed_capacity', $train_trip->getAllowedCapacity());
@@ -78,7 +93,6 @@ class TrainTripRepository extends ServiceEntityRepository
             $stmt->execute();
             $stores = $train_trip->getStore(); 
             $sql = "DELETE FROM train_trip_store  WHERE train_trip_id=:id AND deleted_at IS NULL ;" ;
-            //dump($stores[0]);
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $train_trip->getId());
             
@@ -86,7 +100,6 @@ class TrainTripRepository extends ServiceEntityRepository
             for($i = 0; $i < count($stores); $i++){
                 $sql = "INSERT INTO train_trip_store (train_trip_id, store_id) VALUES (:id, :store_id);" ;
                 $stmt = $conn->prepare($sql);
-                //dump($stores[$i]);
                 $stmt->bindValue('id', $train_trip->getId());
                 $stmt->bindValue('store_id', $stores[$i]->getId());
                 
@@ -145,7 +158,7 @@ class TrainTripRepository extends ServiceEntityRepository
         $train_trip->setDeletedAt(new \DateTime($array['deleted_at']));
         return $train_trip;
     }
-    
+  
     public function assignToTrainTrip($purchase_id){
         //get purchase and products to calculate product total_size
         $conn = $this->getEntityManager()->getConnection();
