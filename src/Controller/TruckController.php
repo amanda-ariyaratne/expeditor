@@ -80,7 +80,7 @@ class TruckController extends AbstractController
      */
     public function edit(Request $request, $id): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER');
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER']);
 
         $truck = $this->getDoctrine() 
                         ->getRepository(Truck::class)

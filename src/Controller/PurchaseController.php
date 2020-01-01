@@ -31,6 +31,8 @@ class PurchaseController extends AbstractController
      */
     public function index(PurchaseRepository $purchaseRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+
         $user = $this->getUser();
         return $this->render('purchase/index.html.twig', [
             'purchases' => $purchaseRepository->getAllByCustomerID($user->getId()),
@@ -40,7 +42,7 @@ class PurchaseController extends AbstractController
      * @Route("/notassigned" , name="not_assigned_train_productList")
      */
     public function productList(PurchaseRepository $purchaseRepository): Response 
-    {/*
+    {
         $this->denyAccessUnlessGranted(['ROLE_CHAIN_MANAGER']);
 
         
@@ -58,14 +60,11 @@ class PurchaseController extends AbstractController
      * @Route("/notassigned-for-truck" , name="not_assigned_productList")
      */
     public function productListForTruck(PurchaseRepository $purchaseRepository): Response 
-    {/*
+    {
         $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER']);
 
-        if($this->isGranted('ROLE_STORE_MANAGER')){
-            */
         $doctrine = $this->getDoctrine();
-        $purchases = $doctrine->getRepository(Purchase::class)->getNATProducts();
-        
+        $purchases = $doctrine->getRepository(Purchase::class)->getNATProducts();       
 
         return $this->render('purchase_assign/show_purchase_truck.html.twig', [
             'purchases' => $purchases
@@ -77,19 +76,25 @@ class PurchaseController extends AbstractController
      */
     public function viewOrder($id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+
+        // $user = $this->getUser()->getId();
+        // $order_customer = $this->getDoctrine()->getRepository(Purchase::class)->find($id)->getCustomerId();
+
+        // dd($order_customer);
+
         $purchase = $this->getDoctrine()->getRepository(Purchase::class)->getDetailsByPurchaseID($id);
-        $total = 0;
-        foreach($purchase as $p){
-            if($p["quantity"] > $p["retail_limit"]){//wholesale
-                $total += $p["quantity"]*$p["wholesale_price"];
-            }
-            else{//retail
-                $total += $p["quantity"]*$p["retail_price"];
-            }
-        }
+        // $total = 0;
+        // foreach($purchase as $p){
+        //     if($p["quantity"] > $p["retail_limit"]){//wholesale
+        //         $total += $p["quantity"]*$p["wholesale_price"];
+        //     }
+        //     else{//retail
+        //         $total += $p["quantity"]*$p["retail_price"];
+        //     }
+        // }
         return $this->render('purchase/purchase.html.twig', [
             'purchase' => $purchase,
-            'total'=> $total,
         ]);
     }
 
@@ -98,6 +103,7 @@ class PurchaseController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
         //address info
         $user = $this->getUser();
         $customer = $this->getDoctrine()->getRepository(Customer::class)->getCustomerByID($user->getId());
@@ -107,7 +113,7 @@ class PurchaseController extends AbstractController
         $stores = $this->getDoctrine()->getRepository(Store::class)->getAll();
         $store_with_routes = array();
         foreach($stores as $store){
-            $truckRoute = $this->getDoctrine()->getRepository(TruckRoute::class)->getAll($store->getId());
+            $truckRoute = $this->getDoctrine()->getRepository(TruckRoute::class)->getAllByStore($store->getId());
             
             if(!empty( $truckRoute )){
                 $arr = array();

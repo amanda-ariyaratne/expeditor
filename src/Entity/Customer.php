@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+// use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -27,7 +27,7 @@ class Customer
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Address", mappedBy="customer", orphanRemoval=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Address")
      */
     private $address;
 
@@ -46,10 +46,10 @@ class Customer
      */
     private $deleted_at;
 
-    public function __construct()
-    {
-        $this->address = new ArrayCollection();
-    }
+    // public function __construct()
+    // {
+    //     $this->address = new ArrayCollection();
+    // }
 
     public function getId(): ?int
     {
@@ -75,36 +75,30 @@ class Customer
         return $this;
     }
 
-    /**
-     * @return Collection|Address[]
-     */
-    public function getAddress(): Collection
+    public function getAddress(): ?Address
     {
         return $this->address;
     }
 
-    public function addAddress(Address $address): self
+    public function setAddress(?Address $address): self
     {
-        if (!$this->address->contains($address)) {
-            $this->address[] = $address;
-            $address->setCustomer($this);
-        }
+        $this->address = $address;
 
         return $this;
     }
 
-    public function removeAddress(Address $address): self
-    {
-        if ($this->address->contains($address)) {
-            $this->address->removeElement($address);
-            // set the owning side to null (unless already changed)
-            if ($address->getCustomer() === $this) {
-                $address->setCustomer(null);
-            }
-        }
+    // public function removeAddress(Address $address): self
+    // {
+    //     if ($this->address->contains($address)) {
+    //         $this->address->removeElement($address);
+    //         // set the owning side to null (unless already changed)
+    //         if ($address->getCustomer() === $this) {
+    //             $address->setCustomer(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getCreatedAt(): ?\DateTimeInterface
     {

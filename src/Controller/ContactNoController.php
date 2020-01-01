@@ -20,6 +20,8 @@ class ContactNoController extends AbstractController
      */
     public function index(ContactNoRepository $contactNoRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+
         return $this->render('contact_no/index.html.twig', [
             'contact_nos' => $contactNoRepository->findAll(),
         ]);
@@ -30,6 +32,8 @@ class ContactNoController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+
         $contactNo = new ContactNo();
         $form = $this->createForm(ContactNoType::class, $contactNo);
         $form->handleRequest($request);
@@ -53,6 +57,8 @@ class ContactNoController extends AbstractController
      */
     public function show(ContactNo $contactNo): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+
         return $this->render('contact_no/show.html.twig', [
             'contact_no' => $contactNo,
         ]);
@@ -63,6 +69,8 @@ class ContactNoController extends AbstractController
      */
     public function edit(Request $request, ContactNo $contactNo): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+
         $form = $this->createForm(ContactNoType::class, $contactNo);
         $form->handleRequest($request);
 
@@ -83,6 +91,8 @@ class ContactNoController extends AbstractController
      */
     public function delete(Request $request, ContactNo $contactNo): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
+        
         if ($this->isCsrfTokenValid('delete'.$contactNo->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($contactNo);

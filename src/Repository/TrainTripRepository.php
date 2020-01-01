@@ -180,10 +180,10 @@ class TrainTripRepository extends ServiceEntityRepository
         $stmt->execute();
         $available_train_trip =  $stmt->fetch();
         
-        if(count($available_train_trip) != 0){
+        if(!empty($available_train_trip)){
             //update purchase with train trip id
             $conn = $this->getEntityManager()->getConnection();
-            $sql = "UPDATE purchase SET train_trip_id =:train_trip_id WHERE id = :id ;";
+            $sql = "UPDATE purchase SET train_trip_id =:train_trip_id , status_id = '2' WHERE id = :id ;";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('train_trip_id', $available_train_trip["id"]);
             $stmt->bindValue('id', $purchase_id);

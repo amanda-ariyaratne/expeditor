@@ -28,6 +28,7 @@ class CustomerController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CUSTOMER');
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
@@ -43,7 +44,9 @@ class CustomerController extends AbstractController
     {
         $customer = new Customer();
         
-		$form = $this->createForm(CustomerType::class, $customer);
+		$form = $this->createForm(CustomerType::class, $customer , [
+            'validation_group' => 'new',
+        ]);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {
