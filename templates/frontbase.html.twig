@@ -190,7 +190,7 @@
                       <ul class="list-inline">
                           <li class="customer-register  waiting">
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                              <a href="{{ path('back_logout') }}" title="Logout">
+                              <a href="{{ path('app_logout') }}" title="Logout">
                                 <i class="demo-icon icon-pencil-2"></i>Logout
                               </a>
                             {% else %}

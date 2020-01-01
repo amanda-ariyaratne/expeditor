@@ -1,11 +1,8 @@
 <?php
-
 namespace App\Repository;
-
 use App\Entity\Store;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-
 /**
  * @method Store|null find($id, $lockMode = null, $lockVersion = null)
  * @method Store|null findOneBy(array $criteria, array $orderBy = null)
@@ -54,7 +51,6 @@ class StoreRepository extends ServiceEntityRepository
         });         
         return $this->getEntityArray($results);
     }
-
     public function getAllAsArray(){
         $conn = $this->getEntityManager()->getConnection();
         $results = $conn->transactional(function($conn){
@@ -65,7 +61,7 @@ class StoreRepository extends ServiceEntityRepository
         });         
         return $results;
     }
-
+  
     function getStoreOfTrainTrip($train_trip_id)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -78,7 +74,6 @@ class StoreRepository extends ServiceEntityRepository
         });
         return $this->getEntityArray($result);
     }
-
     public function update($store)
     {   
         $conn = $this->getEntityManager()->getConnection();
@@ -92,7 +87,6 @@ class StoreRepository extends ServiceEntityRepository
             $stmt->execute();
         });        
     }
-
     public function insert(Store $store)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -105,7 +99,6 @@ class StoreRepository extends ServiceEntityRepository
             $stmt->execute();
         });
     }
-
     public function delete($id)
     {   
         $date = new \DateTime();
@@ -132,9 +125,7 @@ class StoreRepository extends ServiceEntityRepository
         $store->setUpdatedAt(new \DateTime($params['updated_at']));
         $store->setDeletedAt(new \DateTime($params['deleted_at']));
         return $store;
-
     }
-
     private function getEntityArray($array)
     {   
         $entityArray = [];
@@ -144,4 +135,3 @@ class StoreRepository extends ServiceEntityRepository
         return $entityArray;    
     }
 }
-

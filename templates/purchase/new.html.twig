@@ -187,12 +187,12 @@
                       }
                     </style> #}
 
-                    <div class="">
+                    <div class="" style="">
                         <h2 id="paymentsummery" style="width: 380px ;padding: 20px 120px; background-color: #c1939e; border-style: solid; border-width: 5px; border-color: white;font-size: 1.2857em;line-height: 1.3em;font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,sans-serif;background-image: linear-gradient(#12c71e,#1294c7);">
                             TRUCK ROUTE
                         </h2>
                         <p>Select the suitable truck route for you by referring the following pre-defined map routes</p>
-
+                        <div class="" style="overflow:scroll; height:400px;">
                         {% for key1,store in stores %}
                           <div class="" >
                               <p class="total-line__name" scope="row" style="padding: 5px; font-weight:800; margin:0px;"><i class="fas fa-store"></i> {{store[0].name}}, {{store[0].street}}, {{store[0].city}}</p>
@@ -207,7 +207,7 @@
                             </div>
                         {% endfor %}
 
-                           
+                        </div>
 
                           
                     </div>

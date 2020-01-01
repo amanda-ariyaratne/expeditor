@@ -25,13 +25,29 @@ class DriverAssistantRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$id) {
-            $sql = "CALL getDriverAssistants(:id)";
+            $sql = "SELECT * from driver where id = :id AND deleted_at IS NULL;";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
             $stmt->execute();
             return $stmt->fetch();
         });
-        return $this->getEntity($result);
+        return $this->getEntityforT($result);
+    }
+    public function findDA($stime,$max_time,$_date,$store_id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $results = $conn->transactional(function($conn)use(&$store_id,&$_date,&$max_time,&$stime){
+            $sql = 'CALL get_driver_assistants_trips(:stime,:max_time,:_date,:store_id);';
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue('store_id', $store_id);
+            $stmt->bindValue('_date', $_date,'date');
+            $stmt->bindValue('max_time', $max_time);
+            $stmt->bindValue('stime', $stime,'time');
+            
+            $stmt->execute();
+            return $stmt->fetchAll();
+        });         
+        return $this->getEntityArrayforT($results);
     }
 
     public function getAll()
@@ -114,6 +130,14 @@ class DriverAssistantRepository extends ServiceEntityRepository
         }
         return $entityArray;
     }
+    private function getEntityArrayforT($array)
+    {
+        $entityArray = [];
+        foreach ($array as $element) {
+            array_push($entityArray, $this->getEntityforT($element));
+        }
+        return $entityArray;
+    }
 
     private function getEntity($params)
     {
@@ -144,33 +168,24 @@ class DriverAssistantRepository extends ServiceEntityRepository
 
         return $da;
     }
-
-    // /**
-    //  * @return DriverAssistant[] Returns an array of DriverAssistant objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    private function getEntityforT($params)
     {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('d.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        // dd($params);
+        $da = new DriverAssistant();
+        $da->setId($params['id']);
+        $da->setFirstName($params['first_name']);
+        $da->setLastName($params['last_name']);
+        $da->setNIC($params['NIC']);
+        
+        $store=$this->getEntityManager() 
+                    ->getRepository(Store::class)
+                    ->getById($params['store_id']);
+        $da->setStore($store);
+        $da->setCreatedAt(new \DateTime($params['created_at']));
+        $da->setUpdatedAt(new \DateTime($params['updated_at']));
+        
 
-    /*
-    public function findOneBySomeField($value): ?DriverAssistant
-    {
-        return $this->createQueryBuilder('d')
-            ->andWhere('d.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $da;
     }
-    */
+
 }

@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Controller;
-
 use App\Entity\TrainTrip;
 use App\Form\TrainTripType;
 use App\Repository\TrainTripRepository;
@@ -10,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
 /**
  * @Route("/train/trip")
  */
@@ -22,15 +19,16 @@ class TrainTripController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
         $trainTrip = new TrainTrip();
+        
         $form = $this->createForm(TrainTripType::class, $trainTrip);
+        
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getRepository(TrainTrip::class)->insert($trainTrip);
             return $this->redirectToRoute('train_trip_index');
         }
-
         return $this->render('train_trip/new.html.twig', [
             'train_trip' => $trainTrip,
             'form' => $form->createView(),
@@ -42,44 +40,49 @@ class TrainTripController extends AbstractController
      */
     public function index(TrainTripRepository $truckRouteRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
+
+        $truckRoutes = $truckRouteRepository->getAll();
+
         return $this->render('train_trip/index.html.twig', [
-            'train_trips' => $truckRouteRepository->getAll(),
+            'train_trips' => $truckRoutes,
         ]);
     }    
 
     /**
      * @Route("/{id}/edit", name="train_trip_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, TrainTrip $truckRoute): Response
+    public function edit(Request $request, TrainTrip $trainTrip): Response
     {
-        $form = $this->createForm(TrainTripType::class, $truckRoute);
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
+
+        $form = $this->createForm(TrainTripType::class, $trainTrip);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
+            $this->getDoctrine()->getRepository(TrainTrip::class)->update($trainTrip);
             return $this->redirectToRoute('train_trip_index');
         }
-
         return $this->render('train_trip/edit.html.twig', [
-            'train_trip' => $truckRoute,
+            'train_trip' => $trainTrip,
             'form' => $form->createView(),
         ]);
     }
-
     /**
      * @Route("/{id}", name="train_trip_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, TrainTrip $truckRoute): Response
-    {
+    public function delete(Request $request, $id, TrainTripRepository $trainTripRepository): Response
+    {   
+        $deleted = false;
+        $this->denyAccessUnlessGranted('ROLE_CHAIN_MANAGER');
+
         if ($this->isCsrfTokenValid('train_trip', $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($truckRoute);
-            $entityManager->flush();
+            
+            $deleted = $trainTripRepository->delete($id);
+            return new JsonResponse([
+                'status' => $deleted
+            ]);
         }
 
-        return $this->redirectToRoute('train_trip_index');
+        return new JsonResponse(['status' => $deleted]);
     }
 }
-
-

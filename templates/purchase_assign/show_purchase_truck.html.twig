@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Expeditor - Purchases Not Yet Assigned to a Train Trip List{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('back/css/jsgrid.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('back/css/jsgrid-theme.min.css') }}" rel="stylesheet">
+    <style type="text/css">
+        table {
+            {# width: 50%; #}
+            {# table-layout: fixed; #}
+        }
+        td {
+            text-align:center
+        }
+        .plus-icon {
+            background: #025a83;
+            width: 28px;
+            height: 28px;
+            line-height: 28px;
+            text-align: center;
+            display: inline-block;
+            color: #fff!important;
+            border-radius: 100px;
+        }
+        .plus-icon:hover {
+            background: #002661;
+            color: #fff;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+        <div class="card ">
+            <div class="card-body">
+                <h4 class="card-title text-uppercase mb-20 pull-left"> Purchase</h4>
+                <br>
+                
+                
+                {% if is_granted('ROLE_CHAIN_MANAGER') %}
+                    <h4 class="card-title text-uppercase mb-20 pull-right"></h6>
+                {% endif %}
+
+                <div class="table-responsive mt-40">
+                    <table id="myTable" class="display nowrap table table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Purchase</th>
+                                <th>Volume</th>
+                                <th>Delivery Date</th>
+                                <th>Truck Route ID</th>
+                                
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set i = 1 %}
+                            {% for purchase in purchases %}
+                                <tr>
+                                    <td>{{~i~}}</td>
+                                    {% set i = i + 1 %}
+                                    <td style="text-align:left; max-width:400px; white-space: normal;">{{ purchase.purchase_id}}---{{purchase.created_at |date("d/m/Y")}}</a></td>
+                                    <td>{{ purchase.volume}}</td>
+                                    <td>{{ purchase.delivery_date|date("d/m/Y") }}</td>
+                                    
+                                    <td>{{ purchase.truck_route_id }}</td>
+                                   
+                                                                     
+                                </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                    
+                </div>
+                <h6 class="card-title text-uppercase mb-20 pull-left">Add New Truck Trip</h6>
+                
+                    <a href="{{ path('truck_trip_new2') }}" class="plus-icon pull-left">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+</div>
+{% endblock content %}
+
+
+{% block scripts %}
+
+    <script src="{{ asset('back/js/jquery.dataTables.min.js') }}"></script> 
+    <script src="{{ asset('back/js/dataTables.buttons.min.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.flash.min.js') }}"></script> 
+    <script src="{{ asset('back/js/jszip.min.js') }}"></script> 
+    <script src="{{ asset('back/js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('back/js/vfs_fonts.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.html5.min.js') }}"></script> 
+    <script src="{{ asset('back/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('back/js/data-table.js') }}"></script>
+
+
+    
+
+{% endblock %}
