@@ -70,20 +70,28 @@ class DriverController extends AbstractController
      * @Route("/{id}/edit", name="driver_edit", methods={"GET","POST"})
      */
     
-    public function edit(Request $request, Driver $driver, DriverRepository $driverRepositary, StoreRepository $storeRepositary): Response
+    public function edit($id, Request $request, Driver $driver, DriverRepository $driverRepositary, StoreRepository $storeRepositary): Response
     {
         $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER']);
         
-        $form = $this->createForm(DriverType::class, $driver);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $driverRepositary->update($driver);
-            return $this->redirectToRoute('driver_index');
+        $user = $this->getUser()->getId();
+        $user_store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore()->getId();
+        $driver_store = $this->getDoctrine()->getRepository(Driver::class)->find($id)->getStore()->getId();
+
+        if ($user_store==$driver_store){
+
+            $form = $this->createForm(DriverType::class, $driver);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $driverRepositary->update($driver);
+                return $this->redirectToRoute('driver_index');
+            }
+            return $this->render('driver/edit.html.twig', [
+                'driver' => $driver,
+                'form' => $form->createView(),
+            ]);
         }
-        return $this->render('driver/edit.html.twig', [
-            'driver' => $driver,
-            'form' => $form->createView(),
-        ]);
+        return $this->redirectToRoute('driver_index');
     }
     /**
      * @Route("/delete/{id}", name="driver_delete", methods={"DELETE"})
@@ -92,13 +100,24 @@ class DriverController extends AbstractController
     {   
         $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER');
         $deleted = false;
-        if ($this->isCsrfTokenValid('driver-token', $request->request->get('_token'))) {
-            
-            $deleted = $driverRepository->delete($id);
-            return new JsonResponse([
-                'status' => $deleted
-            ]);
+
+        $user = $this->getUser()->getId();
+        $user_store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore()->getId();
+        $driver_store = $this->getDoctrine()->getRepository(Driver::class)->find($id)->getStore()->getId();
+
+        if ($user_store==$driver_store){
+
+            if ($this->isCsrfTokenValid('driver-token', $request->request->get('_token'))) {
+                
+                $deleted = $driverRepository->delete($id);
+                return new JsonResponse([
+                    'status' => $deleted
+                ]);
+            }
+            return new JsonResponse(['status' => $deleted]);
+
         }
-        return new JsonResponse(['status' => $deleted]);
+        return $this->redirectToRoute('driver_index');
+
     }
 }
