@@ -62,6 +62,7 @@ class TruckTrip2Type extends AbstractType
             'attr' => array('readonly' => true),
             'placeholder' => ''
         ])
+        
         ;
             
         
@@ -114,6 +115,7 @@ class TruckTrip2Type extends AbstractType
                     'attr' => array('readonly' => false),
                     
                 ])
+                ->add('submit', SubmitType::class)
                 ;
                 
 

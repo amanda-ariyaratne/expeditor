@@ -52,6 +52,7 @@ class TruckTrip1Type extends AbstractType
                 'choice_value' => 'id',
                 'placeholder' => ''
             ])
+            ->add('submit', SubmitType::class)
             
             
             
