@@ -133,7 +133,7 @@ class TruckRepository extends ServiceEntityRepository
     {
         $entityArray = [];
         foreach ($array as $element) {
-            array_push($entityArray, $this->getEntityforT($element));
+            array_push($entityArray, $this->getEntityforIndex($element));
         }
         return $entityArray;
     }
