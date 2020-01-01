@@ -93,7 +93,9 @@ class TruckTrip2Type extends AbstractType
                 ->add('driver', EntityType::class, [
                     'class' => Driver::class,
                     'choices'=>$drivers,
-                    'choice_label' => 'id',
+                    'choice_label' => function ($driver) {
+                        return $driver->getFirstName() . ' ' . $driver->getLastName();
+                    },
                     'choice_value' => 'id',
                     
                     'attr' => array('readonly' => false),
@@ -104,7 +106,9 @@ class TruckTrip2Type extends AbstractType
                 ->add('driver_assistant', EntityType::class, [
                     'class' => DriverAssistant::class,
                     'choices'=>$driverAs,
-                    'choice_label' => 'id',
+                    'choice_label' => function ($driverAs) {
+                        return $driverAs->getFirstName() . ' ' . $driverAs->getLastName();
+                    },
                     'choice_value' => 'id',
                     
                     'attr' => array('readonly' => false),

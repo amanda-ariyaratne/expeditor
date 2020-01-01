@@ -48,7 +48,7 @@ class TruckTrip1Type extends AbstractType
                     return $er->createQueryBuilder('s')
                         ->where('s.deleted_at is NULL');
                 },
-                'choice_label' => 'id',
+                'choice_label' => 'name',
                 'choice_value' => 'id',
                 'placeholder' => ''
             ])

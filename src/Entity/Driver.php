@@ -23,11 +23,11 @@ class Driver
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $first_name;
+    public $first_name;
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $last_name;
+    public $last_name;
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Store")
      * @ORM\JoinColumn(nullable=true)

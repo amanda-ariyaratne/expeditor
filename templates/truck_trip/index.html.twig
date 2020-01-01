@@ -61,9 +61,9 @@
                                     <td>{{~i~}}</td>
                                     {% set i = i + 1 %}
                                     <td>{{ trucktrip.truck.id }}</td>
-                                    <td>{{ trucktrip.driver.id }}</td>
-                                    <td>{{ trucktrip.driver_assistant.id }}</td>
-                                    <td>{{ trucktrip.truck_route.id }}</td>
+                                    <td>{{ trucktrip.driver.first_name }}  {{ trucktrip.driver.last_name }}</td>
+                                    <td>{{ trucktrip.driver_assistant.first_name }}  {{ trucktrip.driver_assistant.last_name }}</td>
+                                    <td>{{ trucktrip.truck_route.name }}</td>
                                     <td>{{ trucktrip.start_time|date('H:i:s')}}</td>
                                     <td>{{ trucktrip.date|date('d/m/Y')}}</td>
                                     

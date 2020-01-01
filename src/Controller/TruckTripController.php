@@ -96,6 +96,7 @@ class TruckTripController extends AbstractController
         ]);
     }
     
+    
     /**
      * @Route("/new3/{data}", name="truck_trip_new3", methods={"GET","POST"})
      */
