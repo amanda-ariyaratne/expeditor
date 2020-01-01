@@ -32,6 +32,7 @@ class TruckTripRepository extends ServiceEntityRepository
             $stmt->execute();
             return $stmt->fetchAll();
         });
+
         return $this->getEntityArray($result);
     }
     public function getByStore($store)

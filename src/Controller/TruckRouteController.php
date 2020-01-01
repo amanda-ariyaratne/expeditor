@@ -70,21 +70,11 @@ class TruckRouteController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="truck_route_show", methods={"GET"})
-     */
-    public function show(TruckRoute $truckRoute): Response
-    {
-        return $this->render('truck_route/show.html.twig', [
-            'truck_route' => $truckRoute,
-        ]);
-    }
-
-    /**
      * @Route("/{id}/edit", name="truck_route_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, TruckRoute $truck_route, TruckRouteRepository $truckRouteRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER', 'ROLE_CHAIN_MANAGER');
+        $this->denyAccessUnlessGranted('ROLE_STORE_MANAGER');
 
         $user = $this->getUser()->getId();
         $store = $this->getDoctrine()->getRepository(StoreManager::class)->find($user)->getStore();

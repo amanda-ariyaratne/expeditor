@@ -26,11 +26,11 @@ class TruckTripController extends AbstractController
      */
     public function index(TruckTripRepository $truckTripRepository): Response
     {
-        $truckts = $this->getDoctrine() 
+        $truckTrips = $this->getDoctrine() 
                         ->getRepository(TruckTrip::class)
                         ->getAll();
         return $this->render('truck_trip/index.html.twig', [
-            'truck_trip' => $truckts
+            'truck_trip' => $truckTrips
         ]);
     }
     /**

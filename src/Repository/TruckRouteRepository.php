@@ -43,6 +43,7 @@ class TruckRouteRepository extends ServiceEntityRepository
         });
         return $this->getEntityArray($results);
     }
+  
     public function getAll(){
         $conn = $this->getEntityManager()->getConnection();
         $results = $conn->transactional(function($conn){
@@ -64,6 +65,7 @@ class TruckRouteRepository extends ServiceEntityRepository
         });         
         return $this->getEntityArray($results);
     }
+  
     public function insert($truck_route)
     {
         $conn = $this->getEntityManager()->getConnection();
@@ -156,6 +158,7 @@ class TruckRouteRepository extends ServiceEntityRepository
         }
         return $entityArray;    
     }
+  
     public function getTruckRouteById($id)
     {
         $conn = $this->getEntityManager()->getConnection();

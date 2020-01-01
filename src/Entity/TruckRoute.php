@@ -28,8 +28,7 @@ class TruckRoute
      * @ORM\JoinColumn(nullable=false)
      */
     private $store;
-    
-
+  
     /**
      * @ORM\Column(type="string", length=512)
      */
@@ -59,14 +58,12 @@ class TruckRoute
     {
         return $this->id;
     }
-
-    public function setId(string $id): self
+    public function setId(int $id): self
     {
         $this->id = $id;
 
         return $this;
     }
-    
 
     public function getName(): ?string
     {
@@ -91,6 +88,7 @@ class TruckRoute
 
         return $this;
     }
+    
     public function getMaxTimeAllocation(): ?string
     {
         return $this->max_time_allocation;
@@ -126,8 +124,6 @@ class TruckRoute
 
         return $this;
     }
-
-    
 
     public function getUpdatedAt(): ?\DateTimeInterface
     {

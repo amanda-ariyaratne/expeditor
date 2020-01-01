@@ -61,6 +61,7 @@ class StoreRepository extends ServiceEntityRepository
         });         
         return $results;
     }
+  
     function getStoreOfTrainTrip($train_trip_id)
     {
         $conn = $this->getEntityManager()->getConnection();
