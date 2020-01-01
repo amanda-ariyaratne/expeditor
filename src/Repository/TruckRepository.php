@@ -133,7 +133,6 @@ class TruckRepository extends ServiceEntityRepository
 
     private function getEntity($params)
     {
-        dd($params);
         $truck = new Truck();
         $truck->setId($params['truck_id']);
         $truck->setInsuranceNo($params['truck_insurance_no']);
