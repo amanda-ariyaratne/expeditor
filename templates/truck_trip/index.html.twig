@@ -61,21 +61,24 @@
                                     <td>{{~i~}}</td>
                                     {% set i = i + 1 %}
                                     <td>{{ trucktrip.truck.id }}</td>
-                                    <td>{{ trucktrip.driver.id }}</td>
-                                    <td>{{ trucktrip.driver_assistant.id }}</td>
-                                    <td>{{ trucktrip.truck_route.id }}</td>
+                                    <td>{{ trucktrip.driver.first_name }}  {{ trucktrip.driver.last_name }}</td>
+                                    <td>{{ trucktrip.driver_assistant.first_name }}  {{ trucktrip.driver_assistant.last_name }}</td>
+                                    <td>{{ trucktrip.truck_route.name }}</td>
                                     <td>{{ trucktrip.start_time|date('H:i:s')}}</td>
                                     <td>{{ trucktrip.date|date('d/m/Y')}}</td>
                                     
                                     
                                     <td>
-                                    <a href="{{path('assigned_purchase_for_truck', { 'id': trucktrip.id}) }}" class="pencil-icon">
-                                            <i class="fa fa-truck" aria-hidden="true"></i>
+                                    <a href="{{path('assigned_purchase_for_truck', { 'id': trucktrip.id}) }}" class="pencil-icon" title="Assign New Purchases">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
                                         </a>
-                                        <a href="{{path('truck_trip_edit', { 'id': trucktrip.id}) }}" class="pencil-icon">
+                                        <a href="{{path('already_assigned_purchase_for_truck', { 'id': trucktrip.id}) }}" class="pencil-icon" title="Show Assigned Purchases">
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                        </a>
+                                        <a href="{{path('truck_trip_edit', { 'id': trucktrip.id}) }}" class="pencil-icon" title="Edit Truck Trip">
                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                         </a>
-                                        <a href="#" class="delete-icon" data-id="{{ trucktrip.id }}" >
+                                        <a href="#" class="delete-icon" data-id="{{ trucktrip.id }}"  >
                                             <i class="fa fa-trash" aria-hidden="true"></i>
                                         </a>
                                     </td>

@@ -96,6 +96,7 @@ class TruckTripController extends AbstractController
         ]);
     }
     
+    
     /**
      * @Route("/new/{data}", name="truck_trip_new3", methods={"GET","POST"})
      */
@@ -154,6 +155,29 @@ class TruckTripController extends AbstractController
         
 
         return $this->render('truck_trip/purchase_assign.html.twig', [
+            'purchases' => $purchases
+        ]);
+    }
+/**
+     * @Route("/{id}/already-assign-products" , name="already_assigned_purchase_for_truck", methods={"GET","POST"})
+     */
+    public function AssignedPurchaseList(PurchaseRepository $purchaseRepository, Request $request,$id): Response 
+    {
+        /*
+        $this->denyAccessUnlessGranted(['ROLE_STORE_MANAGER']);
+        
+        if($this->isGranted('ROLE_STORE_MANAGER')){
+            */
+            
+            
+        //$request = Request::createFromGlobals();
+        
+
+        $doctrine = $this->getDoctrine();
+        $purchases = $doctrine->getRepository(Purchase::class)->getProductsOnTruck($id);
+        
+
+        return $this->render('truck_trip/already_assigned_truck.html.twig', [
             'purchases' => $purchases
         ]);
     }

@@ -45,6 +45,9 @@ class PurchaseController extends AbstractController
     {
         $this->denyAccessUnlessGranted(['ROLE_CHAIN_MANAGER']);
 
+        
+        if($this->isGranted('ROLE_CHAIN_MANAGER')){
+            
         $doctrine = $this->getDoctrine();
         $purchases = $doctrine->getRepository(Purchase::class)->getNAProducts();
         
@@ -53,6 +56,7 @@ class PurchaseController extends AbstractController
             'purchases' => $purchases
         ]);
     }
+}
 /**
      * @Route("/notassigned-for-truck" , name="not_assigned_truck_productList")
      */
