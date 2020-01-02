@@ -192,7 +192,7 @@
                             TRUCK ROUTE
                         </h2>
                         <p>Select the suitable truck route for you by referring the following pre-defined map routes</p>
-
+                        <div style="overflow:scroll; height:400px;">
                         {% for key1,store in stores %}
                           <div class="" >
                               <p class="total-line__name" scope="row" style="padding: 5px; font-weight:800; margin:0px;"><i class="fas fa-store"></i> {{store[0].name}}, {{store[0].street}}, {{store[0].city}}</p>
@@ -206,6 +206,7 @@
                               </div>
                             </div>
                         {% endfor %}
+                        </div>
 
                            
 
@@ -259,10 +260,11 @@
                 background-color:#10947c;
             }
         </style>
+        <br><br><br>
           <center>
             <div class="form-group has-success m-t-15 m-b-10 row">
                 <div class="col-10"></div>
-                <div class="col-8">
+                <div class="col-8 pull-left">
                     {{ form_widget(form.purchase) }}
                 </div>
             </div>

@@ -121,7 +121,7 @@ class TruckTripController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getRepository(TruckTrip::class)->update($truckt);
 
-            return $this->redirectToRoute('truck_trip_index');
+            return $this->redirectToRoute('truck_trip_new2');
         
 
             
