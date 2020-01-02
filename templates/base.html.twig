@@ -214,7 +214,7 @@
         <ul id="sidebarnav">
           <li> 
               <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false">
-                <i class="mdi mdi-apps mr-10"></i>
+                <i class="fa fa-user"></i>
                 <span class="hide-menu">USERS</span>
               </a>
               <ul aria-expanded="true" class="collapse in">
@@ -233,7 +233,7 @@
 
           <li> 
               <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false">
-                <i class="mdi mdi-apps mr-10"></i>
+                <i class="fa fa-industry"></i>
                 <span class="hide-menu">STORE</span>
               </a>
               <ul aria-expanded="true" class="collapse in">
@@ -280,30 +280,59 @@
                   <a href="{{path('truck_route_index')}}" aria-expanded="false">
                     TRUCK ROUTES
                   </a>
-                </li>                
+                </li>  
+                              
               </ul>
           </li>
 
           <li> 
-            <a class="has-arrow waves-effect waves-dark" href="{{path('report_quarterly_sales')}}" aria-expanded="false">
-              <i class="mdi mdi-account-settings-variant mr-10"></i>
-              <span class="hide-menu">QUARTERLY SALES</span>
+            <a class="has-arrow waves-effect waves-dark" href="{{ path('not_assigned_train_productList') }}" aria-expanded="false">
+              <i class="fa fa-train"></i>
+              <span class="hide-menu">NOT TRAIN ASSIGNED</span>
             </a>
           </li>
 
           <li> 
-            <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false">
-              <i class="mdi mdi-account-settings-variant mr-10"></i>
-              <span class="hide-menu">NOT ASSIGNED PURCHASES</span>
+            <a class="has-arrow waves-effect waves-dark" href="{{ path('not_assigned_truck_productList') }}" aria-expanded="false">
+              <i class="fa fa-truck"></i>
+              <span class="hide-menu">NOT TRUCK TRIP ASSIGNED</span>
             </a>
           </li>
 
+
           <li> 
-            <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false">
-              <i class="mdi mdi-account-settings-variant mr-10"></i>
-              <span class="hide-menu">CUSTOMER ORDER SALES</span>
-            </a>
+              <a href="#" aria-expanded="false">
+                <i class="mdi mdi-apps mr-10"></i>
+                REPORTS
+              </a>
+              <ul aria-expanded="true" class="collapse in">
+
+                <li> 
+                  <a  href="{{path('report_quarterly_sales')}}" aria-expanded="false">
+                    
+                    QUARTERLY SALES
+                  </a>
+                </li>
+
+                
+                <li> 
+                  <a href="{{ path('report_popular_products') }}" aria-expanded="false">
+
+                    POPULAR PRODUCTS
+                  </a>
+                </li>
+
+                <li> 
+                  <a href="{{ path('customer_order_report') }}" aria-expanded="false">
+                    
+                    CUSTOMER ORDER SALES
+                  </a>
+                </li>  
+
+              </ul>
           </li>
+
+          
          
         </ul>
       </nav>

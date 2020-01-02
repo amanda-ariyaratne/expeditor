@@ -34,7 +34,7 @@ class TruckTripController extends AbstractController
         ]);
     }
     /**
-     * @Route("/new", name="truck_trip_new", methods={"GET","POST"})
+     * @Route("/new3", name="truck_trip_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -97,7 +97,7 @@ class TruckTripController extends AbstractController
     }
     
     /**
-     * @Route("/new3/{data}", name="truck_trip_new3", methods={"GET","POST"})
+     * @Route("/new/{data}", name="truck_trip_new3", methods={"GET","POST"})
      */
     public function new3(Request $request,$data): Response
     {

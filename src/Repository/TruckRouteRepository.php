@@ -17,14 +17,14 @@ class TruckRouteRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, TruckRoute::class);
     }
+
     public function getById($id)
     {
         $conn = $this->getEntityManager()->getConnection();
-        $result = $conn->transactional(function($conn) use(&$id,&$store) {
+        $result = $conn->transactional(function($conn) use(&$id) {
             $sql = "SELECT * FROM truck_route WHERE id = :id AND deleted_at IS NULL";            
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $id);
-            //$stmt->bindValue('store', $store);
             $stmt->execute();
             return $stmt->fetch();
         });
@@ -41,7 +41,7 @@ class TruckRouteRepository extends ServiceEntityRepository
             $stmt->execute();
             return $stmt->fetchAll();
         });
-        return $this->getEntityArray($results);
+        return $this->getEntityArrayForId($results);
     }
   
     public function getAll(){
@@ -54,6 +54,7 @@ class TruckRouteRepository extends ServiceEntityRepository
         });   
         return $this->getEntityArray($results);
     }
+
     public function getAllByStore($store_id){
         $conn = $this->getEntityManager()->getConnection();
         $results = $conn->transactional(function($conn) use(&$store_id){
@@ -70,7 +71,7 @@ class TruckRouteRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$truck_route) {
-            $sql = "INSERT INTO truck_route (name, map, store_id) VALUES (:name, :map, :store);";
+            $sql = "INSERT INTO truck_route (name, map, max_time_allocation, store_id) VALUES (:name, :map, :max_time_allocation, :store);";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('name', $truck_route->getName());
             $stmt->bindValue('map',$truck_route->getMap());
@@ -83,7 +84,7 @@ class TruckRouteRepository extends ServiceEntityRepository
     {   
         $conn = $this->getEntityManager()->getConnection();
         $result = $conn->transactional(function($conn) use(&$truck_route) {
-            $sql = "UPDATE truck_route SET name=:_name, map=:map, store_id=:store WHERE id = :id";
+            $sql = "UPDATE truck_route SET name=:_name, map=:map, max_time_allocation=:max_time_allocation, store_id=:store WHERE id = :id";
             $stmt = $conn->prepare($sql);
             $stmt->bindValue('id', $truck_route->getId());
             $stmt->bindValue('_name', $truck_route->getName());
@@ -110,8 +111,9 @@ class TruckRouteRepository extends ServiceEntityRepository
             return false;
         }
     }
+
     private function getEntityForId($params){
-        $truck_route = new TruckRoute();
+        $truck_route = new TruckRoute();        
         $truck_route->setId($params['id']);
         $truck_route->setName($params['name']);
         $truck_route->setMap($params['map']);
@@ -125,8 +127,16 @@ class TruckRouteRepository extends ServiceEntityRepository
         $truck_route->setUpdatedAt(new \DateTime($params['updated_at']));
         return $truck_route;
     }
-    
-  
+
+    private function getEntityArrayForId($array)
+    {   
+        $entityArray = [];
+        foreach ($array as $element) {
+            array_push($entityArray, $this->getEntityForId($element));
+        }
+        return $entityArray;    
+    }
+
     private function getEntity($params){
         $truck_route = new TruckRoute();
         $truck_route->setId($params['truck_route_id']);
@@ -158,6 +168,7 @@ class TruckRouteRepository extends ServiceEntityRepository
         }
         return $entityArray;    
     }
+
   
     public function getTruckRouteById($id)
     {
@@ -169,6 +180,6 @@ class TruckRouteRepository extends ServiceEntityRepository
             $stmt->execute();
             return $stmt->fetch();
         });
-        return $this->getEntity($result);
+        return $this->getEntityForId($result);
     } 
 }

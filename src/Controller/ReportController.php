@@ -88,7 +88,7 @@ class ReportController extends AbstractController
 
 
     /**
-     * @Route("/customerOrder/{id}")
+     * @Route("/customerOrder/{id}", name="customer_order_report", methods={"GET"})
      */
     public function getCustomerOrderReport($id=0 , Request $request): Response
     {

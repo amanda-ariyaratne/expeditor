@@ -54,7 +54,7 @@ class PurchaseController extends AbstractController
         ]);
     }
 /**
-     * @Route("/notassigned-for-truck" , name="not_assigned_productList")
+     * @Route("/notassigned-for-truck" , name="not_assigned_truck_productList")
      */
     public function productListForTruck(PurchaseRepository $purchaseRepository): Response 
     {
